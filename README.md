@@ -2,11 +2,10 @@
 
 ###Cooperative tools
 
-1. Flying Donut
-2. Slack
-3. Github
-4. Kanbanflow
-5. Trello (Another scrum scheduler just for information purpose. I will update it by my own)
+1. Slack
+2. Github
+3. Kanbanflow
+4. Trello (Another scrum scheduler just for information purpose. I will update it by my own)
 
 ###Contribute
 
