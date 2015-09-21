@@ -6,6 +6,7 @@
 2. Slack
 3. Github
 4. Kanbanflow
+5. Trello (Another scrum scheduler just for information purpose. I will update it by my own)
 
 ###Contribute
 
