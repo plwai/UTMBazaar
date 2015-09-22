@@ -28,8 +28,8 @@ class Account extends CI_Controller{
         // Get data from reset_view form
         $username  = $this->input->post('email');
 
-        $this->load->model('account_model');
-				$userdata = $this->account_model->get_user();
+        $this->load->model('Account_model');
+				$userdata = $this->Account_model->get_user($username);
 
         if($userdata['isSuccess']){
           $data['email'] = $username;

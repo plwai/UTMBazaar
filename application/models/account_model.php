@@ -9,18 +9,14 @@ class Account_model extends CI_Model{
     $query = $this->db->get('utm_users');
 
     // Check the user whether exist in the database
-    if($query->num_rows == 1 && $password == ''){
+    if($query->num_rows() == 1 && $password == ''){
       $data = array(
         'isSuccess' => true
       );
     }
-    else if($query->num_rows == 1){
+    else if($query->num_rows() == 1){
       $row = $query->result_array();
       $data = array(
-        'username'     => $row[0]['id'],
-				'password'     => $row[0]['password'],
-				'enc_password' => $row[0]['enc_password'],
-				'last_login'   => $row[0]['last_login'],
 				'isSuccess'    => true
       );
     }
