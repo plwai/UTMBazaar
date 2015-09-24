@@ -11,7 +11,7 @@ class Registration extends CI_Controller
 	}
 	public function index()
 	{
-//session		
+//ses		
 	}
 	public function generateRandomString($nbLetters)
 	{
@@ -24,7 +24,7 @@ class Registration extends CI_Controller
 		}
 		return $randString;
 	}
-	public function register($type='')
+	public function register()
 	{
 		$this->load->library('form_validation');
 //		$this->load->helper(array('Registration', 'url'));
@@ -39,7 +39,7 @@ class Registration extends CI_Controller
 			
 			if($this->form_validation->run())
 			{
-	//could point back to session	
+//	
 				$this->load->model('User_model');
 //				$this->load->view('registration_view');
 				$email  = $this->input->post('email');
@@ -62,7 +62,7 @@ class Registration extends CI_Controller
 				}
 				else
 				{
-
+//
 					$this->load->view('fail');
 				}
 				 
