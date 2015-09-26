@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Registration extends CI_Controller
+class Account extends CI_Controller
 {
 	public function __construct()
 	{
@@ -40,11 +40,11 @@ class Registration extends CI_Controller
 			if($this->form_validation->run())
 			{
 //	
-				$this->load->model('User_model');
+				$this->load->model('account_model');
 //				$this->load->view('registration_view');
 				$email  = $this->input->post('email');
 //				$password  = $this->input->post('password');
-				$state = $this->User_model->check_user($email);
+				$state = $this->account_model->check_user($email);
 				$salt = $this->generateRandomString(32);
 				$password = ($this->input->post('password')).$salt;
 				$password = sha1($password).":".$salt;
@@ -57,7 +57,7 @@ class Registration extends CI_Controller
 				if($state)
 				{
 					
-					$this->User_model->add_user($data);
+					$this->account_model->add_user($data);
 					$this->load->view('success');
 				}
 				else
