@@ -26,7 +26,7 @@ class Account extends CI_Controller
 	}
 	public function register()
 	{
-		$this->load->library('form_validation');
+//		$this->load->library('form_validation');
 //		$this->load->helper(array('Registration', 'url'));
 		
 		if($this->input->server('REQUEST_METHOD') === 'POST')
