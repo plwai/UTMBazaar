@@ -40,11 +40,11 @@ class Account extends CI_Controller
 			if($this->form_validation->run())
 			{
 //	
-				$this->load->model('account_model');
+				$this->load->model('Account_model');
 //				$this->load->view('registration_view');
 				$email  = $this->input->post('email');
 //				$password  = $this->input->post('password');
-				$state = $this->account_model->check_user($email);
+				$state = $this->Account_model->check_user($email);
 				$salt = $this->generateRandomString(32);
 				$password = ($this->input->post('password')).$salt;
 				$password = sha1($password).":".$salt;
@@ -57,7 +57,7 @@ class Account extends CI_Controller
 				if($state)
 				{
 					
-					$this->account_model->add_user($data);
+					$this->Account_model->add_user($data);
 					$this->load->view('success');
 				}
 				else
