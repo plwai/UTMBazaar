@@ -35,11 +35,11 @@ class Account extends CI_Controller{
         if($userdata['isSuccess']){
           $passToken = $this->Account_model->gen_pass_token($username);
 
-          //$subject = "Reset Password";
-          //$message = base_url()."/account/reset_link/".$passToken;
+          $subject = "Reset Password";
+          $message = "<a href='".base_url()."/account/reset_link/".$userdata['id']."-".$passToken."' target='_blank'>Reset Password Link</a>";
 
           // send reset link to user through email
-          //$this->Account_model->sendEmail($username, $subject, $message);
+          $this->Account_model->sendEmail($username, $subject, $message);
 
           $data['email'] = $username;
 
