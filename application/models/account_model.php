@@ -97,8 +97,9 @@ class Account_model extends CI_Model{
   }
 
   // update user password in database
-  public function change_password($password){
+  public function change_password($password, $id){
     $this->db->set('password', $password);
+    $this->db->set('password_token', NULL);
     $this->db->where('id', $id);
     $this->db->update('utm_users');
 

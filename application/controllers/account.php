@@ -63,7 +63,8 @@ class Account extends CI_Controller{
 
     // If token valid
     if($this->Account_model->verify_token($tokenData, "password")){
-      $this->load->view('reset_view/resetlink_view');
+      $data['id'] = $tokenData[0];
+      $this->load->view('reset_view/resetlink_view', $data);
     }
     else{
       //redirect('home');
@@ -78,12 +79,13 @@ class Account extends CI_Controller{
 
       if($this->form_validation->run()){
         $password = $this->input->post('pass');
+        $id = $this->input->post('id');
 
         $this->load->model('Account_model');
 
-        $this->Account_model->change_password($password);
+        $this->Account_model->change_password($password, $id);
 
-
+        $this->load->view('reset_view/reset_success');
       }
     }
   }
