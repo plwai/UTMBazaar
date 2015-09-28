@@ -9,7 +9,7 @@
 
 				Email Address: <input type="text" name="email">
 			  <br>
-        <input type='submit' name="login" value="Reset">
+        <input type='submit' name="reset" value="Reset">
 
 
 			<?php echo validation_errors(); ?>
