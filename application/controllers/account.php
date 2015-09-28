@@ -31,8 +31,18 @@ class Account extends CI_Controller{
         $this->load->model('Account_model');
 				$userdata = $this->Account_model->get_user($username);
 
+        // if user email is exist
         if($userdata['isSuccess']){
+          $passToken = $this->Account_model->gen_pass_token($username);
+
+          //$subject = "Reset Password";
+          //$message = base_url()."/account/reset_link/".$passToken;
+
+          // send reset link to user through email
+          //$this->Account_model->sendEmail($username, $subject, $message);
+
           $data['email'] = $username;
+
           $this->load->view('resetlink_view', $data);
         }
       }
@@ -43,7 +53,7 @@ class Account extends CI_Controller{
   }
 
   // Resend email to user
-  private function resend_email($content){
+  private function send_email($content){
 
   }
 }
