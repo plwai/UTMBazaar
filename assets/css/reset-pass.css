@@ -1,0 +1,11 @@
+.form-boder{
+  margin-top: 50px;
+  padding-top: 50px;
+  border-radius: 4px 4px 4px 4px;
+  min-height: 300px;
+}
+
+.nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
+}

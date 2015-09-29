@@ -1,16 +1,43 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Reset Password</title>
+<!-- Jquery Validation Plugin version-->
+<script src="<?php echo base_url(); ?>assets/jquery validation/dist/jquery.validate.js"></script>
 
-</head>
+<!-- resetlink css-->
+<link rel='stylesheet' href='<?php echo base_url(); ?>assets/css/reset-pass.css'>
+
 <body>
-      <?php echo form_open('account/change_password'); ?>
-        New Password: <input type='text' name='pass'>
-        Retype Password: <input type='text' name='pass_re'>
+      <div class="col-md-offset-3 col-md-5 form-boder">
+        <div class="col-md-offset-3">
+          <h4>Password Reset</h4>
+        </div>
+        <hr>
+        <?php echo form_open('account/change_password', array('class' => 'form-horizontal ')); ?>
+
+        <div class="form-group">
+          <label class="control-label col-md-4">New Password:</label>
+          <div class="col-md-7">
+            <input type='password' class="form-control" name='pass' id='pass'>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-md-4">Retype Password:</label>
+          <div class="col-md-7">
+            <input type='password' class="form-control" name='pass_re' id='pass_re'>
+          </div>
+        </div>
+
         <input type='hidden' name='id' value='<?php echo $id; ?>'>
 
-        <input type='submit' name="change_pass" value="Submit">
-			<?php echo form_close(); ?>
+        <div class="form-group">
+          <div class="col-md-offset-4 col-md-8">
+            <button type="submit" class="btn btn-default">Submit</button>
+          </div>
+        </div>
+
+        <?php echo form_close(); ?>
+      </div>
 </body>
+
+<!-- Password validation javascript -->
+<script src="<?php echo base_url(); ?>assets/javascript/validation/reset-validation.js"></script>
+
 </html>

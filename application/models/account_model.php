@@ -72,6 +72,9 @@ class Account_model extends CI_Model{
     if($type == "password"){
       $id = $token[0];
       $passToken = $token[1];
+      $currTstamp = $_SERVER["REQUEST_TIME"];
+      $timeLimit = 1; // in second
+      $error = NULL;
 
       $this->db->where('id', $id);
       $query = $this->db->get('utm_users');
@@ -80,18 +83,34 @@ class Account_model extends CI_Model{
       if($query->num_rows() == 1){
         $row = $query->result_array();
 
+        $tstamp = $row[0]['tstamp'];
+        if($currTstamp - $tstamp > $timeLimit){
+          $error = "Expired";
+
+          $this->db->set('tstamp', NULL);
+          $this->db->set('password_token', NULL);
+          $this->db->where('id', $id);
+          $this->db->update('utm_users');
+
+          return $error;
+        }
+
         $storedHash = $row[0]['password_token'];
         $hash = hash('sha256', $passToken);
 
         if($storedHash == $hash){
-          return true;
+          return $error;
         }
         else{
-          return false;
+          $error = "Invalid";
+
+          return $error;
         }
       }
       else{
-        return false;
+        $error = "Invalid";
+
+        return $error;
       }
     }
   }
@@ -100,6 +119,7 @@ class Account_model extends CI_Model{
   public function change_password($password, $id){
     $this->db->set('password', $password);
     $this->db->set('password_token', NULL);
+    $this->db->set('tstamp', NULL);
     $this->db->where('id', $id);
     $this->db->update('utm_users');
 
@@ -128,8 +148,11 @@ class Account_model extends CI_Model{
 
     $hash = hash('sha256', $passToken);
 
+    // generate time stamp
+    $tstamp = $_SERVER["REQUEST_TIME"];
 
     $this->db->set('password_token', $hash);
+    $this->db->set('tstamp', $tstamp);
     $this->db->where('username', $email);
     $this->db->update('utm_users');
 

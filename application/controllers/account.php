@@ -36,7 +36,7 @@ class Account extends CI_Controller{
           $passToken = $this->Account_model->gen_pass_token($username);
 
           $subject = "Reset Password";
-          $message = "<a href='".base_url()."/account/reset_link/".$userdata['id']."-".$passToken."' target='_blank'>Reset Password Link</a>";
+          $message = "<a href='".base_url()."account/reset_link/".$userdata['id']."-".$passToken."' target='_blank'>Reset Password Link</a>";
 
           // send reset link to user through email
           if($this->Account_model->sendEmail($username, $subject, $message)){
@@ -46,11 +46,20 @@ class Account extends CI_Controller{
             $data['message'] = "Sorry. Email cannot be sent. Please try again later.";
           }
 
+          $this->load->view('template/header.php');
+          $this->load->view('reset_view/email_view', $data);
+        }
+        else{
+          // For security reason, we dont show the email is invalid to user
+          $data['message'] = "The email is sent to ".$username;
+
+          $this->load->view('template/header.php');
           $this->load->view('reset_view/email_view', $data);
         }
       }
     }
     else{
+      $this->load->view('template/header.php');
       $this->load->view('reset_view/reset_view');
     }
   }
@@ -62,9 +71,22 @@ class Account extends CI_Controller{
     $this->load->model('Account_model');
 
     // If token valid
-    if($this->Account_model->verify_token($tokenData, "password")){
+    $isValid = $this->Account_model->verify_token($tokenData, "password");
+
+    if(!$isValid){
       $data['id'] = $tokenData[0];
+
+      $this->load->view('template/header.php');
       $this->load->view('reset_view/resetlink_view', $data);
+    }
+    else if($isValid == "Expired"){
+      $data['message'] = "Link expired. Please try again. Redirecting...";
+
+      $this->load->view('template/header.php');
+      $this->load->view('reset_view/email_view', $data);
+
+      // redirect to reset password page after 5 second
+      header( "refresh:5;url=".base_url()."account/reset_password");
     }
     else{
       //redirect('home');
@@ -85,8 +107,15 @@ class Account extends CI_Controller{
 
         $this->Account_model->change_password($password, $id);
 
+        $this->load->view('template/header.php');
         $this->load->view('reset_view/reset_success');
+
+        // redirect to home page after 5 second
+        //header( "refresh:5;url=".base_url().);
       }
+    }
+    else{
+      //redirect('home');
     }
   }
 }

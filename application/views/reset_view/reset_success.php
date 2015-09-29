@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Reset Password</title>
 
-</head>
 <body>
-			<p>Success</p>
+			<p>Success. Redirecting to home page.</p>
 </body>
 </html>
