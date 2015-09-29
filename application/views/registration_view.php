@@ -4,11 +4,10 @@
 		<style>
 			.error-message{color:red;}
 		</style>
-		<script type="text/javascript" src="<?php echo base_url();?>assets/js/jquery-2.1.4.min.js" ></script>
-		<script type="text/javascript" src="<?php echo base_url();?>assets/js/registration.js"></script>
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>/assets/css/style.css" />
-		<link rel="stylesheet" href="<?php echo base_url("assets/css/bootstrap.css"); ?>" />
-		<link href="<?php echo base_url("assets/css/bootstrap.css"); ?>" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="<?php echo base_url();?>assets/\jquery/jquery-1.11.3.js" ></script>
+		<script type="text/javascript" src="<?php echo base_url();?>assets\javascript\validation/registration-validation.js"></script>
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>/assets/css/registration.css" />
+		<link rel="stylesheet" href="<?php echo base_url("assets/bootstrap-3.3.5-dist\css/bootstrap.css"); ?>" />
 		
 	</head>
 	<body>
