@@ -5,7 +5,7 @@ class Account_model extends CI_Model{
   // Search for the user and return its data
   // Return true or false if only username passed
   public function get_user($username, $password = ''){
-    $this->db->where('username', $username);
+    $this->db->where('email', $username);
     $query = $this->db->get('utm_users');
 
     // Check the user whether exist in the database
@@ -153,7 +153,7 @@ class Account_model extends CI_Model{
 
     $this->db->set('password_token', $hash);
     $this->db->set('tstamp', $tstamp);
-    $this->db->where('username', $email);
+    $this->db->where('email', $email);
     $this->db->update('utm_users');
 
     return;
