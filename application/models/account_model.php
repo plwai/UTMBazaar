@@ -73,7 +73,7 @@ class Account_model extends CI_Model{
       $id = $token[0];
       $passToken = $token[1];
       $currTstamp = $_SERVER["REQUEST_TIME"];
-      $timeLimit = 1; // in second
+      $timeLimit = 300; // in second
       $error = NULL;
 
       $this->db->where('id', $id);
