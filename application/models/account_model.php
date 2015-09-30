@@ -28,7 +28,5 @@ class Account_model extends CI_Model
 
 		$this->db->insert('utm_users',$data);
 	}
-
-
 }
 ?>
