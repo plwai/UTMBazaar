@@ -18,7 +18,7 @@ class user_model extends CI_Model
 	{
 		$from_email = 'utmbazaar@gmail.com';
 		$subject = 'Verify Your Email Address';
-		$message = 'Dear User,<br /><br />Please click on the below activation link to verify your email address.<br /><br /> http://www.mydomain.com/user/verify/' . md5($to_email) . '<br /><br /><br />Thanks<br />UTMBazaar Team';
+		$message = 'Dear User,<br /><br />Please click on the below activation link to verify your email address.<br /><br /> http://UTMBazaar/index.php/user/verify/' . md5($to_email) . '<br /><br /><br />Thanks<br />UTMBazaar Team';
 		
 		//configure email settings
 		$config['protocol'] = 'smtp';
