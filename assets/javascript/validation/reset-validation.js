@@ -3,7 +3,8 @@ var base_url = window.location.origin;
 $('form').validate({
         rules: {
           pass:{
-            required: true
+            required: true,
+            minlength: 4
           },
           pass_re:{
             equalTo: "#pass",

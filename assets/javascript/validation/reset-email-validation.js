@@ -4,7 +4,7 @@ $('form').validate({
         rules: {
           email:{
             required: true
-          },
+          }
         },
         messages: {
             email: {
