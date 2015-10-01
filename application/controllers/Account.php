@@ -5,15 +5,15 @@ class Account extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		
-		
+
+
 
 	}
 	public function index()
 	{
 
 	}
-	public function generateRandomString($nbLetters)
+	private function generateRandomString($nbLetters)
 	{
 		$randString="";
 		$charUniverse="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -24,7 +24,7 @@ class Account extends CI_Controller
 		}
 		return $randString;
 	}
-	
+
 	public function check_email()
 	{
 		$this->load->model('Account_model');
@@ -40,7 +40,7 @@ class Account extends CI_Controller
     	}
 			echo json_encode($result2);
 		}
-	
+
 	public function register()
 	{
 		$this->form_validation->set_rules('sirname', 'Sir Name', 'trim|required|min_length[1]');
@@ -49,12 +49,12 @@ class Account extends CI_Controller
 		$this->form_validation->set_rules('email', 'Your Email', 'trim|required|valid_email|matches[e-mail]');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[4]|max_length[32]');
 		$this->form_validation->set_rules('passconf', 'Password Confirmation', 'trim|required|matches[password]');
-			
+
 		if($this->input->server('REQUEST_METHOD') === 'POST')
-		{	
+		{
 			if($this->form_validation->run())
 			{
-	
+
 				$this->load->model('Account_model');
 				$email  = $this->input->post('email');
 				$state = $this->Account_model->check_user($email);
@@ -63,14 +63,14 @@ class Account extends CI_Controller
 				$password = sha1($password).":".$salt;
 				$data = array
 				(
-					'sirname' 	=> $this->input->post('sirname'),
+					'surname' 	=> $this->input->post('sirname'),
 					'name' 	=> $this->input->post('name'),
 					'email' 	=> $this->input->post('email'),
 					'password' 	=> $password
 				);
 				if($state)
 				{
-					
+
 					$this->Account_model->add_user($data);
 					$this->load->view('success');
 				}
@@ -78,7 +78,7 @@ class Account extends CI_Controller
 				{
 					$this->load->view('registration_view');
 				}
-				 
+
 			}
 			else
 			{
@@ -86,8 +86,8 @@ class Account extends CI_Controller
 			}
 		}
 		else
-		{ 
+		{
 			$this->load->view('registration_view');
 		}
-	}	
+	}
 }

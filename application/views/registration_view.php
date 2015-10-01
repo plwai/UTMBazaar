@@ -5,7 +5,7 @@
 		<script type="text/javascript" src="<?php echo base_url();?>assets\javascript\validation/registration-validation.js"></script>
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>/assets/css/registration.css" />
 		<link rel="stylesheet" href="<?php echo base_url("assets/bootstrap-3.3.5-dist\css/bootstrap.css"); ?>" />
-		
+
 	</head>
 	<body>
 
@@ -36,7 +36,7 @@
 						<input type="text" name="e-mail" id="e-mail"/>
 						<span id="usr_verify3" class="verify"></span><div class="text-danger" id="e-mailtxt">
 					</div>
-					
+
 					<div class="form-group">
 						<h5>Confirma Email : </h5>
 						<input type="text" name="email" id="email"/>
@@ -51,14 +51,14 @@
 
 					<div class="form-group">
 						<h5>Type it again : </h5>
-						<input type="Confirm Password" name="passconf" id="passconf"  /> 
+						<input type="password" name="passconf" id="passconf"  />
 						<span id="usr_verify6" class="verify"></span><div class="text-danger" id="passconftxt">
 					</div>
 
 					<div class="form-group">
 						<input type="submit" id="submit" onclick="submit()" value="Submit" /><input type="submit" id="cancel" onclick="cancel()" value="cancel" />
 						<div id="submittxt">
-							
+
 					</div>
 					</form>
 
