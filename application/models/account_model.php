@@ -37,7 +37,7 @@ class Account_model extends CI_Model{
 	{
     $this->load->helper('email');
 
-		$from_email = 'pailee.wai@gmail.com';
+		$from_email = 'utmbazaar@gmail.com';
 
     $this->load->library('email');
 
@@ -46,7 +46,7 @@ class Account_model extends CI_Model{
 		$config['smtp_host'] = 'ssl://smtp.gmail.com'; //smtp host name
 		$config['smtp_port'] = '465'; //smtp port number
 		$config['smtp_user'] = $from_email;
-		$config['smtp_pass'] = ''; //$from_email password
+		$config['smtp_pass'] = 'utmbazaar1'; //$from_email password
 		$config['mailtype'] = 'html';
 		$config['charset'] = 'utf-8';
 		$config['wordwrap'] = TRUE;
