@@ -1,5 +1,5 @@
 <?php
-class user extends CI_Controller
+class account extends CI_Controller
 {
 	public function __construct()
 	{
@@ -7,7 +7,7 @@ class user extends CI_Controller
 		$this->load->helper(array('form','url'));
 		$this->load->library(array('session', 'form_validation', 'email'));
 		$this->load->database();
-		$this->load->model('user_model');
+		$this->load->model('account_model');
 	}
 	
 	function index()
@@ -41,42 +41,42 @@ class user extends CI_Controller
 			);
 			
 			// insert form data into database
-			if ($this->user_model->insertUser($data))
+			if ($this->account_model->insertUser($data))
 			{
 				// send email
-				if ($this->user_model->sendEmail($this->input->post('email')))
+				if ($this->account_model->sendEmail($this->input->post('email')))
 				{
 					// successfully sent mail
 					$this->session->set_flashdata('msg','<div class="alert alert-success text-center">You are Successfully Registered! Please confirm the mail sent to your Email-ID!!!</div>');
-					redirect('user/register');
+					redirect('account/register');
 				}
 				else
 				{
 					// error
 					$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error.  Please try again later!!!</div>');
-					redirect('user/register');
+					redirect('account/register');
 				}
 			}
 			else
 			{
 				// error
 				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error.  Please try again later!!!</div>');
-				redirect('user/register');
+				redirect('account/register');
 			}
 		}
 	}
 	
 	function verify($hash=NULL)
 	{
-		if ($this->user_model->verifyEmailID($hash))
+		if ($this->account_model->verifyEmailID($hash))
 		{
 			$this->session->set_flashdata('verify_msg','<div class="alert alert-success text-center">Your Email Address is successfully verified! Please login to access your account!</div>');
-			redirect('user/register');
+			redirect('account/register');
 		}
 		else
 		{
 			$this->session->set_flashdata('verify_msg','<div class="alert alert-danger text-center">Sorry! There is error verifying your Email Address!</div>');
-			redirect('user/register');
+			redirect('account/register');
 		}
 	}
 }

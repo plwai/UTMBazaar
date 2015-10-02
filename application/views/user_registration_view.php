@@ -23,7 +23,7 @@
 			</div>
 			<div class="panel-body">
 				<?php $attributes = array("name" => "registrationform");
-				echo form_open("user/register", $attributes);?>
+				echo form_open("account/register", $attributes);?>
 				<div class="form-group">
 					<label for="name">First Name</label>
 					<input class="form-control" name="fname" placeholder="Your First Name" type="text" value="<?php echo set_value('fname'); ?>" />
