@@ -5,22 +5,23 @@ class Account extends CI_Controller{
 
   public function __construct(){
 	  parent::__construct();
+
+    $this->load->model('Account_model');
   }
 
   // Account controller index
   public function index(){
     // check whether user login
-    /*if($this->session->userdata('is_logged_in')){
+    if($this->session->userdata('is_logged_in')){
 			redirect('home');
 		}
 		else{
 			$this->load->view('login_view');
-		}*/
+		}
   }
 
   public function check_email()
   {
-  	$this->load->model('Account_model');
 	  $email=$this->input->post('email');
   	$result=$this->Account_model->get_user($email);
 
@@ -39,7 +40,6 @@ class Account extends CI_Controller{
   /* Reset password function that will generate a link  *
    * to user's email for resetting password             */
   public function reset_password($type = ''){
-
     // Handle user data(username or email) sent by user
     if($this->input->server('REQUEST_METHOD') === 'POST'){
       $this->form_validation->set_rules('email', 'Email', 'required');
@@ -49,7 +49,6 @@ class Account extends CI_Controller{
         // Get data from reset_view form
         $username  = $this->input->post('email');
 
-        $this->load->model('Account_model');
 				$userdata = $this->Account_model->get_user($username);
 
         // if user email is exist
@@ -89,8 +88,6 @@ class Account extends CI_Controller{
   public function reset_link($token){
     $tokenData = explode("-", $token);
 
-    $this->load->model('Account_model');
-
     // If token valid
     $isValid = $this->Account_model->verify_token($tokenData, "password");
 
@@ -128,7 +125,7 @@ class Account extends CI_Controller{
         $password = ($this->input->post('password')).$salt;
         $password = sha1($password).":".$salt;
 
-        $this->load->model('Account_model');
+
 
         $this->Account_model->change_password($password, $id);
 
@@ -154,7 +151,7 @@ class Account extends CI_Controller{
 
     if($this->input->server('REQUEST_METHOD') === 'POST'){
       if($this->form_validation->run()){
-      $this->load->model('Account_model');
+
       $email  = $this->input->post('email');
       $state = $this->Account_model->get_user($email);
       $salt = $this->generateRandomString(32);
