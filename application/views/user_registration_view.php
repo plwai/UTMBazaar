@@ -4,8 +4,7 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>CodeIgniter User Registration Form Demo</title>
-	<link rel="stylesheet" href="<?php echo base_url("assets/css/bootstrap.css"); ?>" />
-	<link href="<?php echo base_url("bootstrap/css/bootstrap.css"); ?>" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="<?php echo base_url("assets/bootstrap-3.3.5-dist/css/bootstrap.css"); ?>" />
 </head>
 <body>
 <div class="container">
@@ -35,7 +34,7 @@
 					<input class="form-control" name="lname" placeholder="Last Name" type="text" value="<?php echo set_value('lname'); ?>" />
 					<span class="text-danger"><?php echo form_error('lname'); ?></span>
 				</div>
-				
+
 				<div class="form-group">
 					<label for="email">Email ID</label>
 					<input class="form-control" name="email" placeholder="Email-ID" type="text" value="<?php echo set_value('email'); ?>" />

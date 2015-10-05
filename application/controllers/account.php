@@ -4,12 +4,9 @@ class account extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->helper(array('form','url'));
-		$this->load->library(array('session', 'form_validation', 'email'));
-		$this->load->database();
 		$this->load->model('account_model');
 	}
-	
+
 	function index()
 	{
 		$this->register();
@@ -23,7 +20,7 @@ class account extends CI_Controller
 		$this->form_validation->set_rules('email', 'Email ID', 'trim|required|valid_email|is_unique[user.email]');
 		 $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[8]|xss_clean|strip_tags|alpha_numeric');
         $this->form_validation->set_rules('cpassword', 'Confirm Password', 'required|trim|matches[password]|xss_clean|strip_tags|alpha_numeric');
-		
+
 		//validate form input
 		if ($this->form_validation->run() == FALSE)
         {
@@ -39,7 +36,7 @@ class account extends CI_Controller
 				'email' => $this->input->post('email'),
 				'password' => $this->input->post('password')
 			);
-			
+
 			// insert form data into database
 			if ($this->account_model->insertUser($data))
 			{
@@ -65,7 +62,7 @@ class account extends CI_Controller
 			}
 		}
 	}
-	
+
 	function verify($hash=NULL)
 	{
 		if ($this->account_model->verifyEmailID($hash))

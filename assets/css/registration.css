@@ -1,0 +1,26 @@
+@charset "utf-8";
+/* CSS Document */
+body{
+	background-color:#FFF;
+	font-family:Monaco,Consolas,'Lucida Grande','Lucida Console';
+	font-size:16px;
+	text-shadow:rgba(0,0,0,0.01) 0 0 0;
+}
+
+input{
+	padding:3px;
+	color:#333333;
+	border:1px solid #96A6C5;
+	margin-top:2px;
+	width:180px;
+	font-size:11px;
+}
+
+.verify
+{
+    margin-top: 4px;
+    margin-left: 9px;
+    position: absolute;
+    width: 16px;
+    height: 16px;
+}
