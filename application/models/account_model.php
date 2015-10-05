@@ -33,8 +33,7 @@ class Account_model extends CI_Model{
   }
 
   // send email to user
-  public function sendEmail($to_email, $subject, $message)
-	{
+  public function sendEmail($to_email, $subject, $message){
     $this->load->helper('email');
 
 		$from_email = 'utmbazaar@gmail.com';
@@ -64,6 +63,14 @@ class Account_model extends CI_Model{
 
 		return $this->email->send();
 	}
+
+  //activate user account
+  function verifyEmailID($key)
+  {
+	  $data = array('status' => 1);
+	  $this->db->where('md5(email)', $key);
+	  return $this->db->update('user', $data);
+  }
 
   // verify token
   // type:
