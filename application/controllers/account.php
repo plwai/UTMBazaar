@@ -16,7 +16,7 @@ class Account extends CI_Controller{
 			redirect('home');
 		}
 		else{
-			$this->load->view('login_view');
+			$this->load->view('login');
 		}
   }
 
@@ -53,13 +53,13 @@ class Account extends CI_Controller{
 
         // if user email is exist
         if($userdata['isSuccess']){
-          $passToken = $this->Account_model->gen_pass_token($username);
+          $passToken = $this->gen_pass_token($username);
 
           $subject = "Reset Password";
           $message = "<a href='".base_url()."account/reset_link/".$userdata['id']."-".$passToken."' target='_blank'>Reset Password Link</a>";
 
           // send reset link to user through email
-          if($this->Account_model->sendEmail($username, $subject, $message)){
+          if($this->sendEmail($username, $subject, $message)){
             $data['message'] = "The email is sent to ".$username;
           }
           else{
@@ -87,18 +87,20 @@ class Account extends CI_Controller{
   // Handle reset link request from user
   public function reset_link($token){
     $tokenData = explode("-", $token);
+    $id = $tokenData[0];
+    $passToken = $tokenData[1];
+    $hash = hash('sha256', $passToken);
+    $currTstamp = $_SERVER["REQUEST_TIME"];
+    $timeLimit = 300; // in second
 
-    // If token valid
-    $isValid = $this->Account_model->verify_token($tokenData, "password");
+    // get token data
+    $storedData = $this->Account_model->get_token($id, "password");
 
-    if(!$isValid){
-      $data['id'] = $tokenData[0];
+    $tstamp = $storedData['tstamp'];
 
-      $this->load->view('template/header.php');
-      $this->load->view('reset_view/resetlink_view', $data);
-    }
-    else if($isValid == "Expired"){
-      $data['message'] = "Link expired. Please try again. Redirecting...";
+    // check time stamp
+    if($currTstamp - $tstamp > $timeLimit){
+      $data['message'] = "Link expired. Please try again. Redirecting in 5 second...";
 
       $this->load->view('template/header.php');
       $this->load->view('reset_view/email_view', $data);
@@ -106,10 +108,17 @@ class Account extends CI_Controller{
       // redirect to reset password page after 5 second
       header( "refresh:5;url=".base_url()."account/reset_password");
     }
-    else{
-      //redirect('home');
-    }
 
+    // check token
+    if($storedData['storedHash'] == $hash){
+      $data['id'] = $id;
+
+      $this->load->view('template/header.php');
+      $this->load->view('reset_view/resetlink_view', $data);
+    }
+    else{
+      redirect('home');
+    }
   }
 
   // change user password
@@ -133,11 +142,11 @@ class Account extends CI_Controller{
         $this->load->view('reset_view/reset_success');
 
         // redirect to home page after 5 second
-        //header( "refresh:5;url=".base_url().);
+        header( "refresh:5;url=".base_url());
       }
     }
     else{
-      //redirect('home');
+      redirect('home');
     }
   }
 
@@ -194,6 +203,50 @@ class Account extends CI_Controller{
     }
   }
 
+  public function login()
+	{
+		if ($this->input->server('REQUEST_METHOD') === 'POST')
+		{
+			$this->form_validation->set_rules('email', 'email', 'required');
+			$this->form_validation->set_rules('password', 'Password', 'required');
+
+			if ($this->form_validation->run())
+			{
+				$username  = $this->input->post('email');
+				$password  = $this->input->post('password');
+
+				$_data = $this->Account_model->get_user($username);
+
+				$enc_pass	= explode(":", $_data["password"]);
+				$salt		= $enc_pass[1];
+
+				if(sha1($password.$salt)!=$enc_pass[0])
+				{
+					redirect('account/login');
+				}
+
+        $data = array(
+						'username' 	=> $_data['username'],
+						'id'  => $_data['id'],
+						'is_logged_in' 	=> true
+				);
+
+				$this->Account_model->set_active($username);
+				$this->session->set_userdata($data);
+				redirect('home');
+			}
+		}
+		else{
+			$this->load->view('home');
+		}
+	}
+
+  public function logout()
+	{
+		$this->session->sess_destroy();
+		redirect('/');
+	}
+
   private function generateRandomString($nbLetters)
 	{
 	  $randString="";
@@ -206,4 +259,53 @@ class Account extends CI_Controller{
 	  }
   	return $randString;
   }
+
+  // generate random password_token
+  private function gen_pass_token($email) {
+    $length = 15;
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $passToken = '';
+    for ($i = 0; $i < $length; $i++) {
+        $passToken .= $characters[rand(0, $charactersLength - 1)];
+    }
+    $salt = uniqid(mt_rand(), true);
+    $passToken = $passToken.$salt;
+
+    $this->Account_model->encrypt_pass_token($email, $passToken);
+
+    return $passToken;
+  }
+
+  // send email to user
+  private function sendEmail($to_email, $subject, $message){
+    $this->load->helper('email');
+
+		$from_email = 'utmbazaar@gmail.com';
+
+    $this->load->library('email');
+
+		//configure email settings
+		$config['protocol'] = 'smtp';
+		$config['smtp_host'] = 'ssl://smtp.gmail.com'; //smtp host name
+		$config['smtp_port'] = '465'; //smtp port number
+		$config['smtp_user'] = $from_email;
+		$config['smtp_pass'] = 'utmbazaar1'; //$from_email password
+		$config['mailtype'] = 'html';
+		$config['charset'] = 'utf-8';
+		$config['wordwrap'] = TRUE;
+		$config['newline'] = "\r\n"; //use double quotes
+
+
+    $this->email->initialize($config);
+		$this->email->set_newline("\r\n");
+
+		//send mail
+		$this->email->from($from_email, 'UTMBazaar');
+		$this->email->to($to_email);
+		$this->email->subject($subject);
+		$this->email->message($message);
+
+		return $this->email->send();
+	}
 }
