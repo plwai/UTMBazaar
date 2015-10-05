@@ -13,7 +13,7 @@ class Account_model extends CI_Model{
       $row = $query->result_array();
 
       $data = array(
-        'id' => $row[0]['id'],
+        'id' => $row[0]['pkid'],
         'isSuccess' => true
       );
     }
@@ -83,7 +83,7 @@ class Account_model extends CI_Model{
       $timeLimit = 300; // in second
       $error = NULL;
 
-      $this->db->where('id', $id);
+      $this->db->where('pkid', $id);
       $query = $this->db->get('utm_users');
 
       // verify user exist
@@ -96,7 +96,7 @@ class Account_model extends CI_Model{
 
           $this->db->set('tstamp', NULL);
           $this->db->set('password_token', NULL);
-          $this->db->where('id', $id);
+          $this->db->where('pkid', $id);
           $this->db->update('utm_users');
 
           return $error;
@@ -127,7 +127,7 @@ class Account_model extends CI_Model{
     $this->db->set('password', $password);
     $this->db->set('password_token', NULL);
     $this->db->set('tstamp', NULL);
-    $this->db->where('id', $id);
+    $this->db->where('pkid', $id);
     $this->db->update('utm_users');
 
     return;
