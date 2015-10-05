@@ -4,22 +4,18 @@ class Account_model extends CI_Model{
 
   // Search for the user and return its data
   // Return true or false if only username passed
-  public function get_user($username, $password = ''){
+  public function get_user($username){
     $this->db->where('email', $username);
     $query = $this->db->get('utm_users');
 
     // Check the user whether exist in the database
-    if($query->num_rows() == 1 && $password == ''){
+    if($query->num_rows()){
       $row = $query->result_array();
 
       $data = array(
-        'id' => $row[0]['pkid'],
-        'isSuccess' => true
-      );
-    }
-    else if($query->num_rows() == 1){
-      $row = $query->result_array();
-      $data = array(
+        'username'     => $row[0]['email'],
+        'id'           => $row[0]['pkid'],
+        'password'     => $row[0]['password'],
 				'isSuccess'    => true
       );
     }
