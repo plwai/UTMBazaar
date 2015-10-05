@@ -1,79 +1,209 @@
-<?php
-class account extends CI_Controller
-{
-	public function __construct()
-	{
-		parent::__construct();
-		$this->load->model('account_model');
-	}
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-	function index()
-	{
-		$this->register();
-	}
+// Account controller handle account function.
+class Account extends CI_Controller{
 
-    function register()
+  public function __construct(){
+	  parent::__construct();
+
+    $this->load->model('Account_model');
+  }
+
+  // Account controller index
+  public function index(){
+    // check whether user login
+    if($this->session->userdata('is_logged_in')){
+			redirect('home');
+		}
+		else{
+			$this->load->view('login_view');
+		}
+  }
+
+  public function check_email()
+  {
+	  $email=$this->input->post('email');
+  	$result=$this->Account_model->get_user($email);
+
+   	if(!$result['isSuccess'])
+   	{
+      $result2['res']=1;
+	  }
+    else
     {
-		//set validation rules
-		$this->form_validation->set_rules('fname', 'First Name', 'trim|required|alpha|min_length[3]|max_length[30]|xss_clean');
-		$this->form_validation->set_rules('lname', 'Last Name', 'trim|required|alpha|min_length[3]|max_length[30]|xss_clean');
-		$this->form_validation->set_rules('email', 'Email ID', 'trim|required|valid_email|is_unique[user.email]');
-		 $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[8]|xss_clean|strip_tags|alpha_numeric');
-        $this->form_validation->set_rules('cpassword', 'Confirm Password', 'required|trim|matches[password]|xss_clean|strip_tags|alpha_numeric');
+	    $result2['res']=0;
+    }
 
-		//validate form input
-		if ($this->form_validation->run() == FALSE)
-        {
-			// fails
-			$this->load->view('user_registration_view');
+	  echo json_encode($result2);
+  }
+
+  /* Reset password function that will generate a link  *
+   * to user's email for resetting password             */
+  public function reset_password($type = ''){
+    // Handle user data(username or email) sent by user
+    if($this->input->server('REQUEST_METHOD') === 'POST'){
+      $this->form_validation->set_rules('email', 'Email', 'required');
+
+      if($this->form_validation->run()){
+
+        // Get data from reset_view form
+        $username  = $this->input->post('email');
+
+				$userdata = $this->Account_model->get_user($username);
+
+        // if user email is exist
+        if($userdata['isSuccess']){
+          $passToken = $this->Account_model->gen_pass_token($username);
+
+          $subject = "Reset Password";
+          $message = "<a href='".base_url()."account/reset_link/".$userdata['id']."-".$passToken."' target='_blank'>Reset Password Link</a>";
+
+          // send reset link to user through email
+          if($this->Account_model->sendEmail($username, $subject, $message)){
+            $data['message'] = "The email is sent to ".$username;
+          }
+          else{
+            $data['message'] = "Sorry. Email cannot be sent. Please try again later.";
+          }
+
+          $this->load->view('template/header.php');
+          $this->load->view('reset_view/email_view', $data);
         }
-		else
-		{
-			//insert the user registration details into database
-			$data = array(
-				'fname' => $this->input->post('fname'),
-				'lname' => $this->input->post('lname'),
-				'email' => $this->input->post('email'),
-				'password' => $this->input->post('password')
-			);
+        else{
+          // For security reason, we dont show the email is invalid to user
+          $data['message'] = "The email is sent to ".$username;
 
-			// insert form data into database
-			if ($this->account_model->insertUser($data))
-			{
-				// send email
-				if ($this->account_model->sendEmail($this->input->post('email')))
-				{
-					// successfully sent mail
-					$this->session->set_flashdata('msg','<div class="alert alert-success text-center">You are Successfully Registered! Please confirm the mail sent to your Email-ID!!!</div>');
-					redirect('account/register');
-				}
-				else
-				{
-					// error
-					$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error.  Please try again later!!!</div>');
-					redirect('account/register');
-				}
-			}
-			else
-			{
-				// error
-				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error.  Please try again later!!!</div>');
-				redirect('account/register');
-			}
-		}
-	}
+          $this->load->view('template/header.php');
+          $this->load->view('reset_view/email_view', $data);
+        }
+      }
+    }
+    else{
+      $this->load->view('template/header.php');
+      $this->load->view('reset_view/reset_view');
+    }
+  }
 
-	function verify($hash=NULL)
+  // Handle reset link request from user
+  public function reset_link($token){
+    $tokenData = explode("-", $token);
+
+    // If token valid
+    $isValid = $this->Account_model->verify_token($tokenData, "password");
+
+    if(!$isValid){
+      $data['id'] = $tokenData[0];
+
+      $this->load->view('template/header.php');
+      $this->load->view('reset_view/resetlink_view', $data);
+    }
+    else if($isValid == "Expired"){
+      $data['message'] = "Link expired. Please try again. Redirecting...";
+
+      $this->load->view('template/header.php');
+      $this->load->view('reset_view/email_view', $data);
+
+      // redirect to reset password page after 5 second
+      header( "refresh:5;url=".base_url()."account/reset_password");
+    }
+    else{
+      //redirect('home');
+    }
+
+  }
+
+  // change user password
+  public function change_password(){
+    if($this->input->server('REQUEST_METHOD') === 'POST'){
+      $this->form_validation->set_rules('pass', 'Password', 'required');
+
+      if($this->form_validation->run()){
+        $password = $this->input->post('pass');
+        $id = $this->input->post('id');
+
+        $salt = $this->generateRandomString(32);
+        $password = ($this->input->post('password')).$salt;
+        $password = sha1($password).":".$salt;
+
+
+
+        $this->Account_model->change_password($password, $id);
+
+        $this->load->view('template/header.php');
+        $this->load->view('reset_view/reset_success');
+
+        // redirect to home page after 5 second
+        //header( "refresh:5;url=".base_url().);
+      }
+    }
+    else{
+      //redirect('home');
+    }
+  }
+
+  public function register(){
+    $this->form_validation->set_rules('sirname', 'Sir Name', 'trim|required|min_length[1]');
+    $this->form_validation->set_rules('name', 'Name', 'trim|required|min_length[3]');
+    $this->form_validation->set_rules('e-mail', 'Your Email', 'trim|required|valid_email');
+    $this->form_validation->set_rules('email', 'Your Email', 'trim|required|valid_email|matches[e-mail]');
+    $this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[4]|max_length[32]');
+    $this->form_validation->set_rules('passconf', 'Password Confirmation', 'trim|required|matches[password]');
+
+    if($this->input->server('REQUEST_METHOD') === 'POST'){
+      if($this->form_validation->run()){
+
+      $email  = $this->input->post('email');
+      $state = $this->Account_model->get_user($email);
+      $salt = $this->generateRandomString(32);
+      $password = ($this->input->post('password')).$salt;
+      $password = sha1($password).":".$salt;
+      $data = array(
+            'surname' 	=> $this->input->post('sirname'),
+            'name' 	=> $this->input->post('name'),
+            'email' 	=> $this->input->post('email'),
+            'password' 	=> $password
+          );
+      if(!$state['isSuccess']){
+        $this->Account_model->add_user($data);
+        $this->load->view('success');
+      }
+      else{
+        $this->load->view('registration_view');
+      }
+      }
+      else{
+        $this->load->view('registration_view');
+      }
+    }
+      else{
+      $this->load->view('registration_view');
+    }
+  }
+
+  function verify($hash=NULL)
+  {
+	if ($this->account_model->verifyEmailID($hash))
 	{
-		if ($this->account_model->verifyEmailID($hash))
-		{
-			$this->session->set_flashdata('verify_msg','<div class="alert alert-success text-center">Your Email Address is successfully verified! Please login to access your account!</div>');
-			redirect('account/register');
-		}
-		else
-		{
-			$this->session->set_flashdata('verify_msg','<div class="alert alert-danger text-center">Sorry! There is error verifying your Email Address!</div>');
-			redirect('account/register');
-		}
+	  $this->session->set_flashdata('verify_msg','<div class="alert alert-success text-center">Your Email Address is successfully verified! Please login to access your account!</div>');
+	  redirect('account/register');
 	}
+	else
+	{
+	  $this->session->set_flashdata('verify_msg','<div class="alert alert-danger text-center">Sorry! There is error verifying your Email Address!</div>');
+	  redirect('account/register');
+	}
+  }
+
+  private function generateRandomString($nbLetters)
+	{
+	  $randString="";
+	  $charUniverse="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+    for($i=0; $i<$nbLetters; $i++){
+	    $randInt=rand(0,61);
+      $randChar=$charUniverse[$randInt];
+	    $randString=$randString.$randChar;
+	  }
+  	return $randString;
+  }
 }
