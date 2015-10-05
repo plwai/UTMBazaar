@@ -67,9 +67,9 @@ class Account_model extends CI_Model{
   //activate user account
   function verifyEmailID($key)
   {
-	$data = array('status' => 1);
-	$this->db->where('md5(email)', $key);
-	return $this->db->update('user', $data);
+	  $data = array('status' => 1);
+	  $this->db->where('md5(email)', $key);
+	  return $this->db->update('user', $data);
   }
 
   // verify token
