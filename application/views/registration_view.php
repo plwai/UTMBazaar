@@ -61,7 +61,7 @@
                                 				</li>
                             				</ul>
                             				<ul class="nav navbar-nav navbar-right">
-                                				<li><a href="login.html"><span class="fa fa-sign-in"></span> Login</a></li>
+                                				<li><a href="login.php"><span class="fa fa-sign-in"></span> Login</a></li>
                                 				<li><a href="#"><span class="fa fa-edit"></span> Register</a></li>
                             				</ul>
                         			</div>
