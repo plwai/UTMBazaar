@@ -14,7 +14,7 @@
         <div class="form-group">
           <label class="control-label col-md-3 nopadding">Email Address:</label>
           <div class="col-md-6">
-            <input type="text" class="form-control" name="email" id="email">
+            <input type="email" class="form-control" name="email" id="email">
           </div>
           <div class="col-md-2">
             <button type="submit" class="btn btn-default">Reset</button>

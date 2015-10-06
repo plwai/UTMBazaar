@@ -4,22 +4,18 @@ class Account_model extends CI_Model{
 
   // Search for the user and return its data
   // Return true or false if only username passed
-  public function get_user($username, $password = ''){
+  public function get_user($username){
     $this->db->where('email', $username);
     $query = $this->db->get('utm_users');
 
     // Check the user whether exist in the database
-    if($query->num_rows() == 1 && $password == ''){
+    if($query->num_rows()){
       $row = $query->result_array();
 
       $data = array(
-        'id' => $row[0]['id'],
-        'isSuccess' => true
-      );
-    }
-    else if($query->num_rows() == 1){
-      $row = $query->result_array();
-      $data = array(
+        'username'     => $row[0]['email'],
+        'id'           => $row[0]['pkid'],
+        'password'     => $row[0]['password'],
 				'isSuccess'    => true
       );
     }
@@ -32,51 +28,32 @@ class Account_model extends CI_Model{
     return $data;
   }
 
-  // send email to user
-  public function sendEmail($to_email, $subject, $message)
-	{
-    $this->load->helper('email');
+  public function set_active($username){
+    $now = time();
+		$date = date ("Y-m-d", $now);
+		$time = date ("G:i:s", $now);
 
-		$from_email = 'utmbazaar@gmail.com';
+    $date = $date.":".$time;
 
-    $this->load->library('email');
+    $this->db->set('last_active', $date);
+    $this->db->where('email', $username);
+    $query = $this->db->update('utm_users');
+  }
 
-		//configure email settings
-		$config['protocol'] = 'smtp';
-		$config['smtp_host'] = 'ssl://smtp.gmail.com'; //smtp host name
-		$config['smtp_port'] = '465'; //smtp port number
-		$config['smtp_user'] = $from_email;
-		$config['smtp_pass'] = 'utmbazaar1'; //$from_email password
-		$config['mailtype'] = 'html';
-		$config['charset'] = 'utf-8';
-		$config['wordwrap'] = TRUE;
-		$config['newline'] = "\r\n"; //use double quotes
-
-
-    $this->email->initialize($config);
-		$this->email->set_newline("\r\n");
-
-		//send mail
-		$this->email->from($from_email, 'UTMBazaar');
-		$this->email->to($to_email);
-		$this->email->subject($subject);
-		$this->email->message($message);
-
-		return $this->email->send();
-	}
+  //activate user account
+  function verifyEmailID($key)
+  {
+	  $data = array('status' => 1);
+	  $this->db->where('md5(email)', $key);
+	  return $this->db->update('utm_users', $data);
+  }
 
   // verify token
   // type:
   //   password
-  public function verify_token($token, $type){
+  public function get_token($id, $type){
     if($type == "password"){
-      $id = $token[0];
-      $passToken = $token[1];
-      $currTstamp = $_SERVER["REQUEST_TIME"];
-      $timeLimit = 300; // in second
-      $error = NULL;
-
-      $this->db->where('id', $id);
+      $this->db->where('pkid', $id);
       $query = $this->db->get('utm_users');
 
       // verify user exist
@@ -84,28 +61,19 @@ class Account_model extends CI_Model{
         $row = $query->result_array();
 
         $tstamp = $row[0]['tstamp'];
-        if($currTstamp - $tstamp > $timeLimit){
-          $error = "Expired";
-
-          $this->db->set('tstamp', NULL);
-          $this->db->set('password_token', NULL);
-          $this->db->where('id', $id);
-          $this->db->update('utm_users');
-
-          return $error;
-        }
-
         $storedHash = $row[0]['password_token'];
-        $hash = hash('sha256', $passToken);
 
-        if($storedHash == $hash){
-          return $error;
-        }
-        else{
-          $error = "Invalid";
+        $data = array(
+                    'tstamp'     => $tstamp,
+                    'storedHash' => $storedHash
+                );
 
-          return $error;
-        }
+        $this->db->set('tstamp', NULL);
+        $this->db->set('password_token', NULL);
+        $this->db->where('pkid', $id);
+        $this->db->update('utm_users');
+
+        return $data;
       }
       else{
         $error = "Invalid";
@@ -120,31 +88,14 @@ class Account_model extends CI_Model{
     $this->db->set('password', $password);
     $this->db->set('password_token', NULL);
     $this->db->set('tstamp', NULL);
-    $this->db->where('id', $id);
+    $this->db->where('pkid', $id);
     $this->db->update('utm_users');
 
     return;
   }
 
-  // generate random password_token
-  public function gen_pass_token($email) {
-    $length = 15;
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $charactersLength = strlen($characters);
-    $passToken = '';
-    for ($i = 0; $i < $length; $i++) {
-        $passToken .= $characters[rand(0, $charactersLength - 1)];
-    }
-    $salt = uniqid(mt_rand(), true);
-    $passToken = $passToken.$salt;
-
-    $this->encrypt_pass_token($email, $passToken);
-
-    return $passToken;
-  }
-
   // encrypt password token and save into database
-  private function encrypt_pass_token($email, $passToken){
+  public function encrypt_pass_token($email, $passToken){
 
     $hash = hash('sha256', $passToken);
 

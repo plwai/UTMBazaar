@@ -5,22 +5,23 @@ class Account extends CI_Controller{
 
   public function __construct(){
 	  parent::__construct();
+
+    $this->load->model('Account_model');
   }
 
   // Account controller index
   public function index(){
     // check whether user login
-    /*if($this->session->userdata('is_logged_in')){
+    if($this->session->userdata('is_logged_in')){
 			redirect('home');
 		}
 		else{
-			$this->load->view('login_view');
-		}*/
+			$this->load->view('login');
+		}
   }
 
   public function check_email()
   {
-  	$this->load->model('Account_model');
 	  $email=$this->input->post('email');
   	$result=$this->Account_model->get_user($email);
 
@@ -39,7 +40,6 @@ class Account extends CI_Controller{
   /* Reset password function that will generate a link  *
    * to user's email for resetting password             */
   public function reset_password($type = ''){
-
     // Handle user data(username or email) sent by user
     if($this->input->server('REQUEST_METHOD') === 'POST'){
       $this->form_validation->set_rules('email', 'Email', 'required');
@@ -49,18 +49,17 @@ class Account extends CI_Controller{
         // Get data from reset_view form
         $username  = $this->input->post('email');
 
-        $this->load->model('Account_model');
 				$userdata = $this->Account_model->get_user($username);
 
         // if user email is exist
         if($userdata['isSuccess']){
-          $passToken = $this->Account_model->gen_pass_token($username);
+          $passToken = $this->gen_pass_token($username);
 
           $subject = "Reset Password";
           $message = "<a href='".base_url()."account/reset_link/".$userdata['id']."-".$passToken."' target='_blank'>Reset Password Link</a>";
 
           // send reset link to user through email
-          if($this->Account_model->sendEmail($username, $subject, $message)){
+          if($this->sendEmail($username, $subject, $message)){
             $data['message'] = "The email is sent to ".$username;
           }
           else{
@@ -88,20 +87,20 @@ class Account extends CI_Controller{
   // Handle reset link request from user
   public function reset_link($token){
     $tokenData = explode("-", $token);
+    $id = $tokenData[0];
+    $passToken = $tokenData[1];
+    $hash = hash('sha256', $passToken);
+    $currTstamp = $_SERVER["REQUEST_TIME"];
+    $timeLimit = 300; // in second
 
-    $this->load->model('Account_model');
+    // get token data
+    $storedData = $this->Account_model->get_token($id, "password");
 
-    // If token valid
-    $isValid = $this->Account_model->verify_token($tokenData, "password");
+    $tstamp = $storedData['tstamp'];
 
-    if(!$isValid){
-      $data['id'] = $tokenData[0];
-
-      $this->load->view('template/header.php');
-      $this->load->view('reset_view/resetlink_view', $data);
-    }
-    else if($isValid == "Expired"){
-      $data['message'] = "Link expired. Please try again. Redirecting...";
+    // check time stamp
+    if($currTstamp - $tstamp > $timeLimit){
+      $data['message'] = "Link expired. Please try again. Redirecting in 5 second...";
 
       $this->load->view('template/header.php');
       $this->load->view('reset_view/email_view', $data);
@@ -109,10 +108,17 @@ class Account extends CI_Controller{
       // redirect to reset password page after 5 second
       header( "refresh:5;url=".base_url()."account/reset_password");
     }
-    else{
-      //redirect('home');
-    }
 
+    // check token
+    if($storedData['storedHash'] == $hash){
+      $data['id'] = $id;
+
+      $this->load->view('template/header.php');
+      $this->load->view('reset_view/resetlink_view', $data);
+    }
+    else{
+      redirect('home');
+    }
   }
 
   // change user password
@@ -128,7 +134,7 @@ class Account extends CI_Controller{
         $password = ($this->input->post('password')).$salt;
         $password = sha1($password).":".$salt;
 
-        $this->load->model('Account_model');
+
 
         $this->Account_model->change_password($password, $id);
 
@@ -136,15 +142,16 @@ class Account extends CI_Controller{
         $this->load->view('reset_view/reset_success');
 
         // redirect to home page after 5 second
-        //header( "refresh:5;url=".base_url().);
+        header( "refresh:5;url=".base_url());
       }
     }
     else{
-      //redirect('home');
+      redirect('home');
     }
   }
 
   public function register(){
+//set input validation rule
     $this->form_validation->set_rules('sirname', 'Sir Name', 'trim|required|min_length[1]');
     $this->form_validation->set_rules('name', 'Name', 'trim|required|min_length[3]');
     $this->form_validation->set_rules('e-mail', 'Your Email', 'trim|required|valid_email');
@@ -154,9 +161,10 @@ class Account extends CI_Controller{
 
     if($this->input->server('REQUEST_METHOD') === 'POST'){
       if($this->form_validation->run()){
-      $this->load->model('Account_model');
+//get the data post from form and validate the email
       $email  = $this->input->post('email');
       $state = $this->Account_model->get_user($email);
+//enc rule      
       $salt = $this->generateRandomString(32);
       $password = ($this->input->post('password')).$salt;
       $password = sha1($password).":".$salt;
@@ -164,11 +172,31 @@ class Account extends CI_Controller{
             'surname' 	=> $this->input->post('sirname'),
             'name' 	=> $this->input->post('name'),
             'email' 	=> $this->input->post('email'),
-            'password' 	=> $password
+            'password' 	=> $password,
+            'register_date' => date("Y/m/d"),
+            'last_active' => date("Y-m-d h:i:sa")
           );
+//If email valid add information into database, send email verify, set session and directly to homepage.
       if(!$state['isSuccess']){
+        $subject = 'Verify Your Email Address';
+        $message = 'Dear User,<br /><br />Please click on the below activation link to verify your email address.<br /><br /> http://localhost/UTMBazaar/index.php/account/verify/' . md5($email) . '<br /><br /><br />Thanks<br />UTMBazaar Team';
+        $this->sendEmail($email,$subject,$message);
         $this->Account_model->add_user($data);
-        $this->load->view('success');
+
+        $_data = $this->Account_model->get_user($email);
+        $data2 = array(
+            'username'  => $_data['username'],
+            'id'  => $_data['id'],
+            'is_logged_in'  => true
+        );
+
+        $this->Account_model->set_active($email);
+        $this->session->set_userdata($data2);
+
+        echo "<script>window.location.href='" . base_url() . "home';
+        alert('Dear user please confirm your email address in your inbox.');
+        </script>";
+
       }
       else{
         $this->load->view('registration_view');
@@ -183,6 +211,73 @@ class Account extends CI_Controller{
     }
   }
 
+  function verify($hash=NULL)
+  {
+    if ($this->account_model->verifyEmailID($hash))
+    {
+      $this->session->set_flashdata('verify_msg','<div class="alert alert-success text-center">Your Email Address is successfully verified! Please login to access your account!</div>');
+      redirect('account/register');
+    }
+    else
+    {
+      $this->session->set_flashdata('verify_msg','<div class="alert alert-danger text-center">Sorry! There is error verifying your Email Address!</div>');
+      redirect('account/register');
+    }
+  }
+
+  public function login()
+	{
+		if ($this->input->server('REQUEST_METHOD') === 'POST')
+		{
+			$this->form_validation->set_rules('email', 'email', 'required');
+			$this->form_validation->set_rules('password', 'Password', 'required');
+
+			if ($this->form_validation->run())
+			{
+				$username  = $this->input->post('email');
+				$password  = $this->input->post('password');
+
+				$_data = $this->Account_model->get_user($username);
+        if($_data['isSuccess']==false){
+          $result['res']=0;
+          echo json_encode($result);
+          return;
+        }
+
+				$enc_pass	= explode(":", $_data["password"]);
+				$salt		= $enc_pass[1];
+
+				if(sha1($password.$salt)!=$enc_pass[0])
+				{
+          $result['res']=0;
+          echo json_encode($result);
+					return;
+				}
+
+        $data = array(
+						'username' 	=> $_data['username'],
+						'id'  => $_data['id'],
+						'is_logged_in' 	=> true
+				);
+
+				$this->Account_model->set_active($username);
+				$this->session->set_userdata($data);
+        $result['done']=1;
+        echo json_encode($result);
+        return ;
+			}
+		}
+		else{
+			$this->load->view('login');
+		}
+	}
+
+  public function logout()
+	{
+		$this->session->sess_destroy();
+		redirect('/');
+	}
+
   private function generateRandomString($nbLetters)
 	{
 	  $randString="";
@@ -195,4 +290,53 @@ class Account extends CI_Controller{
 	  }
   	return $randString;
   }
+
+  // generate random password_token
+  private function gen_pass_token($email) {
+    $length = 15;
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $passToken = '';
+    for ($i = 0; $i < $length; $i++) {
+        $passToken .= $characters[rand(0, $charactersLength - 1)];
+    }
+    $salt = uniqid(mt_rand(), true);
+    $passToken = $passToken.$salt;
+
+    $this->Account_model->encrypt_pass_token($email, $passToken);
+
+    return $passToken;
+  }
+
+  // send email to user
+  private function sendEmail($to_email, $subject, $message){
+    $this->load->helper('email');
+
+		$from_email = 'utmbazaar@gmail.com';
+
+    $this->load->library('email');
+
+		//configure email settings
+		$config['protocol'] = 'smtp';
+		$config['smtp_host'] = 'ssl://smtp.gmail.com'; //smtp host name
+		$config['smtp_port'] = '465'; //smtp port number
+		$config['smtp_user'] = $from_email;
+		$config['smtp_pass'] = 'utmbazaar1'; //$from_email password
+		$config['mailtype'] = 'html';
+		$config['charset'] = 'utf-8';
+		$config['wordwrap'] = TRUE;
+		$config['newline'] = "\r\n"; //use double quotes
+
+
+    $this->email->initialize($config);
+		$this->email->set_newline("\r\n");
+
+		//send mail
+		$this->email->from($from_email, 'UTMBazaar');
+		$this->email->to($to_email);
+		$this->email->subject($subject);
+		$this->email->message($message);
+
+		return $this->email->send();
+	}
 }
