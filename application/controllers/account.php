@@ -16,7 +16,7 @@ class Account extends CI_Controller{
 			redirect('home');
 		}
 		else{
-			$this->load->view('login');
+      $this->login();
 		}
   }
 
@@ -40,6 +40,9 @@ class Account extends CI_Controller{
   /* Reset password function that will generate a link  *
    * to user's email for resetting password             */
   public function reset_password($type = ''){
+    $data['title'] = 'Reset Password';
+    $data['display'] = 'display:none;';
+
     // Handle user data(username or email) sent by user
     if($this->input->server('REQUEST_METHOD') === 'POST'){
       $this->form_validation->set_rules('email', 'Email', 'required');
@@ -66,26 +69,42 @@ class Account extends CI_Controller{
             $data['message'] = "Sorry. Email cannot be sent. Please try again later.";
           }
 
-          $this->load->view('template/header.php');
+          $this->load->view('template/header.php', $data);
           $this->load->view('reset_view/email_view', $data);
+
+          // redirect to reset password page after 5 second
+          header( "refresh:5;url=".base_url());
         }
         else{
           // For security reason, we dont show the email is invalid to user
           $data['message'] = "The email is sent to ".$username;
 
-          $this->load->view('template/header.php');
+          $this->load->view('template/header.php', $data);
           $this->load->view('reset_view/email_view', $data);
+
+          // redirect to reset password page after 5 second
+          header( "refresh:5;url=".base_url());
         }
       }
     }
+    else if($this->session->userdata('is_logged_in')){
+      redirect('home');
+    }
     else{
-      $this->load->view('template/header.php');
+      $this->load->view('template/header.php', $data);
       $this->load->view('reset_view/reset_view');
     }
   }
 
   // Handle reset link request from user
-  public function reset_link($token){
+  public function reset_link($token=""){
+    if($token == ""){
+      redirect('home');
+    }
+
+    $data['title'] = 'Reset Password';
+    $data['display'] = 'display:none;';
+
     $tokenData = explode("-", $token);
     $id = $tokenData[0];
     $passToken = $tokenData[1];
@@ -102,7 +121,7 @@ class Account extends CI_Controller{
     if($currTstamp - $tstamp > $timeLimit){
       $data['message'] = "Link expired. Please try again. Redirecting in 5 second...";
 
-      $this->load->view('template/header.php');
+      $this->load->view('template/header.php', $data);
       $this->load->view('reset_view/email_view', $data);
 
       // redirect to reset password page after 5 second
@@ -113,7 +132,7 @@ class Account extends CI_Controller{
     if($storedData['storedHash'] == $hash){
       $data['id'] = $id;
 
-      $this->load->view('template/header.php');
+      $this->load->view('template/header.php', $data);
       $this->load->view('reset_view/resetlink_view', $data);
     }
     else{
@@ -123,6 +142,9 @@ class Account extends CI_Controller{
 
   // change user password
   public function change_password(){
+    $data['title'] = 'Reset Password';
+    $data['display'] = 'display:none;';
+
     if($this->input->server('REQUEST_METHOD') === 'POST'){
       $this->form_validation->set_rules('pass', 'Password', 'required');
 
@@ -131,14 +153,12 @@ class Account extends CI_Controller{
         $id = $this->input->post('id');
 
         $salt = $this->generateRandomString(32);
-        $password = ($this->input->post('password')).$salt;
+        $password = $password.$salt;
         $password = sha1($password).":".$salt;
-
-
 
         $this->Account_model->change_password($password, $id);
 
-        $this->load->view('template/header.php');
+        $this->load->view('template/header.php', $data);
         $this->load->view('reset_view/reset_success');
 
         // redirect to home page after 5 second
@@ -151,7 +171,10 @@ class Account extends CI_Controller{
   }
 
   public function register(){
-//set input validation rule
+    $data['title'] = 'Registration';
+    $data['display'] = 'display:none;';
+
+    //set input validation rule
     $this->form_validation->set_rules('sirname', 'Sir Name', 'trim|required|min_length[1]');
     $this->form_validation->set_rules('name', 'Name', 'trim|required|min_length[3]');
     $this->form_validation->set_rules('e-mail', 'Your Email', 'trim|required|valid_email');
@@ -161,10 +184,10 @@ class Account extends CI_Controller{
 
     if($this->input->server('REQUEST_METHOD') === 'POST'){
       if($this->form_validation->run()){
-//get the data post from form and validate the email
+      //get the data post from form and validate the email
       $email  = $this->input->post('email');
       $state = $this->Account_model->get_user($email);
-//enc rule      
+      //enc rule
       $salt = $this->generateRandomString(32);
       $password = ($this->input->post('password')).$salt;
       $password = sha1($password).":".$salt;
@@ -176,7 +199,7 @@ class Account extends CI_Controller{
             'register_date' => date("Y/m/d"),
             'last_active' => date("Y-m-d h:i:sa")
           );
-//If email valid add information into database, send email verify, set session and directly to homepage.
+      //If email valid add information into database, send email verify, set session and directly to homepage.
       if(!$state['isSuccess']){
         $subject = 'Verify Your Email Address';
         $message = 'Dear User,<br /><br />Please click on the below activation link to verify your email address.<br /><br /> http://localhost/UTMBazaar/index.php/account/verify/' . md5($email) . '<br /><br /><br />Thanks<br />UTMBazaar Team';
@@ -199,21 +222,27 @@ class Account extends CI_Controller{
 
       }
       else{
+        $this->load->view('template/header.php', $data);
         $this->load->view('registration_view');
       }
       }
       else{
+        $this->load->view('template/header.php', $data);
         $this->load->view('registration_view');
       }
     }
-      else{
+    else if($this->session->userdata('is_logged_in')){
+      redirect('home');
+    }
+    else{
+      $this->load->view('template/header.php', $data);
       $this->load->view('registration_view');
     }
   }
 
   function verify($hash=NULL)
   {
-    if ($this->account_model->verifyEmailID($hash))
+    if ($this->Account_model->verifyEmailID($hash))
     {
       $this->session->set_flashdata('verify_msg','<div class="alert alert-success text-center">Your Email Address is successfully verified! Please login to access your account!</div>');
       redirect('account/register');
@@ -227,6 +256,9 @@ class Account extends CI_Controller{
 
   public function login()
 	{
+    $data['title'] = 'Login';
+    $data['display'] = 'display:none;';
+
 		if ($this->input->server('REQUEST_METHOD') === 'POST')
 		{
 			$this->form_validation->set_rules('email', 'email', 'required');
@@ -267,7 +299,11 @@ class Account extends CI_Controller{
         return ;
 			}
 		}
+    else if($this->session->userdata('is_logged_in')){
+      redirect('home');
+    }
 		else{
+      $this->load->view('template/header.php', $data);
 			$this->load->view('login');
 		}
 	}
@@ -275,7 +311,7 @@ class Account extends CI_Controller{
   public function logout()
 	{
 		$this->session->sess_destroy();
-		redirect('/');
+		redirect('home');
 	}
 
   private function generateRandomString($nbLetters)
