@@ -151,6 +151,7 @@ class Account extends CI_Controller{
   }
 
   public function register(){
+//set input validation rule
     $this->form_validation->set_rules('sirname', 'Sir Name', 'trim|required|min_length[1]');
     $this->form_validation->set_rules('name', 'Name', 'trim|required|min_length[3]');
     $this->form_validation->set_rules('e-mail', 'Your Email', 'trim|required|valid_email');
@@ -160,9 +161,10 @@ class Account extends CI_Controller{
 
     if($this->input->server('REQUEST_METHOD') === 'POST'){
       if($this->form_validation->run()){
-
+//get the data post from form and validate the email
       $email  = $this->input->post('email');
       $state = $this->Account_model->get_user($email);
+//enc rule      
       $salt = $this->generateRandomString(32);
       $password = ($this->input->post('password')).$salt;
       $password = sha1($password).":".$salt;
@@ -170,11 +172,31 @@ class Account extends CI_Controller{
             'surname' 	=> $this->input->post('sirname'),
             'name' 	=> $this->input->post('name'),
             'email' 	=> $this->input->post('email'),
-            'password' 	=> $password
+            'password' 	=> $password,
+            'register_date' => date("Y/m/d"),
+            'last_active' => date("Y-m-d h:i:sa")
           );
+//If email valid add information into database, send email verify, set session and directly to homepage.
       if(!$state['isSuccess']){
+        $subject = 'Verify Your Email Address';
+        $message = 'Dear User,<br /><br />Please click on the below activation link to verify your email address.<br /><br /> http://localhost/UTMBazaar/index.php/account/verify/' . md5($email) . '<br /><br /><br />Thanks<br />UTMBazaar Team';
+        $this->sendEmail($email,$subject,$message);
         $this->Account_model->add_user($data);
-        $this->load->view('success');
+
+        $_data = $this->Account_model->get_user($email);
+        $data2 = array(
+            'username'  => $_data['username'],
+            'id'  => $_data['id'],
+            'is_logged_in'  => true
+        );
+
+        $this->Account_model->set_active($email);
+        $this->session->set_userdata($data2);
+
+        echo "<script>window.location.href='" . base_url() . "home';
+        alert('Dear user please confirm your email address in your inbox.');
+        </script>";
+
       }
       else{
         $this->load->view('registration_view');
@@ -216,13 +238,20 @@ class Account extends CI_Controller{
 				$password  = $this->input->post('password');
 
 				$_data = $this->Account_model->get_user($username);
+        if($_data['isSuccess']==false){
+          $result['res']=0;
+          echo json_encode($result);
+          return;
+        }
 
 				$enc_pass	= explode(":", $_data["password"]);
 				$salt		= $enc_pass[1];
 
 				if(sha1($password.$salt)!=$enc_pass[0])
 				{
-					redirect('account/login');
+          $result['res']=0;
+          echo json_encode($result);
+					return;
 				}
 
         $data = array(
@@ -233,11 +262,13 @@ class Account extends CI_Controller{
 
 				$this->Account_model->set_active($username);
 				$this->session->set_userdata($data);
-				redirect('home');
+        $result['done']=1;
+        echo json_encode($result);
+        return ;
 			}
 		}
 		else{
-			$this->load->view('home');
+			$this->load->view('login');
 		}
 	}
 

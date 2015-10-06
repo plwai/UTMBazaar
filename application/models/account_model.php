@@ -45,7 +45,7 @@ class Account_model extends CI_Model{
   {
 	  $data = array('status' => 1);
 	  $this->db->where('md5(email)', $key);
-	  return $this->db->update('user', $data);
+	  return $this->db->update('utm_users', $data);
   }
 
   // verify token

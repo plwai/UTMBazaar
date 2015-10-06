@@ -3,7 +3,9 @@
 <!DOCTYPE html>
 
 <!-- Jquery Validation Plugin version 1.13.0-->
-<script src="<?php echo base_url(); ?>assets/jquery-validation-1.13.1/dist/jquery.validate.js"></script>
+<script type="text/javascript" src="<?php echo base_url();?>assets/\jquery/jquery-1.11.3.js" ></script>
+<script type="text/javascript" src="<?php echo base_url();?>assets\javascript\validation/login-validation.js"></script>
+<link rel="stylesheet" href="<?php echo base_url("assets/bootstrap-3.3.5-dist\css/bootstrap.css"); ?>" />
 
 <body>
 
@@ -12,24 +14,27 @@
 		<br>
 		<div class="row">
 			<div class="col-sm-offset-4 col-sm-4 login-form">
-				<?php echo form_open('account/login'); ?>
-
+				<form action='post'>
+                
 					<h3>Sign In</h2>
 					<hr>
 
 					<div class="form-group">
 						<h4>Email</h4>
 						<input type="email" name="email" class="form-control" id="email">
+						<p id ="email" ></p>
+						<p id ="email2" ></p>
 					</div>
 
 					<div class="form-group">
 						<h4>Password</h4>
 						<input type="password" name="password" class="form-control" id="password">
+						<p id="password"></p>
 					</div>
 
 					<br>
-
-					<button type="submit" class="btn btn-default">Login</button>
+                    <p id="respond"></p>
+					<button id="submit" type="button" class="btn btn-default">Login</button>
 					<br>
 					<br>
 					<br>

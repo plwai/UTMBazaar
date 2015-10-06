@@ -22,37 +22,37 @@
 					<div class="form-group">
 						<h5>First Name : </h5>
 						<input type="text" name="sirname"  id="sirname" />
-						<span id="usr_verify1" class="verify"></span><div class="text-danger" id="sirnametxt">
+						<div class="text-danger" id="sirnametxt">
 					</div>
 
 					<div class="form-group">
 						<h5>Last Name: </h5>
 						<input type="text" name="name" id="name"    />
-						<span id="usr_verify2" class="verify"></span><div class="text-danger" id="nametxt">
+						<div class="text-danger" id="nametxt">
 					</div>
 
 					<div class="form-group">
 						<h5>Email Address  : </h5>
 						<input type="text" name="e-mail" id="e-mail"/>
-						<span id="usr_verify3" class="verify"></span><div class="text-danger" id="e-mailtxt">
+						<div class="text-danger" id="e-mailtxt">
 					</div>
 
 					<div class="form-group">
 						<h5>Confirma Email : </h5>
 						<input type="text" name="email" id="email"/>
-						<span id="usr_verify4" class="verify"></span><div class="text-danger" id="emailtxt">
+						<div class="text-danger" id="emailtxt">
 					</div>
 
 					<div class="form-group">
 						<h5>Password : </h5>
 						<input type="Password" name="password" id="password"  />
-						<span id="usr_verify5" class="verify"></span><div class="text-danger" id="passwordtxt">
+						<div class="text-danger" id="passwordtxt">
 					</div>
 
 					<div class="form-group">
 						<h5>Type it again : </h5>
 						<input type="password" name="passconf" id="passconf"  />
-						<span id="usr_verify6" class="verify"></span><div class="text-danger" id="passconftxt">
+						<div class="text-danger" id="passconftxt">
 					</div>
 
 					<div class="form-group">
