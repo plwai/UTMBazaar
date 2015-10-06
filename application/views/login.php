@@ -3,9 +3,8 @@
 <!DOCTYPE html>
 
 <!-- Jquery Validation Plugin version 1.13.0-->
-<script type="text/javascript" src="<?php echo base_url();?>assets/\jquery/jquery-1.11.3.js" ></script>
 <script type="text/javascript" src="<?php echo base_url();?>assets\javascript\validation/login-validation.js"></script>
-<link rel="stylesheet" href="<?php echo base_url("assets/bootstrap-3.3.5-dist\css/bootstrap.css"); ?>" />
+
 
 <body>
 
@@ -15,7 +14,7 @@
 		<div class="row">
 			<div class="col-sm-offset-4 col-sm-4 login-form">
 				<form action='post'>
-                
+
 					<h3>Sign In</h2>
 					<hr>
 
@@ -30,6 +29,7 @@
 						<h4>Password</h4>
 						<input type="password" name="password" class="form-control" id="password">
 						<p id="password"></p>
+            <a href=<?php echo base_url("account/reset_password")?>>Forget password?</a>
 					</div>
 
 					<br>
