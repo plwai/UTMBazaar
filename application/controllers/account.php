@@ -191,14 +191,21 @@ class Account extends CI_Controller{
       $salt = $this->generateRandomString(32);
       $password = ($this->input->post('password')).$salt;
       $password = sha1($password).":".$salt;
+
+      $now = time();
+      $date = date ("Y-m-d", $now);
+      $time = date ("G:i:s", $now);
+
+      $date = $date.":".$time;
+
       $data = array(
             'surname' 	=> $this->input->post('sirname'),
             'name' 	=> $this->input->post('name'),
             'email' 	=> $this->input->post('email'),
             'password' 	=> $password,
-            'register_date' => date("Y/m/d"),
-            'last_active' => date("Y-m-d h:i:sa")
-          );
+            'register_date' => $date,
+            'last_active' => $date
+            );
       //If email valid add information into database, send email verify, set session and directly to homepage.
       if(!$state['isSuccess']){
         $subject = 'Verify Your Email Address';
