@@ -56,12 +56,12 @@ class Products extends CI_Controller{
 
                 } else {
                     echo "<script>window.location.href='" . base_url() . "products/add_products';
-                    alert('Dear user please confirm your email address in your inbox.');
+                    alert('Error Occur');
                     </script>";
                 }
                 $position = $position+1;
                 $upload_state=true;
-                echo "<script type='text/javascript'>alert('submitted successfully!')</script>";
+                
 
             }
         }
@@ -74,7 +74,7 @@ class Products extends CI_Controller{
         }
         else{
             echo "<script>window.location.href='" . base_url() . "products/add_products';
-            alert('Dear user please confirm your email address in your inbox.');
+            alert('Invalid file format');
             </script>";
 
         }
