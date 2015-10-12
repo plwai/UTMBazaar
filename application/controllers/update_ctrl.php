@@ -9,11 +9,11 @@
 	function show_user_id() {
 		$id = $this->uri->segment(3);
 		$data['utm_users'] = $this->update_model->show_user();
-		$data['single_user'] = $this->update_model->show_user_id($pkid);
+		$data['single_user'] = $this->update_model->show_user_id($id);
 		$this->load->view('update_view', $data);
 	}
 	
-function update_user_id1() {
+	function update_user_id1() {
 			$id= $this->input->post('did');
 			$data = array(
 				'User Name' => $this->input->post('name'),
@@ -22,7 +22,7 @@ function update_user_id1() {
 				//'User_Address' => $this->input->post('daddress')
 				);
 		
-			$this->update_model->update_user_id1($pkid,$data);
+			$this->update_model->update_user_id1($id,$data);
 			$this->show_user_id();
 		}
 	}
