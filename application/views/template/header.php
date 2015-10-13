@@ -39,7 +39,7 @@
     </div>
 
     <!--THIS IS NAVIBAR-->
-    <nav class="navbar navbar-default topmenu" style=<?php echo $display; ?>>
+    <nav class="navbar navbar-default topmenu" style=<?php if(isset($display)){echo $display;}; ?>>
       <div class="container-fluid">
         <div class="navbar-inner">
           <div class="navbar-header">
