@@ -18,6 +18,8 @@ class Pay_item extends CI_Controller{
 
   public function __construct(){
 	  parent::__construct();
+
+    $this->load->model('Pay_item_model');
   }
 
   // Account controller index
@@ -80,76 +82,117 @@ class Pay_item extends CI_Controller{
 
   // link to paypal server
   public function pay_online(){
-    $data['title'] = "payment";
+    if($this->input->server('REQUEST_METHOD') === 'POST'){
+      $data['title'] = "payment";
 
-    // Get OAuthToken
-    $apiContext = $this->getAccessToken();
+      // Get OAuthToken
+      $apiContext = $this->getAccessToken();
 
-    $payer = new Payer();
-    $payer->setPaymentMethod("paypal");
+      $payer = new Payer();
+      $payer->setPaymentMethod("paypal");
 
-    $item1 = new Item();
-    $item1->setName('Item1')
-        ->setCurrency('USD')
-        ->setQuantity(1)
-        ->setSku("123123") // Similar to `item_number` in Classic API
-        ->setPrice(7.5);
-    $item2 = new Item();
-    $item2->setName('Item2')
-        ->setCurrency('USD')
-        ->setQuantity(5)
-        ->setSku("321321") // Similar to `item_number` in Classic API
-        ->setPrice(2);
+      $orderID = $this->input->post('order_id[]');
 
-    $itemList = new ItemList();
-    $itemList->setItems(array($item1, $item2));
+      if($orderID == null){
+        return;
+      }
 
-    $details = new Details();
-    $details->setShipping(1.2)
-        ->setTax(1.3)
-        ->setSubtotal(17.50);
+      $itemArray = array();
+      $subTotalPrice = 0;
+      $tax = 1;
+      $shipping = 1;
 
-    $amount = new Amount();
-    $amount->setCurrency("USD")
-    ->setTotal(20)
-    ->setDetails($details);
+      foreach($orderID as $key){
+        // Verify order_id to make sure order data correct
+        if(!$this->Pay_item_model->verifyOrder($key, $this->session->userdata('id'))){
+          $this->session->set_flashdata('msg', 'Order data is not correct. Please try again later');
 
-    $transaction = new Transaction();
-    $transaction->setAmount($amount)
-    ->setItemList($itemList)
-    ->setDescription("Payment description")
-    ->setInvoiceNumber(uniqid());
+          $data['link'] = '';
 
-    $baseUrl = base_url();
-    $redirectUrls = new RedirectUrls();
-    $redirectUrls->setReturnUrl($baseUrl."pay_item/execute_payment?success=true")
-    ->setCancelUrl($baseUrl."pay_item/execute_payment?success=false");
+          $this->load->view('template/header');
+          $this->load->view('payment_view/payment', $data);
 
-    $payment = new Payment();
-    $payment->setIntent("sale")
-    ->setPayer($payer)
-    ->setRedirectUrls($redirectUrls)
-    ->setTransactions(array($transaction));
+          return;
+        }
 
-    $request = clone $payment;
+        // Get item data
+        $itemData = $this->Pay_item_model->getItem($key);
+        $itemPrice = $itemData['price'] * $itemData['quantity'];
 
-    try{
-      $payment->create($apiContext);
-    }catch(Exception $ex){
-      $this->session->set_flashdata('msg', 'Something wrong now. Please try again later');
+        $item1 = new Item();
+        $item1->setName($itemData['name'])
+            ->setCurrency('MYR')
+            ->setQuantity($itemData['quantity'])
+            ->setSku($itemData['id'])
+            ->setPrice($itemData['price']);
 
-      $data['link'] = '';
+        $subTotalPrice += $itemPrice;
 
-      $this->load->view('template/header');
+        array_push($itemArray, $item1);
+      }
+
+
+      $itemList = new ItemList();
+      $itemList->setItems($itemArray);
+
+      $details = new Details();
+      $details->setShipping($shipping)
+          ->setTax($tax)
+          ->setSubtotal($subTotalPrice);
+
+      $amount = new Amount();
+      $amount->setCurrency("MYR")
+      ->setTotal($subTotalPrice + $shipping + $tax)
+      ->setDetails($details);
+
+      $transaction = new Transaction();
+      $transaction->setAmount($amount)
+      ->setItemList($itemList)
+      ->setDescription("Payment description")
+      ->setInvoiceNumber(uniqid());
+
+      $baseUrl = base_url();
+      $redirectUrls = new RedirectUrls();
+      $redirectUrls->setReturnUrl($baseUrl."pay_item/execute_payment?success=true")
+      ->setCancelUrl($baseUrl."pay_item/execute_payment?success=false");
+
+      $payment = new Payment();
+      $payment->setIntent("sale")
+      ->setPayer($payer)
+      ->setRedirectUrls($redirectUrls)
+      ->setTransactions(array($transaction));
+
+      $request = clone $payment;
+
+      try{
+        $payment->create($apiContext);
+      }catch(Exception $ex){
+        $this->session->set_flashdata('msg', 'Something wrong now. Please try again later'.$subTotalPrice);
+
+        $data['link'] = '';
+
+        $this->load->view('template/header', $data);
+        $this->load->view('payment_view/payment', $data);
+        return;
+      }
+      $approvalUrl = $payment->getApprovalLink();
+
+      $data['link'] = $approvalUrl;
+
+      $this->load->view('template/header', $data);
       $this->load->view('payment_view/payment', $data);
-      return;
+
+      header( "refresh:2;url=".$approvalUrl);
     }
-    $approvalUrl = $payment->getApprovalLink();
+    else{
+      redirect('home');
+    }
+  }
 
-    $data['link'] = $approvalUrl;
-
-    $this->load->view('template/header', $data);
-    $this->load->view('payment_view/payment', $data);
+  // testcase
+  public function test(){
+    $this->load->view('template/header');
+    $this->load->view('payment_view/order_list');
   }
 
   // Execute verified payment
@@ -160,7 +203,7 @@ class Pay_item extends CI_Controller{
       $success = $this->input->get('success', TRUE);
 
       if($success == 'false'){
-        $this->session->set_flashdata('msg', 'Payment is not successful.');
+        $data['result'] = "payment canceled";
         $this->load->view('template/header', $data);
         $this->load->view('payment_view/payment_result');
 
