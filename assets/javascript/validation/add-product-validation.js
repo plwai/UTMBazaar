@@ -46,7 +46,8 @@ function validation(){
 
 
     var pic = $("input#up_file").val();
-    if (pic == '' || pic == null) {
+    if (document.getElementById("up_file").files.length < 1) {
+
         $("p#iup_file").css('color', 'red');
         $("p#iup_file").text('Select And Upload a pictures related to the product');
         var f = false;
@@ -88,18 +89,19 @@ function validation(){
 
 
 
-    if (a == false || b == false || c==false|| d == false || e == false || f == false|| g == false) {
+    if (a == false || b == false || c==false|| d == false || f == false||h==false|| i==false|| g == false) {
+
         return  false;
 
     }else{
-        return  'true';
+        return  true;
     }
 }
 
 jQuery(document).ready(function() {
     $('input#submit').click(function(e) {
         var validate_value = validation();
-        if(validate_value=='true'){
+        if(validate_value==true){
         }else{
             e.preventDefault();
         }
