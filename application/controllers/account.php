@@ -383,39 +383,15 @@ class Account extends CI_Controller{
 		return $this->email->send();
 	}
 	
-	/*function show_user() {
+	function show_user() {
 		$id = $this->uri->segment(3);
 		
 		$data['utm_users'] = $this->account_model->show();
 		$data['single_user'] = $this->account_model->show_user($id);
 		$this->load->view('template/header.php', $data);
 		$this->load->view('update_view', $data);
-	}*/
+	}
 	
-	  public function show_user(){
-    $this->db->where('email');
-    $query = $this->db->get('utm_users');
-
-    // Check the user whether exist in the database
-    if($query->num_rows()){
-      $row = $query->result_array();
-
-      $data = array(
-        'username'     => $row[0]['email'],
-        'id'           => $row[0]['pkid'],
-        'password'     => $row[0]['password'],
-				'isSuccess'    => true
-      );
-	  echo "$data";
-    }
-    else{
-      $data = array(
-        'isSuccess' => false
-      );
-    }
-
-    return $data;
-  }
 	
 	function update_user() {
 			$id= $this->input->post('did');

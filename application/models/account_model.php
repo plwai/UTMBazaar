@@ -117,12 +117,12 @@ class Account_model extends CI_Model{
 	}
 	
 		
-	/*function show_user(){
+	function show_user(){
 		$query = $this->db->get('utm_users');
 		$query_result = $query->result();
 		
 		return $query_result;
-	}*/
+	}
 	
 	
 	
@@ -142,31 +142,4 @@ class Account_model extends CI_Model{
 		$this->db->update('utm_users', $data);
 	}
 	
-	
-	
-	
-	
-	  public function show_user($username){
-    $this->db->where('email', $username);
-    $query = $this->db->get('utm_users');
-
-    // Check the user whether exist in the database
-    if($query->num_rows()){
-      $row = $query->result_array();
-
-      $data = array(
-        'username'     => $row[0]['email'],
-        'id'           => $row[0]['pkid'],
-        'password'     => $row[0]['password'],
-				'isSuccess'    => true
-      );
-    }
-    else{
-      $data = array(
-        'isSuccess' => false
-      );
-    }
-
-    return $data;
-  }
 }
