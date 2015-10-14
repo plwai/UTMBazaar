@@ -80,6 +80,60 @@ class Pay_item extends CI_Controller{
     return $apiContext;
   }
 
+  // extract response JSON data and insert into database
+  private function extractData($response){
+    $result = true;
+    $response->toJSON();
+    $response = json_decode($response);
+
+    $createTime = $response->create_time;
+    $payDate = $response->update_time;
+    $payer = $response->payer;
+    $transactions = $response->transactions;
+    $transactionID = $transactions[0]->related_resources[0]->sale->id;
+    $state = $transactions[0]->related_resources[0]->sale->state;
+    $paymentState = $response->state;
+
+    if($paymentState != 'approved'){
+      $remark = "payment is not approved.";
+      $result = false;
+    }
+    else if($state == 'completed'){
+      $remark = "payment is successful.";
+    }
+    else{
+      $remark = "payment is approved but not complete.";
+      $result = false;
+    }
+
+    $paymentData = array(
+                'transaction_id' => $transactionID,
+                'payer_id'       => $payer->payer_info->payer_id,
+                'create_time'    => $createTime,
+                'date_paid'      => $payDate,
+                'state'          => $state,
+                'pay_type'       => $payer->payment_method,
+                'remark'         => $remark
+    );
+
+    $paymentID = $this->Pay_item_model->setPayment($paymentData);
+
+    if($state == 'completed' && $paymentState == 'approved'){
+      $itemList = $transactions[0]->item_list->items;
+
+      foreach($itemList as $item){
+        $itemData = array(
+          'payment_id'   => $paymentID,
+          'order_status' => 1
+        );
+
+        $this->Pay_item_model->updateOrder($item->sku, $itemData);
+      }
+    }
+
+    return $result;
+  }
+
   // link to paypal server
   public function pay_online(){
     if($this->input->server('REQUEST_METHOD') === 'POST'){
@@ -148,7 +202,7 @@ class Pay_item extends CI_Controller{
       $transaction = new Transaction();
       $transaction->setAmount($amount)
       ->setItemList($itemList)
-      ->setDescription("Payment description")
+      ->setDescription("UTMBazaar online payment")
       ->setInvoiceNumber(uniqid());
 
       $baseUrl = base_url();
@@ -182,7 +236,7 @@ class Pay_item extends CI_Controller{
       $this->load->view('template/header', $data);
       $this->load->view('payment_view/payment', $data);
 
-      header( "refresh:2;url=".$approvalUrl);
+      header( "refresh:1;url=".$approvalUrl);
     }
     else{
       redirect('home');
@@ -214,14 +268,29 @@ class Pay_item extends CI_Controller{
       $apiContext = $this->getAccessToken();
 
       $paymentId = $this->input->get('paymentId', TRUE);
-      $payment = Payment::get($paymentId, $apiContext);
+
+      try{
+        $payment = Payment::get($paymentId, $apiContext);
+      } catch(Exception $ex){
+        $data['result'] = "Something wrong please try again.";
+
+        $this->load->view('template/header', $data);
+        $this->load->view('payment_view/payment_result', $data);
+        return;
+      }
 
       $execution = new PaymentExecution();
       $execution->setPayerId($this->input->get('PayerID', TRUE));
 
       try{
         $result = $payment->execute($execution, $apiContext);
-        $data['result'] = $result;
+
+        if($this->extractData($result)){
+          $data['result'] = $result;
+        }
+        else{
+          $data['result'] = "error";
+        }
       } catch(Exception $ex){
         $data['result'] = "Something wrong please try again.";
       }
