@@ -70,7 +70,7 @@
             else{
               echo "<p class='header'>Welcome ".$username."</p>";
 					    echo "<a href='".base_url()."account/logout' class='header'>logout</a>";
-						echo "<br><a href='".base_url()."index.php/update_ctrl/update_user_id1' class='header'> Edit Account</a>";
+						echo "<br><a href='".base_url()."account/update' class='header'> Edit Account</a>";
             }
             ?>
             </ul>
