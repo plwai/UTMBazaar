@@ -31,7 +31,7 @@
                         Product Category <span class="label label-info"> : <?php echo $row->category_name; ?></span>
                     </p>
                     <p>
-                        Product id <span class="label label-info"> : <?php echo $row->product_pk_id; ?></span>
+                        Product id <span class="label label-info"> : <?php echo $row->pk_id; ?></span>
                     </p>
                     <p>
                         Product Quantity <span class="label label-info"> : <?php echo $row->quantity; ?></span>
@@ -46,7 +46,7 @@
                         Dead Added <span class="label label-info"> : <?php echo $row->date_added; ?></span>
                     </p>      
                     
-                    <button type="button" onclick="add_cart(<?php echo $row->product_pk_id; ?>)" class="btn btn-warning">
+                    <button type="button" onclick="add_cart(<?php echo $row->pk_id; ?>)" class="btn btn-warning">
                         <span class="glyphicon glyphicon-shopping-cart"></span> Add to Cart
                     </button>
                     <p class="notify" id="notify"></p>

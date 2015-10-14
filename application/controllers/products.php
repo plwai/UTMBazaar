@@ -26,7 +26,7 @@ class Products extends CI_Controller{
             $data = array(
 
                 'name'    => $query['product_name'],
-                'id'=>$query['product_pk_id'],
+                'id'=>$query['pk_id'],
                 'max_qty'=>$query['quantity'],
                 'price'   => $query['price'],
                 'qty'=>1
