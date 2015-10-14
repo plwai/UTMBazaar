@@ -4,7 +4,7 @@
 
          <div class="row">
             <?php foreach ($query as $row) { ?>
-                <div class="col-md-4" onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->product_pk_id;?>'">
+                <div class="col-md-4" onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'">
                     <a class="thumbnail">
 
                         <div class="well well-sm"><?php echo $row->product_name; ?></div>
