@@ -18,8 +18,8 @@ class product_model extends CI_Model {
         $this->db->select('*');
         $query = $this->db->get('utm_product');
         foreach ($query->result() as $row){
-            if($row->product_pk_id > $higher){
-                $higher = $row->product_pk_id;
+            if($row->pk_id > $higher){
+                $higher = $row->pk_id;
             }
         }
         return ($higher+1);
