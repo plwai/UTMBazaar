@@ -116,17 +116,17 @@ class Account_model extends CI_Model{
 		$this->db->insert('utm_users',$data);
 	}
 	
-	// Function To Fetch All Students Record
-	
+		
 	/*function show_user(){
 		$query = $this->db->get('utm_users');
 		$query_result = $query->result();
 		
 		return $query_result;
-	}
+	}*/
 	
-	// Function To Fetch Selected Student Record
-	function show_user_id($data){
+	
+	
+	function show($data){
 		$this->db->select('*');
 		$this->db->from('utm_users');
 		$this->db->where('pkid', $data);
@@ -137,15 +137,36 @@ class Account_model extends CI_Model{
 	}
 	
 	// Update Query For Selected Student
-	function update_user_id1($id,$data){
+	function update_user($id,$data){
 		$this->db->where('pkid', $id);
 		$this->db->update('utm_users', $data);
-	} */
+	}
 	
-	function profile_update($data) 
-    {
-        $this->db->where('pkid', 3);
-        $this->db->update('utm_users', $data);              
+	
+	
+	
+	
+	  public function show_user($username){
+    $this->db->where('email', $username);
+    $query = $this->db->get('utm_users');
+
+    // Check the user whether exist in the database
+    if($query->num_rows()){
+      $row = $query->result_array();
+
+      $data = array(
+        'username'     => $row[0]['email'],
+        'id'           => $row[0]['pkid'],
+        'password'     => $row[0]['password'],
+				'isSuccess'    => true
+      );
     }
-	
+    else{
+      $data = array(
+        'isSuccess' => false
+      );
+    }
+
+    return $data;
+  }
 }

@@ -383,14 +383,41 @@ class Account extends CI_Controller{
 		return $this->email->send();
 	}
 	
-	/*function show_user_id() {
+	/*function show_user() {
 		$id = $this->uri->segment(3);
-		$data['utm_users'] = $this->account_model->show_user();
-		$data['single_user'] = $this->account_model->show_user_id($id);
+		
+		$data['utm_users'] = $this->account_model->show();
+		$data['single_user'] = $this->account_model->show_user($id);
+		$this->load->view('template/header.php', $data);
 		$this->load->view('update_view', $data);
-	}
+	}*/
 	
-	function update_user_id1() {
+	  public function show_user(){
+    $this->db->where('email');
+    $query = $this->db->get('utm_users');
+
+    // Check the user whether exist in the database
+    if($query->num_rows()){
+      $row = $query->result_array();
+
+      $data = array(
+        'username'     => $row[0]['email'],
+        'id'           => $row[0]['pkid'],
+        'password'     => $row[0]['password'],
+				'isSuccess'    => true
+      );
+	  echo "$data";
+    }
+    else{
+      $data = array(
+        'isSuccess' => false
+      );
+    }
+
+    return $data;
+  }
+	
+	function update_user() {
 			$id= $this->input->post('did');
 			$data = array(
 				'User Name' => $this->input->post('name'),
@@ -399,19 +426,19 @@ class Account extends CI_Controller{
 				//'User_Address' => $this->input->post('daddress')
 				);
 		
-			$this->account_model->update_user_id1($id,$data);
-			$this->show_user_id();
-		} */
+			$this->account_model->update_user($id,$data);
+			$this->show_user();
+		} 
 		
-	function update() 
+	/*function update() 
     {
         $data = array (
             'name' => $this->input->post('name'),
             'email' => $this->input->post('email')         
         );
 
-        $this->load->model('account_model');
-        $this->account_model->profile_update($data);
-    }
+        $this->load->model('Account_model');
+        $this->Account_model->profile_update($data);
+    }*/
 	
 }
