@@ -11,12 +11,18 @@ class Products extends CI_Controller{
     }
 
     public function add_products(){
-        $_data['category_data'] = $this->Product_model->load_category();
-        $_data['error'] = "";
-        $data['title'] = 'Login';
-        $data['display'] = 'display:none;';
-        $this->load->view('template/header.php', $data);
-        $this->load->view('add_products_view',$_data);
+        if($this->session->userdata('is_logged_in')){
+            $username = $this->session->userdata('username');
+            $data['username']   = $username;
+            $_data['category_data'] = $this->Product_model->load_category();
+            $_data['error'] = "";
+            $data['title'] = 'Add Product';
+            $data['display'] = '';
+            $this->load->view('template/header.php', $data);
+            $this->load->view('add_products_view',$_data);
+        }else{
+            redirect('account');
+        }
     }
 
     public function save_product(){
@@ -48,17 +54,21 @@ class Products extends CI_Controller{
                         'category_id' => $this->input->post('product_category'),
                         'main_product_image'=> base_url().$img_fullpath.$filename,
                         'description' => $this->input->post('product_description'),
-//added session id to this after add session
-                        'user_id'=>11,
+                        'user_id'=>$this->session->userdata('id'),
                         'date_added'=>$date,
                         'image' => $img_fullpath
                     );
 
 
                 } else {
-                    echo "<script>window.location.href='" . base_url() . "products/add_products';
-                    alert('Error Occur');
-                    </script>";
+                    $username = $this->session->userdata('username');
+                    $data['username']   = $username;
+                    $_data['category_data'] = $this->Product_model->load_category();
+                    $_data['error'] = "Error occur somewhere, please do again!!";
+                    $data['title'] = 'Add Product';
+                    $data['display'] = '';
+                    $this->load->view('template/header.php', $data);
+                    $this->load->view('add_products_view',$_data);
                 }
                 $position = $position+1;
                 $upload_state=true;
@@ -71,14 +81,17 @@ class Products extends CI_Controller{
             $data['title'] = 'Login';
             $data['display'] = 'display:none;';
             $result = $this->Product_model->inser_product($products_n);
-            
-            
             $this->view_products();
         }
         else{
-            echo "<script>window.location.href='" . base_url() . "products/add_products';
-            alert('Invalid file format');
-            </script>";
+            $username = $this->session->userdata('username');
+            $data['username']   = $username;
+            $_data['category_data'] = $this->Product_model->load_category();
+            $_data['error'] = "Error occur somewhere, please do again!!";
+            $data['title'] = 'Add Product';
+            $data['display'] = '';
+            $this->load->view('template/header.php', $data);
+            $this->load->view('add_products_view',$_data);
 
         }
     }
