@@ -11,16 +11,12 @@ class Products extends CI_Controller{
     }
 
     public function view_products($owner_id=null){
-        if($this->session->userdata('is_logged_in')){
-            $username = $this->session->userdata('username');
-            $data['username']   = $username;
-            $_data['query'] = $this->Product_model->view_products($owner_id);
-            $data['title'] = 'showproducts';
-            $data['display'] = '';
-            $this->load->view('template/header.php', $data);
-            $this->load->view('views_products_view', $_data);
-        }else{
-            redirect('account');
-        }
+        $_data['query'] = $this->Product_model->view_products($owner_id);
+        $data['title'] = 'showproducts';
+        $data['display'] = 'display:none;';
+        $this->load->view('template/header.php', $data);
+        $this->load->view('views_products_view', $_data);
     }
 }
+
+
