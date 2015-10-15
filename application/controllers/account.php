@@ -384,37 +384,27 @@ class Account extends CI_Controller{
 	}
 	
 	function show_user() {
-		$id = $this->uri->segment(3);
+		$data['title'] = 'Edit User';
+		$data['display'] = 'display:none;';
 		
-		$data['utm_users'] = $this->account_model->show();
-		$data['single_user'] = $this->account_model->show_user($id);
+		//if($this->session->userdata('is_logged_in'))
+		$data['single_user'] = $this->Account_model->show_user(30);
 		$this->load->view('template/header.php', $data);
 		$this->load->view('update_view', $data);
 	}
 	
 	
 	function update_user() {
-			$id= $this->input->post('did');
+		
+			
 			$data = array(
-				'User Name' => $this->input->post('name'),
-				'Email' => $this->input->post('email'),
-				//'User_Mobile' => $this->input->post('dmobile'),
-				//'User_Address' => $this->input->post('daddress')
+				'surname' => $this->input->post('surname'),
+				'name' => $this->input->post('name'),
+				'email' => $this->input->post('email'),
 				);
 		
-			$this->account_model->update_user($id,$data);
+			$this->Account_model->update_user(30,$data);
 			$this->show_user();
 		} 
-		
-	/*function update() 
-    {
-        $data = array (
-            'name' => $this->input->post('name'),
-            'email' => $this->input->post('email')         
-        );
 
-        $this->load->model('Account_model');
-        $this->Account_model->profile_update($data);
-    }*/
-	
 }

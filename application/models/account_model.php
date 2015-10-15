@@ -117,7 +117,8 @@ class Account_model extends CI_Model{
 	}
 	
 		
-	function show_user(){
+	function show_user($data){
+		$this->db->where('pkid', $data);
 		$query = $this->db->get('utm_users');
 		$query_result = $query->result();
 		
