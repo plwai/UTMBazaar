@@ -50,7 +50,27 @@
         </tr>
 
     </table>
-
+    <p id="error_mesage"></p>
     <p><?php echo form_submit('', 'Update your Cart'); ?></p>
-    <p><button type="button">Pay now</button></p>
+    <p><button type="button" onclick="confirm_order()" >Confirm Order</button></p>
 
+<script>
+    function confirm_order() {
+        if(<?php echo empty(  $this->cart->contents() )?>){
+            document.getElementById("error_mesage").innerHTML="Your Cart is empty";
+        }else{
+            $.ajax({
+                type: "POST",
+                url: "confirm_order",
+                dataType: 'json'
+            }).done(function(msg){
+                if(msg.state==1){
+                    //go to payment
+                }else if(msg.state==0){
+                    document.getElementById("error_mesage").innerHTML="Product ID "+msg.problem_id+" only can have maximum "+msg.problem_quantity;
+                }
+                
+            }); 
+        }       
+    }
+</script>
