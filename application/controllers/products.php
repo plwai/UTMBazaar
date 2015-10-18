@@ -95,20 +95,4 @@ class Products extends CI_Controller{
         $this->load->view('template/header.php', $data);
         $this->load->view('views_products_details_view', $_data);
     }
-    
-    public function search_by_cat($category_id){
-        $_data['query'] = $this->Product_model->search_by_cat($category_id);
-        $data['title'] = 'searchbycat';
-        $data['display'] = 'display:none;';
-        $this->load->view('template/header.php', $data);
-        $this->load->view('home', $_data);
-    }
-    
-    public function search_by_query($seach_Query){
-        $_data['query'] = $this->Product_model->search_by_query($seach_Query);
-        $data['title'] = 'searchbyqueryt';
-        $data['display'] = 'display:none;';
-        $this->load->view('template/header.php', $data);
-        $this->load->view('home', $_data);
-    }
 }

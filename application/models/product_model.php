@@ -9,7 +9,7 @@ class product_model extends CI_Model {
 
     public function load_category(){
         $this->db->select('*');
-        $this->db->from('product_category');
+        $this->db->from('utm_product_category');
         $category_data = $this->db->get();
         return $category_data->result();
     }
