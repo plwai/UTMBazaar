@@ -4,7 +4,10 @@ class ShoppingCart extends CI_Controller {
 
 	public function buy($id)
 	{
+		$this->load->model ( 'mproduct' );
 		$product = $this->mproduct->find($id);
+
+		$data = array(
         'id'      => $product->id,
         'qty'     => 1,
         'price'   => $product->price,
@@ -28,7 +31,7 @@ class ShoppingCart extends CI_Controller {
 		{
 
 			$this->cart->update(array('rowid' => $items['rowid'], 'qty' => $_POST['qty'.$i]));
-			i++;
+			$i++;
 		}
 
 		$this->load->view('cart');

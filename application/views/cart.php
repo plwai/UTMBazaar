@@ -29,7 +29,7 @@
         <?php echo form_hidden($i.'[rowid]', $items['rowid']); ?>
 
         <tr>
-        		<td align="center"><?php echo anchor('shoppingcart/delet/'.$items['rowid', 'X']); ?> </td>
+        		<td align="center"><?php echo anchor('shoppingcart/delete/'.$items['rowid'], 'X'); ?> </td>
                 <td><?php echo form_input(array('name' => 'qty'.$i, 'value' => $items['qty'], 'maxlength' => '3', 'size' => '5')); ?></td>
                 <td>
                         <?php echo $items['name']; ?>
