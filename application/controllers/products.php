@@ -16,7 +16,9 @@ class Products extends CI_Controller{
             $data['username']   = $username;
 
         }
-        $_data['query'] = $this->Product_model->view_products($owner_id);
+
+        $query=$this->Product_model->view_products($owner_id);
+        $_data['query'] = $query->result();
         $data['title'] = 'showproducts';
         $data['display'] = '';
         $this->load->view('template/header.php', $data);
