@@ -8,7 +8,8 @@ class MProduct extends CI_Model
 	}
 
 
-	function findAll(){
+	function findAll()
+	{
 		return $this->db->get('product')->result();
 	}
 

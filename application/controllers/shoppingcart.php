@@ -18,6 +18,25 @@ class ShoppingCart extends CI_Controller {
 		$this->load->view('cart');
 	}
 
+	/*function remove($rowid) {
+                    // Check rowid value.
+		if ($rowid==="all"){
+                       // Destroy data which store in  session.
+			$this->cart->destroy();
+		}else{
+                    // Destroy selected rowid in session.
+			$data = array(
+				'rowid'   => $rowid,
+				'qty'     => 0
+			);
+                     // Update cart data, after cancle.
+			$this->cart->update($data);
+		}
+		
+                 // This will show cancle data in cart.
+		redirect('shopping');
+	}*/
+	
 	function delete($rowid)
 	{
 		$this->cart->update(array('rowid' => $rowid, 'qty' => 0));
