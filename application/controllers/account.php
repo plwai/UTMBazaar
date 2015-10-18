@@ -5,7 +5,9 @@ class Account extends CI_Controller{
 
   public function __construct(){
 	  parent::__construct();
-
+    $this->load->helper(array('form','url'));
+    $this->load->library(array('session', 'form_validation', 'email'));
+    $this->load->database();
     $this->load->model('Account_model');
   }
 
@@ -388,7 +390,7 @@ class Account extends CI_Controller{
 		$data['display'] = 'display:none;';
 		
 		//if($this->session->userdata('is_logged_in'))
-		$data['single_user'] = $this->Account_model->show_user(30);
+		$data['single_user'] = $this->Account_model->show_user(31);
 		$this->load->view('template/header.php', $data);
 		$this->load->view('update_view', $data);
 	}
@@ -396,15 +398,39 @@ class Account extends CI_Controller{
 	
 	function update_user() {
 		
-			
-			$data = array(
-				'surname' => $this->input->post('surname'),
-				'name' => $this->input->post('name'),
-				'email' => $this->input->post('email'),
-				);
-		
-			$this->Account_model->update_user(30,$data);
-			$this->show_user();
-		} 
+		$this->load->library('form_validation');
+
+       $this->form_validation->set_rules('sirname', 'First Name', 'trim|required|alpha|min_length[3]|max_length[30]|xss_clean');
+       $this->form_validation->set_rules('name', 'Last Name', 'trim|required|alpha|min_length[3]|max_length[30]|xss_clean');
+       $this->form_validation->set_rules('email', 'Email ID', 'trim|required|valid_email|is_unique[user.email]');
+        
+        if ($this->form_validation->run() == FALSE)
+        {
+           // fails
+          $this->load->view('update_view');
+        }
+
+        else
+        {
+    			$data = array(
+    				'surname' => $this->input->post('sirname'),
+    				'name' => $this->input->post('name'),
+    				'email' => $this->input->post('email'),
+    	    	);
+         
+    			if ($this->Account_model->update_user(31,$data))
+          {
+            $this->show_user();
+            $this->session->set_flashdata('msg','<div class="alert alert-success text-center">You are Successfully Updated!</div>');
+            redirect('home');
+          }
+    			
+          else 
+          {
+            $this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error.  Please try again later!!!</div>');
+            redirect('account/show_user');
+          }
+    	  }
+	}
 
 }

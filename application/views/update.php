@@ -22,9 +22,7 @@
 			<div class="panel-body">
 				<?php foreach ($single_user as $user): ?>
 							
-						<form method="post" action="<?php echo base_url() . "account/update_user"?>" >
-				
-
+							<form method="post" action="<?php echo base_url() . "account/update_user"?>" >
 				<div class="form-group">
 					<label for="name">First Name</label>
 					<input class="form-control" name="sirname" placeholder="Your First Name" type="text" value="<?php echo $user->surname; ?>" />
@@ -34,7 +32,7 @@
 				<div class="form-group">
 					<label for="name">Last Name</label>
 					<input class="form-control" name="name" placeholder="Last Name" type="text"  value="<?php echo $user->name; ?>" />
-					<span class="text-danger"><?php echo form_error('name'); ?></span>
+					<span class="text-danger"><?php echo form_error('lname'); ?></span>
 				</div>
 				
 				<div class="form-group">
@@ -46,7 +44,7 @@
 				
 
 				<div class="form-group">
-					<button name="submit" type="submit" class="btn btn-default" onclick="user.php">Update</button>
+					<button name="submit" type="submit" class="btn btn-default" onclick="user.php">Signup</button>
 					<button name="cancel" type="reset" class="btn btn-default">Cancel</button>
 				</div>
 				<?php echo form_close(); ?>
