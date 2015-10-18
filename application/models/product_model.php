@@ -13,37 +13,19 @@ class product_model extends CI_Model {
         $category_data = $this->db->get();
         return $category_data->result();
     }
-    
-    public function search_by_cat($category_id){
-        $this->db->select('*');
-        $this->db->from('product');
-        $where = "(category_id='$category_id')";
-        $this->db->where($where);
-        $query = $this->db->get('product');
-        return $query->result();
-    }
-    
-    public function search_by__query($seach_Query){
-        $this->db->select('*');
-        $this->db->from('product');
-        $where = "(product_name='$seach_Query')";
-        $this->db->where($where);
-        $query = $this->db->get('product');
-        return $query->result();
-    }
 
     public function view_products($product_id){
         if($product_id==null){
             $this->db->select('*');
-            $this->db->from('product');
+            $this->db->from('utm_product');
             $query = $this->db->get();
             return $query->result();
         }
         else{
             $this->db->select('*');
-            $where = "(id='$product_id')";
+            $where = "(pk_id='$product_id')";
             $this->db->where($where);
-            $query = $this->db->get('product');
+            $query = $this->db->get('utm_product');
             return $query->result();
         }
     }

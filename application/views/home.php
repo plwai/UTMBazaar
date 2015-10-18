@@ -4,11 +4,11 @@
             <div class="col-sm-3">
                 
                 <h2> Categories </h2>
-                <?php foreach ($category_data as $row) { ?>
                 <div class="list-group">
+                    <?php foreach ($category_data as $row) { ?>
                     <a href="#" class="list-group-item"> <?php echo $row->category_name; ?> </a>
+                    <?php } ?>
                 </div>
-                <?php } ?>
                 
                 <h3> Search Items </h3>
                 <form class="form-inline" role="form">
@@ -36,61 +36,34 @@
             <div class="col-sm-9">
             <h2> Featured Items </h2>
                 <div class="row">
+                    <?php foreach ($product_list as $row) { ?>
                     <div class="col-md-4">
                         <a class="thumbnail">
-                        <div class="well well-sm"><span data-toggle="popover" title="PRICE" data-content="RM 0.50">Spectacles 1</span></div>
-                            <img src="assets/image/no-image.jpg" style="width:150px;height:150px">
-                            <button type="button" class="btn btn-warning">
-                                <span class="glyphicon glyphicon-shopping-cart"></span> Add to Cart
-                            </button>
-                        </a>
+                                <div class="well well-sm"><?php echo $row->product_name; ?></div>    
+                                <img src="assets/image/no-image.jpg" style="width:150px;height:150px">
+                                <p>
+                                    Price <span class="label label-info"><?php echo $row->price; ?></span>
+                                </p>
+                                <button type="button" class="btn btn-warning">
+                                    <span class="glyphicon glyphicon-shopping-cart"></span> Add to Cart
+                                </button>
+                            </a>
                     </div>        
+                    <?php } ?>
                 </div>
+            
+            
+            
+            
+            
+            
+            
                 <div class="row">
                     <ul class="pager">
                         <li class="previous"><a href="#">Previous</a></li>
                         <li class="next"><a href="#">Next</a></li>
                     </ul>
                 </div>
-            </div>
-        </div>
-        
-        <!--THIS IS ADS PANEL-->
-        <div class="row">
-            <h3>ADS</h3>
-            <div id="adsSlide" class="carousel slide" data-ride="carousel">
-                
-                <!-- Indicators -->
-                <ol class="carousel-indicators">
-                    <li data-target="#adsSlide" data-slide-to="0" class="active"></li>
-                    <li data-target="#adsSlide" data-slide-to="1"></li>
-                    <li data-target="#adsSlide" data-slide-to="2"></li>
-                </ol>
-
-                <!-- Wrapper for slides -->
-                <div class="carousel-inner" role="listbox">
-                    <div class="item active">
-                        <img src="assets/image/blog-one.jpg" alt="one" width="460" height="345">
-                    </div>
-
-                    <div class="item">
-                        <img src="assets/image/blog-two.jpg" alt="two" width="460" height="345">
-                    </div>
-
-                    <div class="item">
-                        <img src="assets/image/blog-three.jpg" alt="three" width="460" height="345">
-                    </div>
-                </div>
-
-                <!-- Left and right controls -->
-                <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
             </div>
         </div>
     </div>

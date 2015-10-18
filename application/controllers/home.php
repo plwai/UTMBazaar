@@ -5,7 +5,7 @@
 
     public function __construct(){
         parent::__construct();
-        $this->load->model('Product_model');
+        $this->load->model('Search_model');
     }
 
     // Account controller index
@@ -14,20 +14,33 @@
     $data['display'] = '';
 
     $username = $this->session->userdata('username');
-
+    
+    $data['view'] = 'ajax_search';
     $data['username'] 	= $username;
-    $cat['category_data'] = $this->Product_model->load_category();
-
+    $product['category_data'] = $this->Search_model->load_category();
+    $product['product_list'] = $this->Search_model->get_products();
+    
     // check whether user login
     if($this->session->userdata('is_logged_in')){
         // set home page display item according to user recent view
         $this->load->view('template/header', $data);
-        $this->load->view('home');
+        $this->load->view('home', $product); //$data
     }
     else{
         $this->load->view('template/header', $data);
-        $this->load->view('home', $cat);
-        $this->load->view('template/footer');
+        $this->load->view('home', $product); //$data
     }
+    
+    $this->load->view('template/footer');
   }
+  
+  /*
+   * function give_more_data() {
+    if (isset($_POST['category_id'])) {
+      $data['ajax_req'] = TRUE;
+      $data['node_list'] = $this->search_model->search_by_cat($_POST['category_id']);
+      $this->load->view('ajax_index',$data);
+    }
+   */
+  
 }
