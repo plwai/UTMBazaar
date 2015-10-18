@@ -56,21 +56,23 @@
 
 <script>
     function confirm_order() {
-        if(<?php echo empty(  $this->cart->contents() )?>){
-            document.getElementById("error_mesage").innerHTML="Your Cart is empty";
-        }else{
-            $.ajax({
-                type: "POST",
-                url: "confirm_order",
-                dataType: 'json'
-            }).done(function(msg){
-                if(msg.state==1){
-                    //go to payment
-                }else if(msg.state==0){
-                    document.getElementById("error_mesage").innerHTML="Product ID "+msg.problem_id+" only can have maximum "+msg.problem_quantity;
-                }
+         $.ajax({
+            type: "POST",
+            url: "confirm_order",
+            dataType: 'json'
+        }).done(function(msg){
+            if(msg.state==1){
+     //go to payment
+            }else if(msg.state==3){
+                window.location = "../account"
+            }else if(msg.state==2){
+                document.getElementById("error_mesage").innerHTML="Empty Cart";
+            }
+            else if(msg.state==0){
+                document.getElementById("error_mesage").innerHTML="Product ID "+msg.problem_id+" only can have maximum "+msg.problem_quantity;
+            }
                 
-            }); 
-        }       
+        }); 
+             
     }
 </script>

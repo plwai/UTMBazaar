@@ -3,7 +3,7 @@
 // Account controller handle account function.
 class Products extends CI_Controller{
     public function __construct(){
-	   parent::__construct();
+       parent::__construct();
         $this->load->model('Product_model');
     }
 
@@ -15,7 +15,8 @@ class Products extends CI_Controller{
             $username = $this->session->userdata('username');
             $data['username']   = $username;
         }        
-        $_data['query'] = $this->Product_model->load_details($product_id);
+        $query=$this->Product_model->get_products($product_id);
+        $_data['query'] = $query->result();
         $data['title'] = 'loaddetails';
         $data['display'] = '';
         $this->load->view('template/header.php', $data);
@@ -25,8 +26,8 @@ class Products extends CI_Controller{
     public function add_cart(){
 
         $product_id = $this->input->post('product_id');
-        $query = $this->Product_model->view_productss($product_id);
-    
+        $query = $this->Product_model->get_products($product_id);
+        $query = $query->row_array();
         $data = array(
                 'name'    => $query['product_name'],
                 'id'=>$query['pk_id'],
@@ -79,29 +80,33 @@ class Products extends CI_Controller{
 
     public function confirm_order(){
         if($this->session->userdata('is_logged_in')){
-            foreach ($this->cart->contents() as $items){
-                $query = $this->Product_model->get_product($items['id']);
-                if($items['qty']>$query['quantity']){
-                    $result['problem_id']= $items['id'];
-                    $result['problem_quantity']=$query['quantity'];
-                    $result['state']=false;
-                    echo json_encode($result);
-                    return;
-                }else{
-                    $_data=array(
-                        'quantity'=>($query['quantity']-$items['qty']));
-                    $this->Product_model->update_product($items['id'],$_data);
-                    $result['state']=true;
-                    echo json_encode($result);
-                    return;
+            if($this->cart->contents()){
+                foreach ($this->cart->contents() as $items){
+                    $query = $this->Product_model->get_products($items['id']);
+                    $query = $query->row_array();
+                    if($items['qty']>$query['quantity']){
+                        $result['problem_id']= $items['id'];
+                        $result['problem_quantity']=$query['quantity'];
+                        $result['state']=0;
+                    }else{
+                        $_data=array(
+                            'quantity'=>($query['quantity']-$items['qty']));
+                        $this->Product_model->update_product($items['id'],$_data);
+                        $result['state']=1;
+                    }
                 }
+
+            }
+            else{
+                $result['state']=2;
             }
 
 
-
         }else{
-            redirect('/account/', 'refresh');
+            $result['state']=3;
         }
+        echo json_encode($result);
+        return;
     }
 }
 
