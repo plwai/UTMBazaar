@@ -56,28 +56,33 @@
             <!--FEATURED ITEMS PANEL-->
             <div class="col-sm-9">
             <h2> Featured Items </h2>
-                <div class="row">
-                    <?php foreach ($product_list as $row) { ?>
-                    <div class="col-md-4">
-                        <a class="thumbnail">
-                                <div class="well well-sm"><?php echo $row->product_name; ?></div>    
-                                <img src="assets/image/no-image.jpg" style="width:150px;height:150px">
-                                <p>
-                                    Price <span class="label label-info"> RM <?php echo $row->price; ?></span>
-                                </p>
-                                <button type="button" class="btn btn-warning">
-                                    <span class="fa fa-cart-plus"></span> Add to Cart
-                                </button>
-                            </a>
-                    </div>        
-                    <?php } ?>
-                </div>
-                <div class="row">
-                    <ul class="pager">
-                        <li class="previous"><a href="#"><span class="fa fa-arrow-left"></span> Previous</a></li>
-                        <li class="next"><a href="#">Next <span class="fa fa-arrow-right"></span></a></li>
-                    </ul>
-                </div>
+            <?php 
+                if (empty($product_list)) { 
+                    echo 'No results';
+                } else { 
+                    foreach ($product_list as $row) { ?>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <a class="thumbnail">
+                                    <div class="well well-sm"><?php echo $row->product_name; ?></div>    
+                                    <img alt="product" src="assets/image/no-image.jpg" style="width:150px;height:150px">
+                                    <p>
+                                        Price <span class="label label-info"> RM <?php echo $row->price; ?></span>
+                                    </p>
+                                    <button type="button" class="btn btn-warning">
+                                        <span class="fa fa-cart-plus"></span> Add to Cart
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <ul class="pager">
+                                <li class="previous"><a href="#"><span class="fa fa-arrow-left"></span> Previous</a></li>
+                                <li class="next"><a href="#">Next <span class="fa fa-arrow-right"></span></a></li>
+                            </ul>
+                        </div>
+                    <?php }
+                } ?>
             </div>
         </div>
     </div>

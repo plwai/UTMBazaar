@@ -8,7 +8,7 @@
                 <h2> Categories </h2>
                 <div class="list-group">
                     <?php foreach ($category_data as $row) { ?>
-                    <a href="#" class="list-group-item"> <?php echo $row->category_name; ?> </a>
+                    <a href="<?php echo base_url();?>search/by_category/<?php echo $row->pk_id;?>" class="list-group-item"> <?php echo $row->category_name; ?> </a>
                     <?php } ?>
                 </div>
                 
@@ -19,14 +19,14 @@
                 ?>
                     <div class="form-group">
                         <?php 
-                        $data = array(
+                        $srch = array(
                             'name'        => 'search-query',
                             'id'          => 'search-query',
                             'class'       => 'form-control',
                             'placeholder' => 'Enter keyword here',
                         );
 
-                        echo form_input($data);
+                        echo form_input($srch);
                         ?>
                     </div>
                     <?php 
@@ -38,8 +38,8 @@
                         );
 
                         echo form_submit($btn);
-                     ?>
-                <?php echo form_close(); ?>
+                        echo form_close(); ?>
+                
                 <button data-toggle="collapse" data-target="#search_option">Search tools</button>
                 <div id="search_option" class="collapse">
                     <form role="form">
