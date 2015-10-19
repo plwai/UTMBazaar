@@ -12,13 +12,10 @@ class search_model extends CI_Model {
         return $query->result();
     }
     
-    public function search_by__query($query){
-        $this->db->select('*');
-        $this->db->from('utm_product');
-        $this->db->where('product_name');
-        $like = "%('$query')%";
-        $this->db->like($like);
-        $query = $this->db->get();
+    public function search_by__name($product_name){
+        
+        $this->db->like('product_name', $product_name);
+        $query = $this->db->get('utm_product');
         
         return $query->result();
     }

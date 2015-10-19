@@ -37,10 +37,10 @@
   }
   
     function view_search_results() {
-        if (isset($_POST['query'])) {
+        if (isset($_POST['product_name'])) {
             $data['ajax_req'] = TRUE;
-            $data['product_list'] = $this->Search_model->search_by_query($_POST['query']);
+            $data['product_list'] = $this->Search_model->search_by_query($_POST['product_name']);
             $this->load->view('ajax_search',$data);
-        };
+        }
     }
 }
