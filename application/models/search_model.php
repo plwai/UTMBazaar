@@ -15,8 +15,9 @@ class search_model extends CI_Model {
     public function search_by__query($query){
         $this->db->select('*');
         $this->db->from('utm_product');
-        $where = "(product_name='$query')";
-        $this->db->where($where);
+        $this->db->where('product_name');
+        $like = "%('$query')%";
+        $this->db->like($like);
         $query = $this->db->get();
         
         return $query->result();

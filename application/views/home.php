@@ -11,8 +11,8 @@
                 </div>
                 
                 <h3> Search </h3>
+                <?php if (!isset($ajax_req)){ ?>
                 <form class="form-inline" role="form">
-                    <?php if (!isset($ajax_req)){ ?>
                     <div class="form-group">
                         <input type="text" class="form-control" id="search-query" placeholder="Any product name">
                     </div>
