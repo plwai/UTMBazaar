@@ -47,13 +47,14 @@ class Products extends CI_Controller{
                     $time = date ("G:i:s", $now);
 
                     $date = $date.":".$time;
+                    $description = strip_tags($this->input->post('product_description'));
                     $products_n = array(
                         'product_name' => $this->input->post('product_name'),
                         'price' => $this->input->post('product_price'),
                         'quantity' => $this->input->post('product_quantity'),
                         'category_id' => $this->input->post('product_category'),
                         'main_product_image'=> base_url().$img_fullpath.$filename,
-                        'description' => $this->input->post('product_description'),
+                        'description' =>$description ,
                         'user_id'=>$this->session->userdata('id'),
                         'date_added'=>$date,
                         'image' => $img_fullpath
