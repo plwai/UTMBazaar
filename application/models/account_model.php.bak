@@ -14,7 +14,7 @@ class Account_model extends CI_Model{
 
       $data = array(
         'username'     => $row[0]['email'],
-        'id'           => $row[0]['pk_id'],
+        'id'           => $row[0]['pkid'],
         'password'     => $row[0]['password'],
 				'isSuccess'    => true
       );

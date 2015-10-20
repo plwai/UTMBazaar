@@ -14,7 +14,7 @@
                             
                         </div>
 						<input type="hidden" name="product_id" value="1">
-                        <?php echo $error;?>
+                        <?php echo validation_errors(); ?>
                         <div class="form-group">
                             <input id ="submit" type="submit"  value="Submit" name="submit">
                         </div>
