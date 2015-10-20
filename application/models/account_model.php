@@ -14,7 +14,7 @@ class Account_model extends CI_Model{
 
       $data = array(
         'username'     => $row[0]['email'],
-        'id'           => $row[0]['pkid'],
+        'id'           => $row[0]['pk_id'],
         'password'     => $row[0]['password'],
 				'isSuccess'    => true
       );
@@ -53,7 +53,7 @@ class Account_model extends CI_Model{
   //   password
   public function get_token($id, $type){
     if($type == "password"){
-      $this->db->where('pkid', $id);
+      $this->db->where('pk_id', $id);
       $query = $this->db->get('utm_users');
 
       // verify user exist
@@ -70,7 +70,7 @@ class Account_model extends CI_Model{
 
         $this->db->set('tstamp', NULL);
         $this->db->set('password_token', NULL);
-        $this->db->where('pkid', $id);
+        $this->db->where('pk_id', $id);
         $this->db->update('utm_users');
 
         return $data;
@@ -88,7 +88,7 @@ class Account_model extends CI_Model{
     $this->db->set('password', $password);
     $this->db->set('password_token', NULL);
     $this->db->set('tstamp', NULL);
-    $this->db->where('pkid', $id);
+    $this->db->where('pk_id', $id);
     $this->db->update('utm_users');
 
     return;
@@ -115,32 +115,32 @@ class Account_model extends CI_Model{
 
 		$this->db->insert('utm_users',$data);
 	}
-	
-		
+
+
 	function show_user($data){
-		$this->db->where('pkid', $data);
+		$this->db->where('pk_id', $data);
 		$query = $this->db->get('utm_users');
 		$query_result = $query->result();
-		
+
 		return $query_result;
 	}
-	
-	
+
+
 	//show query for utm users
 	function show($data){
 		$this->db->select('*');
 		$this->db->from('utm_users');
-		$this->db->where('pkid', $data);
+		$this->db->where('pk_id', $data);
 		$query = $this->db->get();
 		$result = $query->result();
-		
+
 		return $result;
 	}
-	
+
 	// Update Query For utm users
 	function update_user($id,$data){
-		$this->db->where('pkid', $id);
+		$this->db->where('pk_id', $id);
 		$this->db->update('utm_users', $data);
 	}
-	
+
 }
