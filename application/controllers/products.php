@@ -76,8 +76,8 @@ class Products extends CI_Controller{
                 foreach($allpro as $allprovll){
                     if($this->input->post($i.'[rowid]')==$allprovll['rowid']){
                         $data = array(
-                        'rowid' => $allprovll['rowid'],
-                        'qty'   => $this->input->post($i.'[qty]')
+                          'rowid' => $allprovll['rowid'],
+                          'qty'   => $this->input->post($i.'[qty]')
                         );
                         $this->cart->update($data);
                     }
@@ -92,6 +92,16 @@ class Products extends CI_Controller{
             redirect('/products/view_cart/', 'refresh');
         }
     }
+
+  function delete()
+	{
+    $id  = $this->input->post('product_id');
+		$this->cart->update(array('rowid' => $id, 'qty' => 0));
+    $result['state']=success;
+
+    echo json_encode($result);
+    return;
+	}
 
     public function confirm_order(){
         if($this->session->userdata('is_logged_in')){

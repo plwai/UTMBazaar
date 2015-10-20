@@ -6,6 +6,7 @@ class Account extends CI_Controller{
   public function __construct(){
 	  parent::__construct();
 
+    
     $this->load->model('Account_model');
   }
 
@@ -382,4 +383,6 @@ class Account extends CI_Controller{
 
 		return $this->email->send();
 	}
+
+   
 }

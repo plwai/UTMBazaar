@@ -6,8 +6,8 @@
             <th>No</th>
             <th>Quantity</th>
             <th>Name</th>
-            <th>id</th>
             <th style="text-align:right">Item Price</th>
+            <th style="text-align:right">Sub-Total</th>
             <th style="text-align:right">Sub-Total</th>
         </tr>
 
@@ -23,20 +23,17 @@
                 </td>
                 <td>
                     <input type="number" name="<?php echo $i.'[qty]' ?>" min="0" max="<?php echo $items['max_qty'] ?>" value="<?php echo $items['qty'] ?>" >
-                    
+
                 </td>
                 <td>
                     <?php echo $items['name']; ?>
-                </td>
-                <td>
-                    <?php echo $items['id']; ?>
                 </td>
 
 
 
                 <td style="text-align:right"><?php echo $this->cart->format_number($items['price']); ?></td>
                 <td style="text-align:right">$<?php echo $this->cart->format_number($items['subtotal']); ?></td>
-
+                      <td style="text-align:right"><button type="button" onclick=<?php echo "delete_item('".$items['rowid']."')"; ?>>delete</button></td>
             </tr>
 
             <?php $i++; ?>
@@ -71,8 +68,19 @@
             else if(msg.state==0){
                 document.getElementById("error_mesage").innerHTML="Product ID "+msg.problem_id+" only can have maximum "+msg.problem_quantity;
             }
-                
-        }); 
-             
+
+        });
+
     }
+
+  function delete_item(id){
+    $.ajax({
+            type: "POST",
+            url: "delete",
+            dataType: 'json',
+            data: {product_id: id}
+        }).done(function(msg){
+           window.location.reload();
+        });
+  }
 </script>
