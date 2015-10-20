@@ -12,8 +12,7 @@
   <!-- bootstrap-3.3.5 js-->
   <script src="<?php echo base_url(); ?>assets/bootstrap-3.3.5-dist/js/bootstrap.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>/assets/css/font-awesome.min.css" />
-  <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>/assets/css/main.css" />
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/css/main.css" />
 
   <div class="container-fluid">
 			<!--THIS IS HEADER-->
