@@ -42,6 +42,15 @@ class Reviews extends CI_Controller{
                     );
 
             $result = $this->Reviews_model->insert_review($new_reviews);
+			
+			$email = $this->Reviews_model->get_products($this->input->post('product_id'));
+			$email = $email->row_array();
+			$email => $email['email'];
+			
+			$subject = 'Your product had been reviewed!';
+			$message = 'Dear Owner,<br /><br />Your product below had been reviewed. Click on the link below to read the review.<br /><br /> http://localhost/UTMBazaar/index.php/reviews/display_reviews/' . md5($email) . '<br /><br /><br />Thanks<br />UTMBazaar Team';
+			$this->sendEmail($email,$subject,$message);
+
             redirect('home');
         }
 		else{
@@ -69,6 +78,37 @@ class Reviews extends CI_Controller{
         $this->load->view('template/header.php', $data);
         $this->load->view('views_reviews_view', $_data);
 		
+	}
+	
+	private function sendEmail($to_email, $subject, $message){
+    $this->load->helper('email');
+
+		$from_email = 'utmbazaar@gmail.com';
+
+    $this->load->library('email');
+
+		//configure email settings
+		$config['protocol'] = 'smtp';
+		$config['smtp_host'] = 'ssl://smtp.gmail.com'; //smtp host name
+		$config['smtp_port'] = '465'; //smtp port number
+		$config['smtp_user'] = $from_email;
+		$config['smtp_pass'] = 'utmbazaar1'; //$from_email password
+		$config['mailtype'] = 'html';
+		$config['charset'] = 'utf-8';
+		$config['wordwrap'] = TRUE;
+		$config['newline'] = "\r\n"; //use double quotes
+
+
+    $this->email->initialize($config);
+		$this->email->set_newline("\r\n");
+
+		//send mail
+		$this->email->from($from_email, 'UTMBazaar');
+		$this->email->to($to_email);
+		$this->email->subject($subject);
+		$this->email->message($message);
+
+		return $this->email->send();
 	}
 }
 
