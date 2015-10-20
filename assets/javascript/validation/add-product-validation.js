@@ -16,12 +16,14 @@ function validation(){
         $("p#iproduct_price").text('Please Enter product price');
         var b = false;
     }
-    else if(!(price.match(/^\d{2,3}(\.\d{2})?$/i))){
+    else if(!(price.match(/^\d{1,10}(\.\d{2})?$/i))){
         $("p#iproduct_price").css('color', 'red');
         $("p#iproduct_price").text('Only 2 decimal place value is allow');
+        var h = false;
     }
     else{
         $("p#iproduct_price").text('');
+        var h = true;
         var b = true;
     }
     
@@ -93,7 +95,7 @@ function validation(){
 
 
 
-    if (a == false || b == false || c==false|| d == false || f == false||h==false|| i==false|| g == false) {
+    if (a == false || b == false || c==false|| d == false || f == false||h==false|| i==false|| g == false || h == false) {
 
         return  false;
 
