@@ -184,7 +184,7 @@ class Products extends CI_Controller{
 	{
     $id  = $this->input->post('product_id');
 		$this->cart->update(array('rowid' => $id, 'qty' => 0));
-    $result['state']=success;
+    $result['state']='success';
 
     echo json_encode($result);
     return;
@@ -204,6 +204,15 @@ class Products extends CI_Controller{
                         $_data=array(
                             'quantity'=>($query['quantity']-$items['qty']));
                         $this->Product_model->update_product($items['id'],$_data);
+
+                        $orderData = array(
+                            'user_id' => $this->session->userdata('id'),
+                            'product_id' => $items['id'],
+                            'order_quantity' => $items['qty']
+                        );
+
+                        $this->Product_model->create_order($orderData);
+
                         $result['state']=1;
                     }
                 }

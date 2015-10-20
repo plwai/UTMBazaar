@@ -59,7 +59,8 @@
             dataType: 'json'
         }).done(function(msg){
             if(msg.state==1){
-     //go to payment
+             //go to payment
+              window.location = "../pay_item/view_list";
             }else if(msg.state==3){
                 window.location = "../account"
             }else if(msg.state==2){
