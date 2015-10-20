@@ -4,7 +4,6 @@ class reviews_model extends CI_Model {
 
     public function insert_review($review) {
         $this->db->insert('utm_feedback', $review);
-        return true;
     }
 	
 	public function view_reviews($product_id){
@@ -34,6 +33,8 @@ class reviews_model extends CI_Model {
         
         return $query;
     }
+
+
 
 }
 
