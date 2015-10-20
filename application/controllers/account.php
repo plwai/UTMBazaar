@@ -252,12 +252,12 @@ class Account extends CI_Controller{
     if ($this->Account_model->verifyEmailID($hash))
     {
       $this->session->set_flashdata('verify_msg','<div class="alert alert-success text-center">Your Email Address is successfully verified! Please login to access your account!</div>');
-      redirect('account/register');
+      redirect('home');
     }
     else
     {
       $this->session->set_flashdata('verify_msg','<div class="alert alert-danger text-center">Sorry! There is error verifying your Email Address!</div>');
-      redirect('account/register');
+      redirect('home');
     }
   }
 
