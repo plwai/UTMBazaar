@@ -19,6 +19,11 @@ class product_model extends CI_Model {
         }
         return $query;
     }
+
+    public function update_product($id,$_data){
+        $this->db->where('pk_id',$id);
+        $this->db->update('utm_product', $_data); 
+    }
 }
 
 ?>
