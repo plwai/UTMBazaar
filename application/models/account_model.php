@@ -115,4 +115,32 @@ class Account_model extends CI_Model{
 
 		$this->db->insert('utm_users',$data);
 	}
+
+
+	function show_user($data){
+		$this->db->where('pk_id', $data);
+		$query = $this->db->get('utm_users');
+		$query_result = $query->result();
+
+		return $query_result;
+	}
+
+
+	//show query for utm users
+	function show($data){
+		$this->db->select('*');
+		$this->db->from('utm_users');
+		$this->db->where('pk_id', $data);
+		$query = $this->db->get();
+		$result = $query->result();
+
+		return $result;
+	}
+
+	// Update Query For utm users
+	function update_user($id,$data){
+		$this->db->where('pk_id', $id);
+		$this->db->update('utm_users', $data);
+	}
+
 }
