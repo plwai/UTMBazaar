@@ -389,10 +389,16 @@ class Account extends CI_Controller{
 		$data['title'] = 'Edit User';
 		$data['display'] = 'display:none;';
 		
-		//if($this->session->userdata('is_logged_in'))
-		$data['single_user'] = $this->Account_model->show_user(31);
-		$this->load->view('template/header.php', $data);
-		$this->load->view('update_view', $data);
+		if($this->session->userdata('is_logged_in'))
+    {
+  		$data['single_user'] = $this->Account_model->show_user($this->session->userdata('id'));
+  		$this->load->view('template/header.php', $data);
+  		$this->load->view('update_view', $data);
+   }
+    
+    else{
+      $this->login();
+    }
 	}
 	
 	
@@ -400,6 +406,8 @@ class Account extends CI_Controller{
 		
        // $update_s = $this->session->userdata($username);
 
+    if($this->session->userdata('is_logged_in'))
+    {
        $this->form_validation->set_rules('sirname', 'First Name', 'trim|required|alpha|min_length[3]|max_length[30]|xss_clean');
        $this->form_validation->set_rules('name', 'Last Name', 'trim|required|alpha|min_length[3]|max_length[30]|xss_clean');
        $this->form_validation->set_rules('email', 'Email ID', 'trim|required|valid_email');
@@ -414,7 +422,7 @@ class Account extends CI_Controller{
     				'email' => $this->input->post('email'),
     	    	);
          
-    			$this->Account_model->update_user(31,$data);
+    			$this->Account_model->update_user($this->session->userdata('id'),$data);
           
           
             $this->session->set_flashdata('msg','<div class="alert alert-success text-center">You are Successfully Updated!</div>');
@@ -427,13 +435,16 @@ class Account extends CI_Controller{
             $data['titile'] = 'Edit User';
             $data['display'] = 'displayname';
              
-            $data['single_user'] = $this->Account_model->show_user(31);
+            $data['single_user'] = $this->Account_model->show_user($this->session->userdata('id'));
             $this->load->view('template/header.php', $data);
             $this->load->view('update_view', $data);
 
           }
-	}
 
-  
- 
+          }
+    
+    else{
+      $this->login();
+    }
+  }
 }
