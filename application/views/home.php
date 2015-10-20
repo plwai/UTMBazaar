@@ -1,5 +1,3 @@
-<script type="text/javascript" src="<?php echo base_url();?>assets\javascript\search/search-product.js"></script>
-
 <body>
     <div class="container">
         <div class="row">
@@ -58,17 +56,25 @@
             <h2> Featured Items </h2>
                 <div class="row">
                     <?php foreach ($product_list as $row) { ?>
-                    <div class="col-md-4">
+                    <div class="col-md-4" onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'">
                         <a class="thumbnail">
-                                <div class="well well-sm"><?php echo $row->product_name; ?></div>    
-                                <img src="assets/image/no-image.jpg" style="width:150px;height:150px">
-                                <p>
-                                    Price <span class="label label-info"> RM <?php echo $row->price; ?></span>
-                                </p>
-                                <button type="button" class="btn btn-warning">
-                                    <span class="fa fa-cart-plus"></span> Add to Cart
-                                </button>
-                            </a>
+                            <div class="well well-sm"><?php echo $row->product_name; ?></div>  
+                            <!-- check image availability -->
+                            <?php 
+                                $img = $row->image;
+                                if($img != NULL){
+                            ?>
+                            <img alt="product" src="<?php echo $row->image; ?>" style="width:150px;height:150px">
+                                <?php } else { ?>
+                            <img alt="product" src="<?php echo base_url();?>assets/image/no-image.jpg" style="width:150px;height:150px">
+                                <?php } ?>
+                            <p>
+                                Price <span class="label label-info"> RM <?php echo $row->price; ?></span>
+                            </p>
+                            <button type="button" class="btn btn-warning">
+                                <span class="fa fa-cart-plus"></span> Add to Cart
+                            </button>
+                        </a>
                     </div>        
                     <?php } ?>
                 </div>

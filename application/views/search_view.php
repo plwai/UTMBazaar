@@ -1,5 +1,3 @@
-<script type="text/javascript" src="<?php echo base_url();?>assets\javascript\search/search-product.js"></script>
-
 <body>
     <div class="container">
         <div class="row">
@@ -57,15 +55,24 @@
             <div class="col-sm-9">
             <h2> Featured Items </h2>
             <?php 
+                //check result(s) count
                 if (empty($product_list)) { 
-                    echo 'No results';
-                } else { 
-                    foreach ($product_list as $row) { ?>
+                    echo 'No results could be displayed';
+                } else { ?>
                         <div class="row">
-                            <div class="col-md-4">
+                            <?php foreach ($product_list as $row) { ?>
+                            <div class="col-md-4" onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'">
                                 <a class="thumbnail">
-                                    <div class="well well-sm"><?php echo $row->product_name; ?></div>    
-                                    <img alt="product" src="assets/image/no-image.jpg" style="width:150px;height:150px">
+                                    <div class="well well-sm"><?php echo $row->product_name; ?></div>  
+                                    <!-- check image availability -->
+                                    <?php 
+                                        $img = $row->image;
+                                        if($img != NULL){
+                                    ?>
+                                    <img alt="product" src="<?php echo $row->image; ?>" style="width:150px;height:150px">
+                                        <?php } else { ?>
+                                    <img alt="product" src="<?php echo base_url();?>assets/image/no-image.jpg" style="width:150px;height:150px">
+                                        <?php } ?>
                                     <p>
                                         Price <span class="label label-info"> RM <?php echo $row->price; ?></span>
                                     </p>
@@ -73,16 +80,16 @@
                                         <span class="fa fa-cart-plus"></span> Add to Cart
                                     </button>
                                 </a>
+                            </div>        
+                            <?php } ?>
                             </div>
-                        </div>
-                        <div class="row">
-                            <ul class="pager">
-                                <li class="previous"><a href="#"><span class="fa fa-arrow-left"></span> Previous</a></li>
-                                <li class="next"><a href="#">Next <span class="fa fa-arrow-right"></span></a></li>
-                            </ul>
-                        </div>
-                    <?php }
-                } ?>
+                            <div class="row">
+                                <ul class="pager">
+                                    <li class="previous"><a href="#"><span class="fa fa-arrow-left"></span> Previous</a></li>
+                                    <li class="next"><a href="#">Next <span class="fa fa-arrow-right"></span></a></li>
+                                </ul>
+                            </div>
+            <?php }?>
             </div>
         </div>
     </div>

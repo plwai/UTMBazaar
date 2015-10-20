@@ -22,7 +22,6 @@
     
     // check whether user login
     if($this->session->userdata('is_logged_in')){
-        // set home page display item according to user recent view
         $this->load->view('template/header', $data);
         $this->load->view('home', $data); //$data
     }

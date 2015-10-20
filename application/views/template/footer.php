@@ -16,15 +16,15 @@
                 <!-- Wrapper for slides -->
                 <div class="carousel-inner" role="listbox">
                     <div class="item active">
-                        <img src="assets/image/blog-one.jpg" alt="one" width="460" height="345">
+                        <img src="<?php echo base_url();?>assets/image/blog-one.jpg" alt="one" width="460" height="345">
                     </div>
 
                     <div class="item">
-                        <img src="assets/image/blog-two.jpg" alt="two" width="460" height="345">
+                        <img src="<?php echo base_url();?>assets/image/blog-two.jpg" alt="two" width="460" height="345">
                     </div>
 
                     <div class="item">
-                        <img src="assets/image/blog-three.jpg" alt="three" width="460" height="345">
+                        <img src="<?php echo base_url();?>assets/image/blog-three.jpg" alt="three" width="460" height="345">
                     </div>
                 </div>
 

@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-    // Home controller to handle data in home page
+    // Search controller to handle data results in search page
     class Search extends CI_Controller{
 
     public function __construct(){
@@ -23,7 +23,6 @@
     
     // check whether user login
     if($this->session->userdata('is_logged_in')){
-        // set home page display item according to user recent view
         $this->load->view('template/header', $data);
     }
     else{
