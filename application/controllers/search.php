@@ -23,6 +23,8 @@
     $config["total_rows"] = $this->Search_model->num_row_by_search($ref);
     $config["per_page"] = 6;
     $config['display_pages'] = FALSE;
+    $config['prev_link'] = '&lt; Previous';
+    $config['next_link'] = 'Next &gt;';
     
     $this->pagination->initialize($config);
     
@@ -49,9 +51,20 @@
 
     $username = $this->session->userdata('username');
     
+    $config = array();
+    $config["base_url"] = base_url() . "search";
+    $config["total_rows"] = $this->Search_model->num_row_by_cat($category_id);
+    $config["per_page"] = 6;
+    $config['display_pages'] = FALSE;
+    $config['prev_link'] = '&lt; Previous';
+    $config['next_link'] = 'Next &gt;';
+    
+    $this->pagination->initialize($config);
+    
     $data['username'] 	= $username;
     $data['category_data'] = $this->Product_model->load_category();
-    $data['product_list'] = $this->Search_model->search_by_cat($category_id);
+    $data['product_list'] = $this->Search_model->search_by_cat($config["per_page"], $category_id);
+    $data["links"] = $this->pagination->create_links();
     
     // check whether user login
     if($this->session->userdata('is_logged_in')){

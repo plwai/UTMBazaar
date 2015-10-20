@@ -85,9 +85,9 @@
                             </div>
                             <div class="row">
                                 
-                                <p align="center" style="font-size:200%"><strong><?php echo $links; ?></strong> </p>
+                                <p align="center" style="font-size:150%"><strong><?php echo $links; ?></strong> </p>
                                 
-                                    <p> <br><?php echo $count?> result(s) found. ({elapsed_time} seconds)</p>
+                                <p align="right"> <br><?php echo $count?> result(s) displayed. ({elapsed_time} seconds)</p>
                                     
                             </div>
             <?php }?>
