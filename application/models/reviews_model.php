@@ -24,7 +24,7 @@ class reviews_model extends CI_Model {
 	
 	public function get_products($product_id){
 
-            $this->db->select("utm_product.*,utm_users.name");
+            $this->db->select("utm_product.*,utm_users.email");
             $this->db->from('utm_product');
             $this->db->join('utm_users', 'utm_users.pk_id = utm_product.user_id');
             

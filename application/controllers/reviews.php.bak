@@ -44,6 +44,9 @@ class Reviews extends CI_Controller{
             $result = $this->Reviews_model->insert_review($new_reviews);
 			
 			$email = $this->Reviews_model->get_products($this->input->post('product_id'));
+			$email = $email->row_array();
+			$email = $email['email'];
+			
 			$subject = 'Your product had been reviewed!';
 			$message = 'Dear Owner,<br /><br />Your product below had been reviewed. Click on the link below to read the review.<br /><br /> http://localhost/UTMBazaar/index.php/reviews/display_reviews/' . md5($email) . '<br /><br /><br />Thanks<br />UTMBazaar Team';
 			$this->sendEmail($email,$subject,$message);
