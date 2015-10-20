@@ -126,7 +126,7 @@ class Account_model extends CI_Model{
 	}
 	
 	
-	
+	//show query for utm users
 	function show($data){
 		$this->db->select('*');
 		$this->db->from('utm_users');
@@ -137,7 +137,7 @@ class Account_model extends CI_Model{
 		return $result;
 	}
 	
-	// Update Query For Selected Student
+	// Update Query For utm users
 	function update_user($id,$data){
 		$this->db->where('pkid', $id);
 		$this->db->update('utm_users', $data);

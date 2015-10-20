@@ -398,22 +398,16 @@ class Account extends CI_Controller{
 	
 	function update_user() {
 		
-   // $id= $this->input->post('did');
-        
-    $this->load->library('form_validation');
+       // $update_s = $this->session->userdata($username);
 
        $this->form_validation->set_rules('sirname', 'First Name', 'trim|required|alpha|min_length[3]|max_length[30]|xss_clean');
        $this->form_validation->set_rules('name', 'Last Name', 'trim|required|alpha|min_length[3]|max_length[30]|xss_clean');
        $this->form_validation->set_rules('email', 'Email ID', 'trim|required|valid_email');
         
-        if ($this->form_validation->run() == FALSE)
+        if ($this->form_validation->run())
         {
-           // fails
-          $this->load->view('update_view');
-        } 
-		
-        else
-        {
+          
+        
     			$data = array(
     				'surname' => $this->input->post('sirname'),
     				'name' => $this->input->post('name'),
@@ -422,17 +416,22 @@ class Account extends CI_Controller{
          
     			$this->Account_model->update_user(31,$data);
           
-            $this->show_user();
+          
             $this->session->set_flashdata('msg','<div class="alert alert-success text-center">You are Successfully Updated!</div>');
-           redirect('home');
+            
+          redirect('account/show_user');
           }
     			
-         /* else 
+          else 
           {
-            $this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error.  Could not Update User!!!</div>');
-            redirect('account/show_user');
-          }*/
-    	  
+            $data['titile'] = 'Edit User';
+            $data['display'] = 'displayname';
+             
+            $data['single_user'] = $this->Account_model->show_user(31);
+            $this->load->view('template/header.php', $data);
+            $this->load->view('update_view', $data);
+
+          }
 	}
 
   
