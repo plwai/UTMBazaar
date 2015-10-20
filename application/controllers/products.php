@@ -97,6 +97,21 @@ class Products extends CI_Controller{
         }
     }
 
+    public function view_products($owner_id=null){
+        if($this->session->userdata('is_logged_in')){
+            $username = $this->session->userdata('username');
+            $data['username']   = $username;
+
+        }
+
+        $query=$this->Product_model->get_products($owner_id);
+        $_data['query'] = $query->result();
+        $data['title'] = 'showproducts';
+        $data['display'] = '';
+        $this->load->view('template/header.php', $data);
+        $this->load->view('views_products_view', $_data);
+    }
+
     public function load_details($product_id){
         if($this->session->userdata('is_logged_in')){
             $username = $this->session->userdata('username');
@@ -148,8 +163,8 @@ class Products extends CI_Controller{
                 foreach($allpro as $allprovll){
                     if($this->input->post($i.'[rowid]')==$allprovll['rowid']){
                         $data = array(
-                        'rowid' => $allprovll['rowid'],
-                        'qty'   => $this->input->post($i.'[qty]')
+                          'rowid' => $allprovll['rowid'],
+                          'qty'   => $this->input->post($i.'[qty]')
                         );
                         $this->cart->update($data);
                     }
@@ -164,6 +179,16 @@ class Products extends CI_Controller{
             redirect('/products/view_cart/', 'refresh');
         }
     }
+
+  function delete()
+	{
+    $id  = $this->input->post('product_id');
+		$this->cart->update(array('rowid' => $id, 'qty' => 0));
+    $result['state']=success;
+
+    echo json_encode($result);
+    return;
+	}
 
     public function confirm_order(){
         if($this->session->userdata('is_logged_in')){

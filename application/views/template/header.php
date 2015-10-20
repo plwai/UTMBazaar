@@ -69,6 +69,7 @@
             else{
               echo "<p class='header'>Welcome ".$username."</p>";
 					    echo "<a href='".base_url()."account/logout' class='header'>logout</a>";
+						echo "<br><a href='".base_url()."account/show_user' class='header'> Edit Account</a>";
             }
             ?>
             </ul>
