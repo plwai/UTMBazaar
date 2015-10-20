@@ -21,7 +21,6 @@ class Pay_item extends CI_Controller{
 
     $this->load->model('Pay_item_model');
 
-    $data['title'] = 'UTM Bazaar';
     $data['display'] = '';
 
     $username = $this->session->userdata('username');
@@ -82,7 +81,7 @@ class Pay_item extends CI_Controller{
 
   // extract response JSON data and insert into database
   private function extractData($response){
-    $result = true;
+    $result['success'] = true;
     $response->toJSON();
     $response = json_decode($response);
 
@@ -96,14 +95,14 @@ class Pay_item extends CI_Controller{
 
     if($paymentState != 'approved'){
       $remark = "payment is not approved.";
-      $result = false;
+      $result['success'] = false;
     }
     else if($state == 'completed'){
       $remark = "payment is successful.";
     }
     else{
       $remark = "payment is approved but not complete.";
-      $result = false;
+      $result['success'] = false;
     }
 
     $paymentData = array(
@@ -131,6 +130,8 @@ class Pay_item extends CI_Controller{
       }
     }
 
+    $result['paymentID'] = $paymentID;
+
     return $result;
   }
 
@@ -138,6 +139,8 @@ class Pay_item extends CI_Controller{
   public function pay_online(){
     if($this->input->server('REQUEST_METHOD') === 'POST'){
       $data['title'] = "payment";
+      $username = $this->session->userdata('username');
+      $data['username'] 	= $username;
 
       // Get OAuthToken
       $apiContext = $this->getAccessToken();
@@ -243,15 +246,11 @@ class Pay_item extends CI_Controller{
     }
   }
 
-  // testcase
-  public function test(){
-    $this->load->view('template/header');
-    $this->load->view('payment_view/order_list');
-  }
-
   // Execute verified payment
   public function execute_payment(){
     $data['title'] = "payment";
+    $username = $this->session->userdata('username');
+    $data['username'] 	= $username;
 
     if($this->input->server('REQUEST_METHOD') === 'GET'){
       $success = $this->input->get('success', TRUE);
@@ -260,7 +259,7 @@ class Pay_item extends CI_Controller{
         $data['result'] = "payment canceled";
         $this->load->view('template/header', $data);
         $this->load->view('payment_view/payment_result');
-
+        header( "refresh:1;url=".base_url());
         return;
       }
 
@@ -284,9 +283,27 @@ class Pay_item extends CI_Controller{
 
       try{
         $result = $payment->execute($execution, $apiContext);
+        $decoded_result = $this->extractData($result);
 
-        if($this->extractData($result)){
-          $data['result'] = $result;
+        if($decoded_result['success']){
+          $data['result'] = "Payment success";
+          $query = $this->Pay_item_model->getSpecificPaymentItem($decoded_result['paymentID']);
+
+          $row = $query->result_array();
+
+          $data['items'] = array();
+
+          foreach($row as $item){
+            $temp_data = array(
+              'name' => $item['product_name'],
+              'quantity' => $item['order_quantity'],
+              'id' => $item['pk_id'],
+              'price' => $item['price'],
+              'image' => $item['main_product_image']
+            );
+
+            array_push($data['items'], $temp_data);
+          }
         }
         else{
           $data['result'] = "error";
@@ -303,6 +320,8 @@ class Pay_item extends CI_Controller{
   // Display item to let user choose for payment
   public function view_list(){
     $data['title'] = "Order list";
+    $username = $this->session->userdata('username');
+    $data['username'] 	= $username;
 
     $orderList = $this->Pay_item_model->getOrderList($this->session->userdata('id'), true);
 

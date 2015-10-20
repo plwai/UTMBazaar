@@ -47,7 +47,7 @@ class Pay_item_model extends CI_Model{
   // payment true to show the order that havent been paid and vice versa
   public function getOrderList($userID, $payment = false){
     $this->db->select('utm_order.*');
-    $this->db->select('utm_product.product_name, utm_product.price');
+    $this->db->select('utm_product.product_name, utm_product.price, utm_product.main_product_image');
     $this->db->from('utm_order');
     $this->db->join('utm_product', 'utm_order.product_id = utm_product.pk_id');
     $this->db->where('utm_order.user_id', $userID);
@@ -71,7 +71,8 @@ class Pay_item_model extends CI_Model{
           'name' => $item['product_name'],
           'quantity' => $item['order_quantity'],
           'id' => $item['pk_id'],
-          'price' => $item['price']
+          'price' => $item['price'],
+          'image' => $item['main_product_image']
         );
 
         array_push($data, $temp_data);
@@ -82,6 +83,17 @@ class Pay_item_model extends CI_Model{
     else{
       return null;
     }
+  }
+
+  public function getSpecificPaymentItem($paymentID){
+    $this->db->select('utm_order.*');
+    $this->db->select('utm_product.product_name, utm_product.price, utm_product.main_product_image');
+    $this->db->from('utm_order');
+    $this->db->join('utm_product', 'utm_order.product_id = utm_product.pk_id');
+    $this->db->where('payment_id', $paymentID);
+    $query = $this->db->get();
+
+    return $query;
   }
 
   public function setPayment($paymentData){
