@@ -16,7 +16,7 @@ class Pay_item_model extends CI_Model{
     }
   }
 
-  // Get order data
+  // Get certain order data
   public function getItem($orderID){
     $this->db->select('utm_order.*');
     $this->db->select('utm_product.product_name, utm_product.price');
@@ -35,6 +35,47 @@ class Pay_item_model extends CI_Model{
         'id' => $row[0]['pk_id'],
         'price' => $row[0]['price']
       );
+
+      return $data;
+    }
+    else{
+      return null;
+    }
+  }
+
+  // Get order list
+  // payment true to show the order that havent been paid and vice versa
+  public function getOrderList($userID, $payment = false){
+    $this->db->select('utm_order.*');
+    $this->db->select('utm_product.product_name, utm_product.price');
+    $this->db->from('utm_order');
+    $this->db->join('utm_product', 'utm_order.product_id = utm_product.pk_id');
+    $this->db->where('utm_order.user_id', $userID);
+
+    if($payment){
+      $this->db->where('utm_order.order_status', NULL);
+    }
+    else{
+      $this->db->where('utm_order.order_status', 1);
+    }
+
+    $query = $this->db->get();
+
+    if($query->num_rows()){
+      $row = $query->result_array();
+
+      $data = array();
+
+      foreach($row as $item){
+        $temp_data = array(
+          'name' => $item['product_name'],
+          'quantity' => $item['order_quantity'],
+          'id' => $item['pk_id'],
+          'price' => $item['price']
+        );
+
+        array_push($data, $temp_data);
+      }
 
       return $data;
     }

@@ -20,10 +20,7 @@ class Pay_item extends CI_Controller{
 	  parent::__construct();
 
     $this->load->model('Pay_item_model');
-  }
 
-  // Account controller index
-  public function index(){
     $data['title'] = 'UTM Bazaar';
     $data['display'] = '';
 
@@ -32,12 +29,15 @@ class Pay_item extends CI_Controller{
     $data['username'] 	= $username;
 
      // check whether user login
-    if($this->session->userdata('is_logged_in')){
-			$this->pay_online();
+
+    if(!$this->session->userdata('is_logged_in')){
+			redirect('account/login');
 		}
-		else{
-      redirect('home');
-		}
+  }
+
+  // Account controller index
+  public function index(){
+    $this->pay_online();
   }
 
   private function getAccessToken(){
@@ -298,5 +298,17 @@ class Pay_item extends CI_Controller{
       $this->load->view('template/header', $data);
       $this->load->view('payment_view/payment_result', $data);
     }
+  }
+
+  // Display item to let user choose for payment
+  public function view_list(){
+    $data['title'] = "Order list";
+
+    $orderList = $this->Pay_item_model->getOrderList($this->session->userdata('id'), true);
+
+    $data['orderList'] = $orderList;
+
+    $this->load->view('template/header', $data);
+    $this->load->view('payment_view/order_list', $data);
   }
 }
