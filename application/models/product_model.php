@@ -14,17 +14,21 @@ class product_model extends CI_Model {
         return $category_data->result();
     }
 
-    public function view_products($product_id){
-        if($product_id==null){
+    public function view_products($owner_id){
+        if($owner_id==null){
             $this->db->select('*');
             $this->db->from('utm_product');
+            $this->db->limit(6);
+            $this->db->order_by("date_added", "desc");
             $query = $this->db->get();
             return $query->result();
         }
         else{
             $this->db->select('*');
-            $where = "(pk_id='$product_id')";
+            $where = "(user_id='$owner_id_id')";
             $this->db->where($where);
+            $this->db->limit(6);
+            $this->db->order_by("date_added", "desc");
             $query = $this->db->get('utm_product');
             return $query->result();
         }

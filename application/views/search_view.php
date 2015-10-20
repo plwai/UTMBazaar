@@ -60,7 +60,7 @@
                     echo 'No results could be displayed';
                 } else { ?>
                         <div class="row">
-                            <?php foreach ($product_list as $row) { ?>
+                            <?php $count = 0; foreach ($product_list as $row) { ?>
                             <div class="col-md-4" onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'">
                                 <a class="thumbnail">
                                     <div class="well well-sm"><?php echo $row->product_name; ?></div>  
@@ -81,13 +81,14 @@
                                     </button>
                                 </a>
                             </div>        
-                            <?php } ?>
+                            <?php $count++; } ?>
                             </div>
                             <div class="row">
-                                <ul class="pager">
-                                    <li class="previous"><a href="#"><span class="fa fa-arrow-left"></span> Previous</a></li>
-                                    <li class="next"><a href="#">Next <span class="fa fa-arrow-right"></span></a></li>
-                                </ul>
+                                
+                                <p align="center" style="font-size:200%"><strong><?php echo $links; ?></strong> </p>
+                                
+                                    <p> <br><?php echo $count?> result(s) found. ({elapsed_time} seconds)</p>
+                                    
                             </div>
             <?php }?>
             </div>

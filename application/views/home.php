@@ -79,10 +79,7 @@
                     <?php } ?>
                 </div>
                 <div class="row">
-                    <ul class="pager">
-                        <li class="previous"><a href="#"><span class="fa fa-arrow-left"></span> Previous</a></li>
-                        <li class="next"><a href="#">Next <span class="fa fa-arrow-right"></span></a></li>
-                    </ul>
+                    
                 </div>
             </div>
         </div>

@@ -7,6 +7,7 @@
         parent::__construct();
         $this->load->model('Product_model');
         $this->load->model('Search_model');
+        $this->load->library("pagination");
     }
 
     // Account controller index
@@ -17,9 +18,18 @@
     $username = $this->session->userdata('username');
     $ref = $this->input->post('search-query');
     
+    $config = array();
+    $config["base_url"] = base_url() . "search";
+    $config["total_rows"] = $this->Search_model->num_row_by_search($ref);
+    $config["per_page"] = 6;
+    $config['display_pages'] = FALSE;
+    
+    $this->pagination->initialize($config);
+    
     $data['username'] 	= $username;
     $data['category_data'] = $this->Product_model->load_category();
-    $data['product_list'] = $this->Search_model->search_by__name($ref);
+    $data['product_list'] = $this->Search_model->search_by__name($config["per_page"], $ref);
+    $data["links"] = $this->pagination->create_links();
     
     // check whether user login
     if($this->session->userdata('is_logged_in')){
@@ -33,8 +43,8 @@
     $this->load->view('template/footer');
   }
   
-  public function by_category($category_id){
-      $data['title'] = 'UTM Bazaar - Search Results';
+    public function by_category($category_id){
+    $data['title'] = 'UTM Bazaar - Search Results';
     $data['display'] = '';
 
     $username = $this->session->userdata('username');
