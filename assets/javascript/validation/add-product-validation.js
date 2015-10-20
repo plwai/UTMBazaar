@@ -16,6 +16,10 @@ function validation(){
         $("p#iproduct_price").text('Please Enter product price');
         var b = false;
     }
+    else if(!(price.match(/^\d{2,3}(\.\d{2})?$/i))){
+        $("p#iproduct_price").css('color', 'red');
+        $("p#iproduct_price").text('Only 2 decimal place value is allow');
+    }
     else{
         $("p#iproduct_price").text('');
         var b = true;
@@ -79,7 +83,7 @@ function validation(){
     var product_description = $("textarea#product_description").val();
     if (product_description == '' || product_description == null) {
         $("p#iproduct_description").css('color', 'red');
-        $("p#iproduct_description").text('Select Any Product Year');
+        $("p#iproduct_description").text('Enter the product description');
         var g = false;
     }
     else{
