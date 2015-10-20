@@ -424,7 +424,7 @@ class Account extends CI_Controller{
           
             $this->show_user();
             $this->session->set_flashdata('msg','<div class="alert alert-success text-center">You are Successfully Updated!</div>');
-           // redirect('home');
+           redirect('home');
           }
     			
          /* else 
