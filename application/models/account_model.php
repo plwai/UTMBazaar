@@ -14,7 +14,7 @@ class Account_model extends CI_Model{
 
       $data = array(
         'username'     => $row[0]['email'],
-        'id'           => $row[0]['pkid'],
+        'id'           => $row[0]['pk_id'],
         'password'     => $row[0]['password'],
 				'isSuccess'    => true
       );
@@ -53,7 +53,7 @@ class Account_model extends CI_Model{
   //   password
   public function get_token($id, $type){
     if($type == "password"){
-      $this->db->where('pkid', $id);
+      $this->db->where('pk_id', $id);
       $query = $this->db->get('utm_users');
 
       // verify user exist
@@ -70,7 +70,7 @@ class Account_model extends CI_Model{
 
         $this->db->set('tstamp', NULL);
         $this->db->set('password_token', NULL);
-        $this->db->where('pkid', $id);
+        $this->db->where('pk_id', $id);
         $this->db->update('utm_users');
 
         return $data;
@@ -88,7 +88,7 @@ class Account_model extends CI_Model{
     $this->db->set('password', $password);
     $this->db->set('password_token', NULL);
     $this->db->set('tstamp', NULL);
-    $this->db->where('pkid', $id);
+    $this->db->where('pk_id', $id);
     $this->db->update('utm_users');
 
     return;
