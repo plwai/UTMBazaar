@@ -1,6 +1,7 @@
 
 $(document).ready(function(){
 	$('button#submit').click(function(e){
+    e.preventDefault();
 
 		validate_value = validation();
 		if(validate_value == 'true'){
@@ -18,8 +19,6 @@ $(document).ready(function(){
                       window.location.href = window.location.origin+window.location.pathname;
                     }
                 });
-		}else{
-			e.preventDefault();
 		}
 	});
 

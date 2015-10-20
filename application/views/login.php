@@ -13,7 +13,7 @@
 		<br>
 		<div class="row">
 			<div class="col-sm-offset-4 col-sm-4 login-form">
-				<form method='post'>
+				<form method='post' action='#'>
 
 					<h3>Sign In</h2>
 					<hr>

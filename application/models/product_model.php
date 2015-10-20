@@ -1,6 +1,29 @@
 <?php
 
 class product_model extends CI_Model {
+    public function load_category(){
+        $this->db->select('*');
+        $this->db->from('utm_product_category');
+        $category_data = $this->db->get();
+        return $category_data->result();
+    }
+
+    public function inser_product($products) {
+        $this->db->insert('utm_product', $products);
+        return true;
+    }
+
+    public function get_product_id(){
+        $higher = 0;
+        $this->db->select('*');
+        $query = $this->db->get('utm_product');
+        foreach ($query->result() as $row){
+            if($row->pk_id > $higher){
+                $higher = $row->pk_id;
+            }
+        }
+        return ($higher+1);
+    }
 
     public function get_products($product_id){
         if($product_id==null){
@@ -22,7 +45,7 @@ class product_model extends CI_Model {
 
     public function update_product($id,$_data){
         $this->db->where('pk_id',$id);
-        $this->db->update('utm_product', $_data); 
+        $this->db->update('utm_product', $_data);
     }
 }
 
