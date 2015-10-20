@@ -19,7 +19,7 @@ class Reviews extends CI_Controller{
                                 )
                         ); 
                            $this->jquery_stars->set_place_holder_id('stars-wrapper');
-        $this->jquery_stars->init_stars($config); //yey! where finished!
+        $this->jquery_stars->init_stars($config);
     }
 
     public function index(){
@@ -45,7 +45,7 @@ class Reviews extends CI_Controller{
 
     public function save_reviews(){
         $this->form_validation->set_rules('cust_review','Review', 'trim|required|min_length[1]');
- //       $this->form_validation->set_rules('mystart','Rate','callback_check_rate');
+ 
 		if($this->input->server('REQUEST_METHOD') === 'POST')
 		{
                     if($this->form_validation->run()){
