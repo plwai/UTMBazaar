@@ -46,7 +46,7 @@
 				
 
 				<div class="form-group">
-					<button name="submit" type="submit" class="btn btn-default" onclick="user.php">Update</button>
+					<button name="submit" type="submit" class="btn btn-default" onclick="account.php">Update</button>
 					<button name="cancel" type="reset" class="btn btn-default">Cancel</button>
 				</div>
 				<?php echo form_close(); ?>

@@ -398,18 +398,20 @@ class Account extends CI_Controller{
 	
 	function update_user() {
 		
-		$this->load->library('form_validation');
+   // $id= $this->input->post('did');
+        
+    $this->load->library('form_validation');
 
        $this->form_validation->set_rules('sirname', 'First Name', 'trim|required|alpha|min_length[3]|max_length[30]|xss_clean');
        $this->form_validation->set_rules('name', 'Last Name', 'trim|required|alpha|min_length[3]|max_length[30]|xss_clean');
-       $this->form_validation->set_rules('email', 'Email ID', 'trim|required|valid_email|is_unique[user.email]');
+       $this->form_validation->set_rules('email', 'Email ID', 'trim|required|valid_email');
         
         if ($this->form_validation->run() == FALSE)
         {
            // fails
           $this->load->view('update_view');
-        }
-
+        } 
+		
         else
         {
     			$data = array(
@@ -418,19 +420,21 @@ class Account extends CI_Controller{
     				'email' => $this->input->post('email'),
     	    	);
          
-    			if ($this->Account_model->update_user(31,$data))
-          {
+    			$this->Account_model->update_user(31,$data);
+          
             $this->show_user();
             $this->session->set_flashdata('msg','<div class="alert alert-success text-center">You are Successfully Updated!</div>');
-            redirect('home');
+           // redirect('home');
           }
     			
-          else 
+         /* else 
           {
-            $this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error.  Please try again later!!!</div>');
+            $this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error.  Could not Update User!!!</div>');
             redirect('account/show_user');
-          }
-    	  }
+          }*/
+    	  
 	}
 
+  
+ 
 }
