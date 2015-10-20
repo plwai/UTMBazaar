@@ -2,7 +2,7 @@
 
 class product_model extends CI_Model {
 
-        public function get_products($product_id){
+    public function get_products($product_id){
         if($product_id==null){
             $this->db->select('*');
             $this->db->from('utm_product');

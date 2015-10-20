@@ -10,11 +10,26 @@ class Products extends CI_Controller{
     public function index(){
     }
 
+    public function view_products($owner_id=null){
+        if($this->session->userdata('is_logged_in')){
+            $username = $this->session->userdata('username');
+            $data['username']   = $username;
+
+        }
+
+        $query=$this->Product_model->get_products($owner_id);
+        $_data['query'] = $query->result();
+        $data['title'] = 'showproducts';
+        $data['display'] = '';
+        $this->load->view('template/header.php', $data);
+        $this->load->view('views_products_view', $_data);
+    }
+
     public function load_details($product_id){
         if($this->session->userdata('is_logged_in')){
             $username = $this->session->userdata('username');
             $data['username']   = $username;
-        }        
+        }
         $query=$this->Product_model->get_products($product_id);
         $_data['query'] = $query->result();
         $data['title'] = 'loaddetails';
@@ -35,7 +50,7 @@ class Products extends CI_Controller{
                 'price'   => $query['price'],
                 'qty'=>1
                 );
-        $this->cart->insert($data); 
+        $this->cart->insert($data);
         $result['res']=1;
         echo json_encode($result);
         return ;
