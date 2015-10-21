@@ -51,6 +51,19 @@ class product_model extends CI_Model {
     public function create_order($order){
         $this->db->insert('utm_order', $order);
     }
+    
+    public function add_cat($cat_name) {
+        $item = $cat_name;
+        $this->db->insert('utm_product_category' , $item);
+    }
+    
+    public function del_cat($id) {
+        $this->db->where('pk_id', $id);
+        $this->db->delete('utm_product_category'); 
+        
+        $this->db->where('category_id', $id);
+        $this->db->delete('utm_product'); 
+    }
 }
 
 ?>
