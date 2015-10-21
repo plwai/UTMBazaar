@@ -229,5 +229,41 @@ class Products extends CI_Controller{
         echo json_encode($result);
         return;
     }
+    
+    public function view_edit_cat() {
+        $data['title'] = 'UTM Bazaar - Edit Category';
+    $data['display'] = '';
+
+    $username = $this->session->userdata('username');
+
+    $data['username'] 	= $username;
+    $data['category_data'] = $this->Product_model->load_category();
+
+    // check whether user login
+    if($this->session->userdata('is_logged_in')){
+        $this->load->view('template/header', $data);
+    }
+    else{
+        $this->load->view('template/header', $data);
+    }
+    
+    $this->load->view('edit_categories_view');
+    $this->load->view('template/footer');
+    }
+    
+    public function add_category(){
+        
+        $ref = array('Category_name' => $this->input->post('cat_name'));
+        $this->Product_model->add_cat($ref);
+        
+        redirect('products/view_edit_cat');
+    }
+    
+    public function del_category($ref){
+        
+        $this->Product_model->del_cat($ref);
+        
+        redirect('products/view_edit_cat');
+    }
 }
 
