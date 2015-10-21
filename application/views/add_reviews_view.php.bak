@@ -52,7 +52,7 @@
 
                     }
                     else{
-                        document.getElementById("respond_rating").innerHTML="Review fail to add";
+                        document.getElementById("respond_rating").innerHTML="Review fail too add";
                     }if(msg.respost==0){
                         document.getElementById("respond_post").innerHTML="Posting error";
                     }
