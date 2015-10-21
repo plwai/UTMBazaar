@@ -1,12 +1,13 @@
 
 $(document).ready(function(){
 	$('button#submit').click(function(e){
-		
+    e.preventDefault();
+
 		validate_value = validation();
 		if(validate_value == 'true'){
                 $.ajax({
                 type: "POST",
-                url: "account/login",
+                url: window.location.origin + window.location.pathname + "/login",
                 dataType: 'json',
                 data: {email:$("#email").val(),password:$("#password").val()}
                 }).done(function(msg){
@@ -15,11 +16,9 @@ $(document).ready(function(){
                         document.getElementById("respond").innerHTML=" Invalid Email or Password ";
                     }
                     if(msg.done==1){
-                        window.location.href = window.location.origin+window.location.pathname+"/../home";
+                      window.location.href = window.location.origin+window.location.pathname;
                     }
                 });
-		}else{
-			e.preventDefault();
 		}
 	});
 
@@ -49,10 +48,10 @@ function validation(){
         var b = false;
     }
     else{
-        $("p#email").text(''); 
-        var b = true; 
+        $("p#email").text('');
+        var b = true;
     }
-        
+
     var isEmail = isValidEmailAddress(email)
     if (!isEmail) {
         $("p#email2").css('color', 'red');

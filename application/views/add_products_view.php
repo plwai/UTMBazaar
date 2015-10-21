@@ -1,9 +1,5 @@
-
+<script type="text/javascript" src="<?php echo base_url();?>assets\javascript\validation/add-product-validation.js"></script>
 <html>
-    <head>
-        <script type="text/javascript" src="<?php echo base_url();?>/assets/jquery/jquery-1.11.3.js" ></script>
-        <link rel="stylesheet" href="<?php echo base_url("assets/bootstrap-3.3.5-dist\css/bootstrap.css"); ?>" />
-    </head>
     <body>
         <div class="row col-md-6 col-md-offset-3 container">
             <div id="validation-error"></div>
@@ -37,7 +33,7 @@
                             <select id="product_category" name="product_category">
                                 <option value="" title="$"> --Category--</option>
                                 <?php foreach ($category_data as $row) { ?>
-                                <option value="<?php echo $row->id; ?>" title="$" ><?php echo $row->type; ?></option>
+                                <option value="<?php echo $row->pk_id; ?>" title="$" ><?php echo $row->category_name; ?></option>
                                 <?php } ?>
                             </select>
                             <p id ="iproduct_category" ></p>

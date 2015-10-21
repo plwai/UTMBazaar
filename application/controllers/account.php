@@ -252,12 +252,12 @@ class Account extends CI_Controller{
     if ($this->Account_model->verifyEmailID($hash))
     {
       $this->session->set_flashdata('verify_msg','<div class="alert alert-success text-center">Your Email Address is successfully verified! Please login to access your account!</div>');
-      redirect('account/register');
+      redirect('home');
     }
     else
     {
       $this->session->set_flashdata('verify_msg','<div class="alert alert-danger text-center">Sorry! There is error verifying your Email Address!</div>');
-      redirect('account/register');
+      redirect('home');
     }
   }
 
@@ -382,4 +382,67 @@ class Account extends CI_Controller{
 
 		return $this->email->send();
 	}
+
+	function show_user() {
+		$data['title'] = 'Edit User';
+		$data['display'] = 'display:none;';
+
+	if($this->session->userdata('is_logged_in'))
+    {
+  		$data['single_user'] = $this->Account_model->show_user($this->session->userdata('id'));
+  		$this->load->view('template/header.php', $data);
+  		$this->load->view('update_view', $data);
+   }
+
+    else{
+      $this->login();
+    }
+	}
+
+
+	function update_user() {
+
+       // $update_s = $this->session->userdata($username);
+
+    if($this->session->userdata('is_logged_in'))
+    {
+       $this->form_validation->set_rules('sirname', 'First Name', 'trim|required|min_length[3]|max_length[30]|xss_clean');
+       $this->form_validation->set_rules('name', 'Last Name', 'trim|required|alpha|min_length[3]|max_length[30]|xss_clean');
+       $this->form_validation->set_rules('email', 'Email ID', 'trim|required|valid_email');
+
+        if ($this->form_validation->run())
+        {
+
+
+    			$data = array(
+    				'surname' => $this->input->post('sirname'),
+    				'name' => $this->input->post('name'),
+    				'email' => $this->input->post('email'),
+    	    	);
+
+    			$this->Account_model->update_user($this->session->userdata('id'),$data);
+
+
+            $this->session->set_flashdata('msg','<div class="alert alert-success text-center">You are Successfully Updated!</div>');
+
+          redirect('account/show_user');
+          }
+
+          else
+          {
+            $data['titile'] = 'Edit User';
+            $data['display'] = 'displayname';
+
+            $data['single_user'] = $this->Account_model->show_user($this->session->userdata('id'));
+            $this->load->view('template/header.php', $data);
+            $this->load->view('update_view', $data);
+
+          }
+
+          }
+
+    else{
+      $this->login();
+    }
+  }
 }
