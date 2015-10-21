@@ -15,11 +15,12 @@
 
     $username = $this->session->userdata('username');
     $owner_id = NULL;
-    
+
     $data['username'] 	= $username;
     $data['category_data'] = $this->Product_model->load_category();
-    $data['product_list'] = $this->Product_model->view_products($owner_id);
-    
+    $data['product_list'] = $this->Product_model->get_products($owner_id);
+    $data['product_list'] = $data['product_list']->result();
+
     // check whether user login
     if($this->session->userdata('is_logged_in')){
         $this->load->view('template/header', $data);
@@ -29,7 +30,7 @@
         $this->load->view('template/header', $data);
         $this->load->view('home', $data); //$data
     }
-    
+
     $this->load->view('template/footer');
   }
 }

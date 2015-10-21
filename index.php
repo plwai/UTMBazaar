@@ -292,4 +292,5 @@ switch (ENVIRONMENT)
  *
  * And away we go...
  */
+include_once './PayPal-PHP-SDK/vendor/autoload.php';
 require_once BASEPATH.'core/CodeIgniter.php';

@@ -13,7 +13,7 @@
 		<br>
 		<div class="row">
 			<div class="col-sm-offset-4 col-sm-4 login-form">
-				<form action='post'>
+				<form method='post' action='#'>
 
 					<h3>Sign In</h2>
 					<hr>
@@ -34,13 +34,14 @@
 
 					<br>
                     <p id="respond"></p>
-					<button id="submit" type="button" class="btn btn-default">Login</button>
+          <div class="form-group">
+					<button id="submit" type="submit" class="btn btn-default">Login</button>
+          </div>
 					<br>
 					<br>
 					<br>
 
-				<?php echo validation_errors(); ?>
-				<?php echo form_close(); ?>
+				</form>
 			</div>
 
 			<div class="col-sm-4">

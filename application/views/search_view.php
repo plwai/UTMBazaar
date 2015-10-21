@@ -2,21 +2,21 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-3">
-                
+
                 <h2> Categories </h2>
                 <div class="list-group">
                     <?php foreach ($category_data as $row) { ?>
                     <a href="#" class="list-group-item"> <?php echo $row->category_name; ?> </a>
                     <?php } ?>
                 </div>
-                
+
                 <h4> Looking for something? </h4>
-                <?php 
+                <?php
                 $attributes = array('class' => 'form-inline', 'role' => 'form');
-                echo form_open('search', $attributes); 
+                echo form_open('search', $attributes);
                 ?>
                     <div class="form-group">
-                        <?php 
+                        <?php
                         $data = array(
                             'name'        => 'search-query',
                             'id'          => 'search-query',
@@ -27,7 +27,7 @@
                         echo form_input($data);
                         ?>
                     </div>
-                    <?php 
+                    <?php
                         $btn = array(
                             'name'  => 'search-product',
                             'id'    => 'search-product',
@@ -50,26 +50,26 @@
                     </form>
                 </div>
             </div>
-            
+
             <!--FEATURED ITEMS PANEL-->
             <div class="col-sm-9">
             <h2> Featured Items </h2>
-            <?php 
+            <?php
                 //check result(s) count
-                if (empty($product_list)) { 
+                if (empty($product_list)) {
                     echo 'No results could be displayed';
                 } else { ?>
                         <div class="row">
                             <?php $count = 0; foreach ($product_list as $row) { ?>
                             <div class="col-md-4" onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'">
                                 <a class="thumbnail">
-                                    <div class="well well-sm"><?php echo $row->product_name; ?></div>  
+                                    <div class="well well-sm"><?php echo $row->product_name; ?></div>
                                     <!-- check image availability -->
-                                    <?php 
-                                        $img = $row->image;
+                                    <?php
+                                        $img = $row->main_product_image;
                                         if($img != NULL){
                                     ?>
-                                    <img alt="product" src="<?php echo $row->image; ?>" style="width:150px;height:150px">
+                                    <img alt="product" src="<?php echo $img; ?>" style="width:150px;height:150px">
                                         <?php } else { ?>
                                     <img alt="product" src="<?php echo base_url();?>assets/image/no-image.jpg" style="width:150px;height:150px">
                                         <?php } ?>
@@ -80,20 +80,19 @@
                                         <span class="fa fa-cart-plus"></span> Add to Cart
                                     </button>
                                 </a>
-                            </div>        
+                            </div>
                             <?php $count++; } ?>
                             </div>
                             <div class="row">
-                                
+
                                 <p align="center" style="font-size:150%"><strong><?php echo $links; ?></strong> </p>
-                                
+
                                 <p align="right"> <br><?php echo $count?> result(s) displayed. ({elapsed_time} seconds)</p>
-                                    
+
                             </div>
             <?php }?>
             </div>
         </div>
     </div>
-    
-    <script src="<?php echo base_url(); ?>assets/search/search-product.js"></script>
+
 </body>
