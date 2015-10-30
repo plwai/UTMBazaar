@@ -265,5 +265,38 @@ class Products extends CI_Controller{
         
         redirect('products/view_edit_cat');
     }
+    public function mineproduct(){
+        if($this->session->userdata('is_logged_in')){
+            $data['title'] = 'Mine Products';
+            $data['display'] = '';
+                        $username = $this->session->userdata('username');
+            $data['username']   = $username;
+
+            $query = $this->Product_model->get_products_by_owner($this->session->userdata('id'));
+            $_data['query'] = $query->result();
+            $this->load->view('template/header.php', $data);
+            $this->load->view('myProduct_view',$_data);
+        }else{
+            redirect('account');
+        }
+    }
+    public function change_product_state(){
+        if($this->input->server('REQUEST_METHOD') === 'POST'){
+            $product_id  = $this->input->post('product_id');
+            $state = $this->input->post('state');
+            if($state==1){
+                $state=0;
+            }else{
+                $state=1;
+            }
+            $_data = array(
+                'state'=>$state);
+            $this->Product_model->update_product($product_id,$_data);
+            $result['res']=1;
+
+        echo json_encode($result);
+        return;
+        }
+    }
 }
 
