@@ -212,7 +212,7 @@ class Products extends CI_Controller{
                         );
 
                         $this->Product_model->create_order($orderData);
-
+                        $this->cart->destroy();
                         $result['state']=1;
                     }
                 }
@@ -229,7 +229,7 @@ class Products extends CI_Controller{
         echo json_encode($result);
         return;
     }
-    
+
     public function view_edit_cat() {
         $data['title'] = 'UTM Bazaar - Edit Category';
     $data['display'] = '';
@@ -246,24 +246,51 @@ class Products extends CI_Controller{
     else{
         $this->load->view('template/header', $data);
     }
-    
+
     $this->load->view('edit_categories_view');
     $this->load->view('template/footer');
     }
-    
+
     public function add_category(){
-        
+
         $ref = array('Category_name' => $this->input->post('cat_name'));
         $this->Product_model->add_cat($ref);
-        
-        redirect('products/view_edit_cat');
-    }
-    
-    public function del_category($ref){
-        
-        $this->Product_model->del_cat($ref);
-        
-        redirect('products/view_edit_cat');
-    }
-}
 
+        redirect('products/view_edit_cat');
+    }
+
+    public function del_category($ref){
+
+        $this->Product_model->del_cat($ref);
+
+        redirect('products/view_edit_cat');
+    }
+
+    public function mineproduct(){
+      if($this->session->userdata('is_logged_in')){
+        $data['title'] = 'Mine Products';
+        $data['display'] = '';
+        $username = $this->session->userdata('username');
+        $data['username']   = $username;
+
+        $query = $this->Product_model->get_products_by_owner($this->session->userdata('id'));
+        $_data['query'] = $query->result();
+        $this->load->view('template/header.php', $data);
+        $this->load->view('myProduct_view',$_data);
+        }else{
+            redirect('account');
+        }
+    }
+
+    public function remove_product(){
+        $product_id  = $this->input->post('product_id');
+
+        $this->Product_model->remove_product($product_id);
+        $result['res']=1;
+
+        echo json_encode($result);
+        return;
+    }
+
+
+}

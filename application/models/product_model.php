@@ -51,18 +51,34 @@ class product_model extends CI_Model {
     public function create_order($order){
         $this->db->insert('utm_order', $order);
     }
-    
+
     public function add_cat($cat_name) {
         $item = $cat_name;
         $this->db->insert('utm_product_category' , $item);
     }
-    
+
     public function del_cat($id) {
         $this->db->where('pk_id', $id);
-        $this->db->delete('utm_product_category'); 
-        
+        $this->db->delete('utm_product_category');
+
         $this->db->where('category_id', $id);
-        $this->db->delete('utm_product'); 
+        $this->db->delete('utm_product');
+    }
+    public function get_products_by_owner($owner_id){
+        $this->db->select("utm_product.*,utm_users.name,utm_product_category.category_name");
+        $this->db->from('utm_product');
+        $this->db->join('utm_users', 'utm_users.pk_id = utm_product.user_id');
+        $this->db->join('utm_product_category','utm_product_category.pk_id = utm_product.category_id');
+        $where = "(utm_product.user_id = $owner_id)";
+        $this->db->where($where);
+        $query = $this->db->get();
+        
+        return $query;
+    }
+    public function remove_product($product_id){
+        $this->db->where('pk_id', $product_id);
+        $this->db->delete('utm_product');
+
     }
 }
 
