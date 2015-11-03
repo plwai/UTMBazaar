@@ -15,7 +15,7 @@ class reviews_model extends CI_Model {
         }
         else{
             $this->db->select('*');
-            $this->db->where('id',$product_id);
+            $this->db->where('product_id',$product_id);
             $query = $this->db->get('utm_feedback');
             return $query->result();
         }
