@@ -31,6 +31,7 @@ class product_model extends CI_Model {
             $this->db->from('utm_product');
             $this->db->where('remove_state', 0 );
             $this->db->where( 'publish_state',1);
+            $this->db->order_by("pk_id", "desc");
             $query = $this->db->get();
         }
         else{
@@ -42,6 +43,7 @@ class product_model extends CI_Model {
             $this->db->where($where);
             $this->db->where('remove_state', 0 );
             $this->db->where( 'publish_state',1);
+            $this->db->order_by("pk_id", "desc");
             $query = $this->db->get();
         }
         return $query;
@@ -76,7 +78,8 @@ class product_model extends CI_Model {
         $where = "(utm_product.user_id = $owner_id)";
         $this->db->where($where);
         $this->db->where('remove_state', 0 );
-            $this->db->where( 'publish_state',1);
+        $this->db->where( 'publish_state',1);
+        $this->db->order_by("pk_id", "desc");
         $query = $this->db->get();
         
         return $query;
@@ -89,14 +92,14 @@ class product_model extends CI_Model {
         $where = "(utm_product.user_id = $owner_id)";
         $this->db->where($where);
         $this->db->where('remove_state', 0 );
-
+        $this->db->order_by("pk_id", "desc");
         $query = $this->db->get();
         
         return $query;
     }
     public function remove_product($product_id){
         $this->db->where('pk_id', $product_id);
-        $data = array('remove_state' => 1);
+        $data = array('remove_state' => 1,'publish_state'=>0);
         $this->db->update('utm_product', $data);
 
     }
