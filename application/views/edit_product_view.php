@@ -79,6 +79,14 @@ function validation(){
         $("p#iproduct_name").text('');
         var a = true;
     }
+        if(isValidAlphapetOnly(name)){
+        $("p#iproduct_name").text('');
+        var e = true;
+    }else{
+        $("p#iproduct_name").css('color', 'red');
+        $("p#iproduct_name").text('Alphapets Only');
+        var e = false;
+    }
         
     var price = $("input#product_price").val();
     if (price == '' || price == null) {
@@ -135,7 +143,7 @@ function validation(){
 
 
 
-    if (a == false || b == false || c==false|| d == false || g == false || h == false) {
+    if (a == false || b == false || c==false|| d == false || e==false || g == false || h == false) {
 
         return  false;
 
