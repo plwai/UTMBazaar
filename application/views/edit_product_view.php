@@ -18,19 +18,19 @@
 				<div class="form-group">
                             <input type="hidden" value="<?php echo $row->pk_id  ?>" name="product_id">
                             <label >Product Name</label><br>
-                            <input class="form-control" id="product_name" type="text" name="product_name" value="<?php echo $row->product_name ?>">
+                            <input class="form-control" id="product_name" placeholder="Product name only " type="text" name="product_name" value="<?php echo $row->product_name ?>">
                             <p id= "iproduct_name"></p>
                         </div>
 
                         <div class="form-group">
                             <label >Product Price (RM) :</label><br>
-                            <input  class="form-control" id="product_price" type="number" step="0.01" min="0"  name="product_price" value="<?php echo $row->price ?>">
+                            <input  class="form-control" id="product_price" type="number" placeholder="Product price only " step="0.01" min="0"  name="product_price" value="<?php echo $row->price ?>">
                             <p id ="iproduct_price" ></p>                
                         </div>
 
                         <div class="form-group">      
                             <label >Product Quantity:</label><br>
-                            <input class="form-control" id="product_quantity" type="number" step="1" min="1"  name="product_quantity" value="<?php echo $row->quantity ?>">
+                            <input class="form-control" id="product_quantity" type="number" step="1" min="1" placeholder="Product quantity only" name="product_quantity" value="<?php echo $row->quantity ?>">
                             <p id ="iproduct_quantity" ></p>            
                         </div>
 
@@ -47,11 +47,11 @@
 
                         <div class="form-group">
                             <label >Product Description</label><br>
-                            <textarea value = "<?php echo $row->description?>"id= "product_description" class="form-control" name="product_description"  rows="6"></textarea>
+                            <textarea value = "" placeholder="Enter the description here, included information about product size. " id= "product_description" class="form-control" name="product_description"  rows="6"><?php echo $row->description ?></textarea>
                             <p id ="iproduct_description" ></p>
                         </div>
                         <div class="form-group">
-                            <input id ="submit" type="submit"  value="Save Product" name="submit">
+                            <input id ="submit" type="submit"  value="Save Product" name="submit" >
                         </div>
 
 
