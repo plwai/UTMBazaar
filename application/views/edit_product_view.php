@@ -183,4 +183,8 @@ function ValidateSingleInput(oInput) {
     }
     return true;
 }
+    function isValidAlphapetOnly(testString){
+        var pattern = new RegExp(/^[a-zA-Z\s]+$/);
+        return pattern.test(testString)
+    };
 </script>
