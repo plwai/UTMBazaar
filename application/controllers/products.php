@@ -288,7 +288,7 @@ class Products extends CI_Controller{
                 if($this->session->userdata('is_logged_in')){
             $data['title'] = 'Mine Products';
             $data['display'] = '';
-                        $username = $this->session->userdata('username');
+            $username = $this->session->userdata('username');
             $data['username']   = $username;
 
         if($this->input->server('REQUEST_METHOD') === 'POST'){
