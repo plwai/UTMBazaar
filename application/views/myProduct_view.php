@@ -104,7 +104,7 @@
           </div>
           <div role="tabpanel" class="tab-pane fade" id="publish_products" aria-labelledBy="profile-tab">
             <div class="row">
-               <?php foreach ($query as $row) { ?>
+               <?php foreach ($query2 as $row) { ?>
                    <div class="col-md-6">
                        <a class="thumbnail">
 
@@ -112,8 +112,8 @@
                            <img src="<?php echo $row->main_product_image; ?>" style="width:150px;height:150px">
                            <form  action="edit_products" method="post">
                            <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
-                           <button type="button" onclick="change_publish_state(<?php echo $row->pk_id; ?>,<?php echo $row->state ?>)" class="btn btn-warning">
-                               <span class="glyphicon glyphicon-asterisk"></span> <?php if($row->state==1){echo "unpushblish" ;}else{echo "pubish";}?>
+                           <button type="button" onclick="change_publish_state(<?php echo $row->pk_id; ?>,<?php echo $row->publish_state ?>)" class="btn btn-warning">
+                               <span class="glyphicon glyphicon-asterisk"></span> <?php if($row->publish_state==1){echo "unpushblish" ;}else{echo "pubish";}?>
                            </button>
                            </form>
                        </a>

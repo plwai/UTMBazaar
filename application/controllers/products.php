@@ -273,7 +273,9 @@ class Products extends CI_Controller{
             $data['username']   = $username;
 
             $query = $this->Product_model->get_products_by_owner($this->session->userdata('id'));
+            $query2 = $this->Product_model->get_products_by_owner_ignore_publish($this->session->userdata('id'));
             $_data['query'] = $query->result();
+            $_data['query2'] = $query2->result();
             $this->load->view('template/header.php', $data);
             $this->load->view('myProduct_view',$_data);
         }else{
@@ -290,7 +292,7 @@ class Products extends CI_Controller{
                 $state=1;
             }
             $_data = array(
-                'state'=>$state);
+                'publish_state'=>$state);
             $this->Product_model->update_product($product_id,$_data);
             $result['res']=1;
 
