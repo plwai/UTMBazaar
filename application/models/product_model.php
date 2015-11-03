@@ -29,6 +29,8 @@ class product_model extends CI_Model {
         if($product_id==null){
             $this->db->select('*');
             $this->db->from('utm_product');
+            $this->db->where('remove_state', 0 );
+            $this->db->where( 'publish_state',1);
             $query = $this->db->get();
         }
         else{
@@ -38,6 +40,8 @@ class product_model extends CI_Model {
             $this->db->join('utm_product_category','utm_product_category.pk_id = utm_product.category_id');
             $where = "(utm_product.pk_id = $product_id)";
             $this->db->where($where);
+            $this->db->where('remove_state', 0 );
+            $this->db->where( 'publish_state',1);
             $query = $this->db->get();
         }
         return $query;
@@ -71,13 +75,29 @@ class product_model extends CI_Model {
         $this->db->join('utm_product_category','utm_product_category.pk_id = utm_product.category_id');
         $where = "(utm_product.user_id = $owner_id)";
         $this->db->where($where);
+        $this->db->where('remove_state', 0 );
+            $this->db->where( 'publish_state',1);
+        $query = $this->db->get();
+        
+        return $query;
+    }
+    public function get_products_by_owner_ignore_publish($owner_id){
+        $this->db->select("utm_product.*,utm_users.name,utm_product_category.category_name");
+        $this->db->from('utm_product');
+        $this->db->join('utm_users', 'utm_users.pk_id = utm_product.user_id');
+        $this->db->join('utm_product_category','utm_product_category.pk_id = utm_product.category_id');
+        $where = "(utm_product.user_id = $owner_id)";
+        $this->db->where($where);
+        $this->db->where('remove_state', 0 );
+
         $query = $this->db->get();
         
         return $query;
     }
     public function remove_product($product_id){
         $this->db->where('pk_id', $product_id);
-        $this->db->delete('utm_product');
+        $data = array('remove_state' => 1);
+        $this->db->update('utm_product', $data);
 
     }
 }
