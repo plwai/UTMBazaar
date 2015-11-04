@@ -6,22 +6,42 @@ class Pages extends CI_Controller {
                 $this->load->model('pages_model');
                 $this->load->helper('url_helper');
                 $this->load->model('Reviews_model');
+                $this->load->library("pagination");
         }
 
-        public function index() {
+   /*  public function example1() {
+        $config = array();
+        $config["base_url"] = base_url() . "welcome/example1";
+        $config["total_rows"] = $this->Countries->record_count();
+        $config["per_page"] = 20;
+        $config["uri_segment"] = 3;
+
+        $this->pagination->initialize($config);
+
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $data["results"] = $this->Countries->
+            fetch_countries($config["per_page"], $page);
+        $data["links"] = $this->pagination->create_links();
+
+        $this->load->view("example1", $data);
+    }*/
+
+
+  public function index() {
+        $config = array();
 		$this->load->helper('url');
                 $pageData['title'] = 'All Products';
                 $pageData['products'] = $this->pages_model->get_products();
                 $this->load->view('template/header.php', $pageData);
                 $this->load->view('views_reviews_view', $pageData);
-                //$this->load->view('footer', $pageData);
+               
         }
 
   public function display_reviews($product_id=null)
 	{
         $_data['query'] = $this->Reviews_model->view_reviews($product_id);
         $data['title'] = 'Product Reviews';
-        $data['display'] = 'display:none;';
+        $data['display'] = 'display:none';
         $this->load->view('template/header.php', $data);
         $this->load->view('review', $_data);
 		
@@ -40,11 +60,21 @@ class Pages extends CI_Controller {
 
 	public function admin() {
 		$this->load->helper('url');
+        $config = array();
+        $config["base_url"] = base_url() . "pages/admin";
+        $config["total_rows"] = $this->pages_model->record_count();
+        $config["per_page"] = 20;
+        $config["uri_segment"] = 3;
+        $this->pagination->initialize($config);
+
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+
                 $pageData['title'] = 'Reviews';
-                $pageData['review'] = $this->pages_model->get_all_reviews();
+                $pageData['review'] = $this->pages_model->get_all_reviews($config["per_page"], $page);
+                $pageData['links'] = $this->pagination->create_links();
                 $this->load->view('template/header.php', $pageData);
                 $this->load->view('admin', $pageData);
-                //$this->load->view('footer', $pageData);
+                
 	}
 
 	public function deleteReview($slug = NULL) {

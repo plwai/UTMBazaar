@@ -27,9 +27,21 @@ class Pages_model extends CI_model {
         
 	}
 
-	public function get_all_reviews() {
+	 public function record_count() {
+        return $this->db->count_all('utm_feedback');
+    }
+
+	public function get_all_reviews($limit, $start) {
+		$this->db->limit($limit, $start);
 		$query = $this->db->get('utm_feedback');
-                return $query->result_array();
+                //return $query->result_array();
+		 if ($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        
 	}
 
 	public function delete_reviews($id) {
