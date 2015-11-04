@@ -2,7 +2,7 @@
 
 class ban_user_model extends CI_Model {
 
-    public function get_user_list($user_id){
+    public function view_user($user_id){
         
         $this->db->select('*');
         $this->db->from('utm_users');
@@ -26,13 +26,11 @@ class ban_user_model extends CI_Model {
 		return $return;
 	}
 	
-    public function del_cat($id) {
-        $this->db->where('pk_id', $id);
-        $this->db->delete('utm_product_category'); 
-        
-        $this->db->where('category_id', $id);
-        $this->db->delete('utm_product'); 
-    }
+	public function update_user($id,$data){
+		$this->db->where('pk_id', $id);
+		$this->db->update('utm_users', $data);
+	}
+	
 }
 
 ?>
