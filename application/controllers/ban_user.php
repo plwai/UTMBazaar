@@ -25,7 +25,7 @@ class Ban_user extends CI_Controller{
         $this->load->view('user_list', $_data/*, $dropdown*/);
     }
 	
-	/*public update_ban_user(){
+	/*public function update_ban_user(){
 	    if($this->session->userdata('is_logged_in'))
 		{
 		    $i = 1;
@@ -36,15 +36,21 @@ class Ban_user extends CI_Controller{
 		{
 		    redirect('account');
 		}
-	}
+	}*/
 	
-	public change_ban_user(){
+	public function change_ban_user(){
 		$id  = $this->input->post('user_id');
+		$user_type  = $this->input->post('option_value');
+
+		$data = array(
+                        'user_type' => $user_type
+                    );
+		$this->Ban_user_model->update_user($id, $data);
 		$result['state']='success';
 
 		echo json_encode($result);
 		return;
-	}*/
+	}
 }
 
 ?>

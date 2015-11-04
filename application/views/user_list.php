@@ -1,4 +1,4 @@
-<?php echo form_open('ban_user/update_ban_user'); ?>
+
 
 	<table cellpadding="6" cellspacing="1" style="width:100%" border="0">
 
@@ -16,16 +16,16 @@
 				<td><?php echo $i; ?></td>
 				<td><?php echo $row->email; ?></td>
 				<td>
-					<!--?php echo form_dropdown('type_id', $type_list, set_value('type_id', $type_id));  ?-->
 					
-					<!--p>
-					<select name="type">
-						<option value="1">User</option>
-						<option value="2">Banned User</option>
+					<p>
+					<select id=<?php echo $row->pk_id; ?> name="type">
+						<option value="1" <?php if($row->user_type == '1'){echo("selected");}?>>User</option>
+						<option value="2" <?php if($row->user_type == '2'){echo("selected");}?>>Banned User</option>
 					</select>
-					</p-->	
+					</p>
+					
 				</td>
-				<td><button type="button" onclick=<?php //echo "change($id)"; ?>>Change Type</button></td>
+				<td><button type="button" onclick="func(<?php echo $row->pk_id ?>)">Change Type</button></td>
 			</tr>
 
 		    <?php $i++; ?>
@@ -33,19 +33,24 @@
 		<?php endforeach; ?>
 
 	</table>
-<?php echo form_submit('', 'Update user type'); ?>
-<?php
-/*<script>
 
-  function change(id){
-    $.ajax({
-            type: "POST",
-            url: "change_ban_user",
-            dataType: 'json',
-            data: {user_id: id}
-        }).done(function(msg){
-           window.location.reload();
+
+<script>
+function func(id){
+
+ 
+  var e = document.getElementById(id);
+var strUser = e.options[e.selectedIndex].value;
+alert(id);
+alert(strUser);
+		$.ajax({
+				type: "POST",
+				url: "change_ban_user",
+				dataType: 'json',
+				data: {user_id: id,option_value:strUser}
+			}).done(function(msg){
+			   window.location.reload();
         });
+	
   }
-</script>*/
-?>
+</script>
