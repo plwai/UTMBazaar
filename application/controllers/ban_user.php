@@ -12,31 +12,28 @@ class Ban_user extends CI_Controller{
 
     public function view_user($user_id=null){
         if($this->session->userdata('is_logged_in')){
-            $username = $this->session->userdata('username');
-            $data['username']   = $username;
-        }
-
-        $query=$this->Ban_user_model->view_user($user_id);
-        $_data['query'] = $query->result();
-		//$dropdown['type_list'] = $this->Ban_user_model->get_dropdown();
-        $data['title'] = 'ban_user';
-        $data['display'] = 'display:none;';
-        $this->load->view('template/header.php', $data);
-        $this->load->view('user_list', $_data/*, $dropdown*/);
+		    //validation for admin login
+			if($this->session->userdata('user_type')==0){
+				$username = $this->session->userdata('username');
+				$data['username']   = $username;
+				$query=$this->Ban_user_model->view_user($user_id);
+				$_data['query'] = $query->result();
+				$data['title'] = 'ban_user';
+				$data['display'] = 'display:none;';
+				$this->load->view('template/header.php', $data);
+				$this->load->view('user_list', $_data);
+            }
+			else
+			{
+			    //temporary redirect to home first
+				redirect ('home');
+			}
+		}
+		else{
+		    redirect ('account');
+		}
+        
     }
-	
-	/*public function update_ban_user(){
-	    if($this->session->userdata('is_logged_in'))
-		{
-		    $i = 1;
-			$data = this->input->post($type);
-		    $this->Ban_user_model->update_user($this->session->userdata('id'),$data);
-		}
-		else
-		{
-		    redirect('account');
-		}
-	}*/
 	
 	public function change_ban_user(){
 		$id  = $this->input->post('user_id');
