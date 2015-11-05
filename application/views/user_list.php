@@ -38,11 +38,9 @@
 <script>
 function func(id){
 
- 
-  var e = document.getElementById(id);
-var strUser = e.options[e.selectedIndex].value;
-alert(id);
-alert(strUser);
+	var e = document.getElementById(id);
+	var strUser = e.options[e.selectedIndex].value;
+
 		$.ajax({
 				type: "POST",
 				url: "change_ban_user",
