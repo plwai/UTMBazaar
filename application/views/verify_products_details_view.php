@@ -64,7 +64,7 @@
 				url: "../change_verify_status",
 				dataType: 'json',
 				data: {product_id: id,status:v_status}
-			}).done(function(msg){alert("a");
+			}).done(function(msg){;
 			   window.location.replace("http://localhost/UTMBazaar/products/view_verify_products");
 			});
 	
