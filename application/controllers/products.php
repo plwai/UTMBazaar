@@ -268,17 +268,25 @@ class Products extends CI_Controller{
 	
 	public function view_verify_products($owner_id=null){
         if($this->session->userdata('is_logged_in')){
-            $username = $this->session->userdata('username');
-            $data['username']   = $username;
+            //validation for admin login
+			if($this->session->userdata('user_type')==0){
+				$username = $this->session->userdata('username');
+				$data['username']   = $username;
+
+				$query=$this->Product_model->get_products($owner_id);
+				$_data['query'] = $query->result();
+				$data['title'] = 'Verify product';
+				$data['display'] = 'display:none;';
+				$this->load->view('template/header.php', $data);
+				$this->load->view('verify_products_view', $_data);
+				}
+				else
+				{
+				    //temporary redirect to home first
+					redirect ('home');
+				}
 
         }
-
-        $query=$this->Product_model->get_products($owner_id);
-        $_data['query'] = $query->result();
-        $data['title'] = 'Verify product';
-        $data['display'] = 'display:none;';
-        $this->load->view('template/header.php', $data);
-        $this->load->view('verify_products_view', $_data);
     }
 	
 	public function verify_products($product_id){
