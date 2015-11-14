@@ -157,27 +157,15 @@ class Products extends CI_Controller{
     }
     public function update_cart(){
         $allpro=$this->cart->contents();
-        $i = 1;
-        if(!empty($allpro)){
-            foreach($allpro as $allprovl){
-                foreach($allpro as $allprovll){
-                    if($this->input->post($i.'[rowid]')==$allprovll['rowid']){
-                        $data = array(
-                          'rowid' => $allprovll['rowid'],
-                          'qty'   => $this->input->post($i.'[qty]')
-                        );
-                        $this->cart->update($data);
-                    }
-                    $i++;
-                }
-                $i=1;
-            }
-            redirect('/products/view_cart/', 'refresh');
-        }
-        else{
-            $this->cart->destroy();
-            redirect('/products/view_cart/', 'refresh');
-        }
+
+        $id  = $this->input->post('product_id');
+        $quantity = $this->input->post('value');
+
+        $this->cart->update(array('rowid' => $id, 'qty' => $quantity));
+        $result['state']='success';
+
+        echo json_encode($result);
+        return;
     }
 
   function delete()
@@ -229,7 +217,7 @@ class Products extends CI_Controller{
         echo json_encode($result);
         return;
     }
-    
+
     public function view_edit_cat() {
         $data['title'] = 'UTM Bazaar - Edit Category';
     $data['display'] = '';
@@ -246,24 +234,23 @@ class Products extends CI_Controller{
     else{
         $this->load->view('template/header', $data);
     }
-    
+
     $this->load->view('edit_categories_view');
     $this->load->view('template/footer');
     }
-    
+
     public function add_category(){
-        
+
         $ref = array('Category_name' => $this->input->post('cat_name'));
         $this->Product_model->add_cat($ref);
-        
+
         redirect('products/view_edit_cat');
     }
-    
+
     public function del_category($ref){
-        
+
         $this->Product_model->del_cat($ref);
-        
+
         redirect('products/view_edit_cat');
     }
 }
-
