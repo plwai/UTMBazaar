@@ -1,7 +1,6 @@
 
 <script src="<?php echo base_url(); ?>assets/jquery/jquery.simplePopup.js"></script>
-<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/global.css">
-<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/style.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/simplePopup.css">
 <body>
     <div class="col-sm-9">
         <h2> My Products </h2>
@@ -25,7 +24,7 @@
         <div id="myTabContent" class="tab-content">
           <div role="tabpanel" class="tab-pane fade in active" id="products" aria-labelledBy="home-tab">
             <div class="row">
-               <?php foreach ($query2 as $row) { ?>
+               <?php foreach ($query as $row) { ?>
                    <div class="col-md-6">
                        <a class="thumbnail">
 
@@ -42,7 +41,7 @@
           </div>
           <div role="tabpanel" class="tab-pane fade" id="product_data" aria-labelledBy="dropdown1-tab">
             <div class="row">
-               <?php foreach ($query2 as $row) { ?>
+               <?php foreach ($query as $row) { ?>
                    <div class="col-md-6">
                        <a class="thumbnail">
 
@@ -62,7 +61,7 @@
           </div>
           <div role="tabpanel" class="tab-pane fade" id="product_image" aria-labelledBy="dropdown2-tab">
             <div class="row">
-               <?php foreach ($query2 as $row) { ?>
+               <?php foreach ($query as $row) { ?>
                    <div class="col-md-6">
                        <a class="thumbnail">
 
@@ -104,7 +103,7 @@
           </div>
           <div role="tabpanel" class="tab-pane fade" id="publish_products" aria-labelledBy="profile-tab">
             <div class="row">
-               <?php foreach ($query2 as $row) { ?>
+               <?php foreach ($query as $row) { ?>
                    <div class="col-md-6">
                        <a class="thumbnail">
 
@@ -196,7 +195,7 @@ $(document).ready(function(){
                     }
                     if(msg.res==1){
                       document.getElementById("respond").innerHTML=" Remove succsuful ";
-                      <?php header( "url=mineproduct" ); ?>
+                      location.reload(true);
                     }
                 });
 
