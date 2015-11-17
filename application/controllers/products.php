@@ -302,7 +302,7 @@ class Products extends CI_Controller{
     }
 
     public function edit_products(){
-                if($this->session->userdata('is_logged_in')){
+        if($this->session->userdata('is_logged_in')){
             $data['title'] = 'Mine Products';
             $data['display'] = '';
             $username = $this->session->userdata('username');
@@ -314,10 +314,11 @@ class Products extends CI_Controller{
             $_data['category_data'] = $this->Product_model->load_category();
             $_data['query'] = $query->result();
              $data['title'] = 'Mine Products';
-            $data['display'] = '';   
+            $data['display'] = '';
                 $this->load->view('template/header.php', $data);
-            $this->load->view('edit_product_view',$_data);        
+            $this->load->view('edit_product_view',$_data);
         }
+      }
     }
 
     public function remove_product(){
@@ -393,8 +394,6 @@ class Products extends CI_Controller{
       redirect('home');
     }
 	}
-}
-    }  
       public function add_image(){$upload_state= false;
       if($this->input->server('REQUEST_METHOD') === 'POST'){
 
@@ -522,7 +521,7 @@ class Products extends CI_Controller{
 }
     }
 
-  }  
+  }
     public function edit_product_image(){
     if($this->input->server('REQUEST_METHOD') === 'POST'){
       $product_id  = $this->input->post('product_id');
