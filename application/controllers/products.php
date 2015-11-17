@@ -311,17 +311,22 @@ class Products extends CI_Controller{
   }
 
 	public function change_verify_status(){
-		$id  = $this->input->post('product_id');
-		$verify_status  = $this->input->post('status');
+    if ($this->input->server('REQUEST_METHOD') === 'POST'){
+		  $id  = $this->input->post('product_id');
+      $verify_status  = $this->input->post('status');
 
-		$data = array(
-                        'verify_status' => $verify_status
-                    );
-		$this->Product_model->update_verify_status($id, $data);
-		$result['state']='success';
+      $data = array(
+                          'verify_status' => $verify_status
+                      );
+      $this->Product_model->update_verify_status($id, $data);
+      $result['state']='success';
 
-		echo json_encode($result);
-		return;
+      echo json_encode($result);
+      return;
+    }
+    else{
+      redirect('home');
+    }
 	}
 }
 
