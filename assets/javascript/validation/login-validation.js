@@ -18,6 +18,7 @@ $(document).ready(function(){
                     if(msg.done==1){
                       window.location.href = window.location.origin+window.location.pathname;
                     }
+					
 					//for banned user
 					if(msg.res==3){
 					$("p#respond").css('color', 'red');
