@@ -265,27 +265,44 @@ class Products extends CI_Controller{
 
         redirect('products/view_edit_cat');
     }
-
     public function mineproduct(){
-      if($this->session->userdata('is_logged_in')){
-        $data['title'] = 'Mine Products';
-        $data['display'] = '';
-        $username = $this->session->userdata('username');
-        $data['username']   = $username;
+        if($this->session->userdata('is_logged_in')){
+            $data['title'] = 'Mine Products';
+            $data['display'] = '';
+            $username = $this->session->userdata('username');
+            $data['username']   = $username;
 
-        $query = $this->Product_model->get_products_by_owner($this->session->userdata('id'));
-        $query2 = $this->Product_model->get_products_by_owner_ignore_publish($this->session->userdata('id'));
-        $_data['query'] = $query->result();
-        $_data['query2'] = $query2->result();
-        $this->load->view('template/header.php', $data);
-        $this->load->view('myProduct_view',$_data);
+            $query = $this->Product_model->get_products_by_owner($this->session->userdata('id'));
+            $query2 = $this->Product_model->get_products_by_owner_ignore_publish($this->session->userdata('id'));
+            $_data['query'] = $query->result();
+            $_data['query2'] = $query2->result();
+            $this->load->view('template/header.php', $data);
+            $this->load->view('myProduct_view',$_data);
         }else{
             redirect('account');
         }
     }
+    public function change_product_state(){
+        if($this->input->server('REQUEST_METHOD') === 'POST'){
+            $product_id  = $this->input->post('product_id');
+            $state = $this->input->post('state');
+            if($state==1){
+                $state=0;
+            }else{
+                $state=1;
+            }
+            $_data = array(
+                'publish_state'=>$state);
+            $this->Product_model->update_product($product_id,$_data);
+            $result['res']=1;
+
+        echo json_encode($result);
+        return;
+        }
+    }
 
     public function edit_products(){
-                if($this->session->userdata('is_logged_in')){
+        if($this->session->userdata('is_logged_in')){
             $data['title'] = 'Mine Products';
             $data['display'] = '';
             $username = $this->session->userdata('username');
@@ -297,10 +314,11 @@ class Products extends CI_Controller{
             $_data['category_data'] = $this->Product_model->load_category();
             $_data['query'] = $query->result();
              $data['title'] = 'Mine Products';
-            $data['display'] = '';   
+            $data['display'] = '';
                 $this->load->view('template/header.php', $data);
-            $this->load->view('edit_product_view',$_data);        
+            $this->load->view('edit_product_view',$_data);
         }
+      }
     }
 
     public function remove_product(){
@@ -360,7 +378,7 @@ class Products extends CI_Controller{
 
 	public function change_verify_status(){
     if ($this->input->server('REQUEST_METHOD') === 'POST'){
-		  $id  = $this->input->post('product_id');
+	  $id  = $this->input->post('product_id');
       $verify_status  = $this->input->post('status');
 
       $data = array(
@@ -376,8 +394,6 @@ class Products extends CI_Controller{
       redirect('home');
     }
 	}
-}
-    }  
       public function add_image(){$upload_state= false;
       if($this->input->server('REQUEST_METHOD') === 'POST'){
 
@@ -505,7 +521,7 @@ class Products extends CI_Controller{
 }
     }
 
-  }  
+  }
     public function edit_product_image(){
     if($this->input->server('REQUEST_METHOD') === 'POST'){
       $product_id  = $this->input->post('product_id');
