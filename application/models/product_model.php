@@ -64,6 +64,11 @@ class product_model extends CI_Model {
         $this->db->where('category_id', $id);
         $this->db->delete('utm_product'); 
     }
+	
+	public function update_verify_status($id,$data){
+		$this->db->where('pk_id', $id);
+		$this->db->update('utm_product', $data);
+	}
 }
 
 ?>
