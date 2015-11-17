@@ -292,11 +292,18 @@ class Account extends CI_Controller{
           echo json_encode($result);
 					return;
 				}
-
+		//validation for banned user		
+		if($_data['user_type']==2){
+		$result['res']=3;
+		echo json_encode($result);
+		return;
+		}
+		
         $data = array(
 						'username' 	=> $_data['username'],
 						'id'  => $_data['id'],
-						'is_logged_in' 	=> true
+						'is_logged_in' 	=> true,
+						'user_type' => $_data['user_type']
 				);
 
 				$this->Account_model->set_active($username);

@@ -294,4 +294,66 @@ class Products extends CI_Controller{
     }
 
 
+	public function view_verify_products($owner_id=null){
+        if($this->session->userdata('is_logged_in')){
+            //validation for admin login
+			if($this->session->userdata('user_type')==0){
+				$username = $this->session->userdata('username');
+				$data['username']   = $username;
+
+				$query=$this->Product_model->get_products($owner_id);
+				$_data['query'] = $query->result();
+				$data['title'] = 'Verify product';
+				$data['display'] = 'display:none;';
+				$this->load->view('template/header.php', $data);
+				$this->load->view('verify_products_view', $_data);
+				}
+				else
+				{
+				    //temporary redirect to home first
+					redirect ('home');
+				}
+
+        }
+    }
+
+	public function verify_products($product_id){
+      if(isset($product_id)){
+          if($this->session->userdata('is_logged_in')){
+              $username = $this->session->userdata('username');
+              $data['username']   = $username;
+              $query=$this->Product_model->get_products($product_id);
+              $_data['query'] = $query->result();
+              $data['title'] = 'Verify product';
+              $data['display'] = 'display:none;';
+              $this->load->view('template/header.php', $data);
+              $this->load->view('verify_products_details_view', $_data);
+          }
+          else{
+              redirect('home');
+          }
+      }
+      else{
+          redirect('home');
+      }
+  }
+
+	public function change_verify_status(){
+    if ($this->input->server('REQUEST_METHOD') === 'POST'){
+		  $id  = $this->input->post('product_id');
+      $verify_status  = $this->input->post('status');
+
+      $data = array(
+                          'verify_status' => $verify_status
+                      );
+      $this->Product_model->update_verify_status($id, $data);
+      $result['state']='success';
+
+      echo json_encode($result);
+      return;
+    }
+    else{
+      redirect('home');
+    }
+	}
 }

@@ -1,11 +1,16 @@
 <body>
-  <?php echo $this->session->flashdata('msg');?>
-  <?php echo $result;?>
   <?php
+    if($type == "Seller"){
+      echo "<h1>Item Sold</h1>";
+    }
+    else{
+      echo "<h1>Item Bought</h1>";
+    }
+
     $list = "";
 
-    if(isset($items)){
-      foreach($items as $item){
+    if(isset($history)){
+      foreach($history as $item){
         $list .= "<div class='row'>";
         $list .= "<div class='col-sm-offset-3 col-sm-3'>";
         $list .= "<img src='".$item['image']."' height='200' width='200'></img> <br>";

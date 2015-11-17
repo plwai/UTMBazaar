@@ -103,6 +103,11 @@ class product_model extends CI_Model {
         $this->db->update('utm_product', $data);
 
     }
+	
+	public function update_verify_status($id,$data){
+		$this->db->where('pk_id', $id);
+		$this->db->update('utm_product', $data);
+	}
 }
 
 ?>
