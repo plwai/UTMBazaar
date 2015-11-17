@@ -296,7 +296,8 @@ class Account extends CI_Controller{
         $data = array(
 						'username' 	=> $_data['username'],
 						'id'  => $_data['id'],
-						'is_logged_in' 	=> true
+						'is_logged_in' 	=> true,
+						'user_type' => $_data['user_type']
 				);
 
 				$this->Account_model->set_active($username);

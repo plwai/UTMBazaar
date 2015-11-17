@@ -16,7 +16,8 @@ class Account_model extends CI_Model{
         'username'     => $row[0]['email'],
         'id'           => $row[0]['pk_id'],
         'password'     => $row[0]['password'],
-				'isSuccess'    => true
+		'isSuccess'    => true,
+		'user_type'     => $row[0]['user_type']
       );
     }
     else{
