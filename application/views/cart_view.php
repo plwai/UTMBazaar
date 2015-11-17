@@ -22,13 +22,8 @@
                     <?php echo $i; ?>
                 </td>
                 <td>
-                    
-                    <select onchange=<?php echo "jsFunction(this.value,'".$items['rowid']."')"; ?>  id="product_category" name="<?php echo $i.'[qty]' ?>">
-                        <option value="" title="$"> --Quantity--</option>
-                        <?php for ($x=0;$x<= $items['max_qty'];$x++) { ?>
-                        <option value="<?php echo $x; ?>" title="$" <?php if($x==$items['qty']) echo("selected")?>><?php echo $x; ?></option>
-                        <?php } ?>
-                    </select>
+                    <input type="number" name="<?php echo $i.'[qty]' ?>" min="0" max="<?php echo $items['max_qty'] ?>" value="<?php echo $items['qty'] ?>" >
+
                 </td>
                 <td>
                     <?php echo $items['name']; ?>
@@ -53,7 +48,7 @@
 
     </table>
     <p id="error_mesage"></p>
-    <p></p>
+    <p><?php echo form_submit('', 'Update your Cart'); ?></p>
     <p><button type="button" onclick="confirm_order()" >Confirm Order</button></p>
 
 <script>
@@ -89,16 +84,4 @@
            window.location.reload();
         });
   }
-  function jsFunction(value,id)
-{
-    $.ajax({
-            type: "POST",
-            url: "update_cart",
-            dataType: 'json',
-            data: {product_id: id,value:value}
-        }).done(function(msg){
-           window.location.reload();
-        });
-
-}
 </script>
