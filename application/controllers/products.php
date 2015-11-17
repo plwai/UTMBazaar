@@ -229,7 +229,7 @@ class Products extends CI_Controller{
         echo json_encode($result);
         return;
     }
-    
+
     public function view_edit_cat() {
         $data['title'] = 'UTM Bazaar - Edit Category';
     $data['display'] = '';
@@ -246,26 +246,26 @@ class Products extends CI_Controller{
     else{
         $this->load->view('template/header', $data);
     }
-    
+
     $this->load->view('edit_categories_view');
     $this->load->view('template/footer');
     }
-    
+
     public function add_category(){
-        
+
         $ref = array('Category_name' => $this->input->post('cat_name'));
         $this->Product_model->add_cat($ref);
-        
+
         redirect('products/view_edit_cat');
     }
-    
+
     public function del_category($ref){
-        
+
         $this->Product_model->del_cat($ref);
-        
+
         redirect('products/view_edit_cat');
     }
-	
+
 	public function view_verify_products($owner_id=null){
         if($this->session->userdata('is_logged_in')){
             //validation for admin login
@@ -288,20 +288,28 @@ class Products extends CI_Controller{
 
         }
     }
-	
+
 	public function verify_products($product_id){
-        if($this->session->userdata('is_logged_in')){
-            $username = $this->session->userdata('username');
-            $data['username']   = $username;
-        }
-        $query=$this->Product_model->get_products($product_id);
-        $_data['query'] = $query->result();
-        $data['title'] = 'Verify product';
-        $data['display'] = 'display:none;';
-        $this->load->view('template/header.php', $data);
-        $this->load->view('verify_products_details_view', $_data);
-    }
-	
+      if(isset($product_id)){
+          if($this->session->userdata('is_logged_in')){
+              $username = $this->session->userdata('username');
+              $data['username']   = $username;
+              $query=$this->Product_model->get_products($product_id);
+              $_data['query'] = $query->result();
+              $data['title'] = 'Verify product';
+              $data['display'] = 'display:none;';
+              $this->load->view('template/header.php', $data);
+              $this->load->view('verify_products_details_view', $_data);
+          }
+          else{
+              redirect('home');
+          }
+      }
+      else{
+          redirect('home');
+      }
+  }
+
 	public function change_verify_status(){
 		$id  = $this->input->post('product_id');
 		$verify_status  = $this->input->post('status');
