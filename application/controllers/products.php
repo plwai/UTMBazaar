@@ -212,7 +212,7 @@ class Products extends CI_Controller{
                         );
 
                         $this->Product_model->create_order($orderData);
-
+                        $this->cart->destroy();
                         $result['state']=1;
                     }
                 }
@@ -265,6 +265,34 @@ class Products extends CI_Controller{
 
         redirect('products/view_edit_cat');
     }
+
+    public function mineproduct(){
+      if($this->session->userdata('is_logged_in')){
+        $data['title'] = 'Mine Products';
+        $data['display'] = '';
+        $username = $this->session->userdata('username');
+        $data['username']   = $username;
+        $query = $this->Product_model->get_products_by_owner($this->session->userdata('id'));
+        $query2 = $this->Product_model->get_products_by_owner_ignore_publish($this->session->userdata('id'));
+        $_data['query'] = $query->result();
+        $_data['query2'] = $query2->result();
+        $this->load->view('template/header.php', $data);
+        $this->load->view('myProduct_view',$_data);
+        }else{
+            redirect('account');
+        }
+    }
+
+    public function remove_product(){
+        $product_id  = $this->input->post('product_id');
+
+        $this->Product_model->remove_product($product_id);
+        $result['res']=1;
+
+        echo json_encode($result);
+        return;
+    }
+
 
 	public function view_verify_products($owner_id=null){
         if($this->session->userdata('is_logged_in')){
@@ -329,4 +357,3 @@ class Products extends CI_Controller{
     }
 	}
 }
-
