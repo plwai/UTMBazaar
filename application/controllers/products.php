@@ -346,8 +346,7 @@ class Products extends CI_Controller{
 				$this->load->view('template/header.php', $data);
 				$this->load->view('verify_products_view', $_data);
 				}
-				else
-				{
+				else{
 				    //temporary redirect to home first
 					redirect ('home');
 				}
@@ -356,205 +355,195 @@ class Products extends CI_Controller{
     }
 
 	public function verify_products($product_id){
-      if(isset($product_id)){
-          if($this->session->userdata('is_logged_in')){
-              $username = $this->session->userdata('username');
-              $data['username']   = $username;
-              $query=$this->Product_model->get_products($product_id);
-              $_data['query'] = $query->result();
-              $data['title'] = 'Verify product';
-              $data['display'] = 'display:none;';
-              $this->load->view('template/header.php', $data);
-              $this->load->view('verify_products_details_view', $_data);
-          }
-          else{
-              redirect('home');
-          }
-      }
-      else{
-          redirect('home');
-      }
-  }
+        if(isset($product_id)){
+            if($this->session->userdata('is_logged_in')){
+                $username = $this->session->userdata('username');
+                $data['username']   = $username;
+                $query=$this->Product_model->get_products($product_id);
+                $_data['query'] = $query->result();
+                $data['title'] = 'Verify product';
+                $data['display'] = 'display:none;';
+                $this->load->view('template/header.php', $data);
+                $this->load->view('verify_products_details_view', $_data);
+            }
+            else{
+                redirect('home');
+            }
+        }
+        else{
+            redirect('home');
+        }
+    }
 
 	public function change_verify_status(){
-    if ($this->input->server('REQUEST_METHOD') === 'POST'){
-	  $id  = $this->input->post('product_id');
-      $verify_status  = $this->input->post('status');
+        if ($this->input->server('REQUEST_METHOD') === 'POST'){
+	       $id  = $this->input->post('product_id');
+            $verify_status  = $this->input->post('status');
 
-      $data = array(
-                          'verify_status' => $verify_status
-                      );
-      $this->Product_model->update_verify_status($id, $data);
-      $result['state']='success';
+            $data = array(
+                'verify_status' => $verify_status
+            );
+            $this->Product_model->update_verify_status($id, $data);
+            $result['state']='success';
 
-      echo json_encode($result);
-      return;
-    }
-    else{
-      redirect('home');
-    }
+            echo json_encode($result);
+            return;
+        }
+        else{
+            redirect('home');
+        }
 	}
-      public function add_image(){$upload_state= false;
-      if($this->input->server('REQUEST_METHOD') === 'POST'){
 
-        $product_id = $this->input->post("product_id");
+    public function add_image(){$upload_state= false;
+        if($this->input->server('REQUEST_METHOD') === 'POST'){
+            $product_id = $this->input->post("product_id");
 
-          $img_fullpath = '';
-          $position = 0;
-          while (!empty($_FILES["up_file"]["tmp_name"][$position])){
-              $filename = time() .$position. ".png";
-              $target_dir = "uploads/".$product_id."/";
-              if (!file_exists($target_dir)) {
-                  mkdir($target_dir, 0777, true);
-              }
-              $target_file = $target_dir . $filename;
+            $img_fullpath = '';
+            $position = 0;
+            while (!empty($_FILES["up_file"]["tmp_name"][$position])){
+                $filename = time() .$position. ".png";
+                $target_dir = "uploads/".$product_id."/";
+                if (!file_exists($target_dir)) {
+                    mkdir($target_dir, 0777, true);
+                }
+                $target_file = $target_dir . $filename;
 
-              $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
+                $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
 
-              if (move_uploaded_file($_FILES["up_file"]["tmp_name"][$position], $target_file)){
-                  $img_fullpath = "uploads/" .$product_id."/";
+                if (move_uploaded_file($_FILES["up_file"]["tmp_name"][$position], $target_file)){
+                    $img_fullpath = "uploads/" .$product_id."/";
+                } else {
+                    $query=$this->Product_model->get_products($product_id);
+                    $query = $query->row_array();
+                    $_data =  array(
+                        "path"=>$query['image'],
+                        "mainpath"=>$query['main_product_image'],
+                        "pk_id"=>$product_id,
+                        "product_name"=>$query['product_name']
+                    );
+                    $_data['state']="Error";
+                    $data['title'] = 'Edit Products Image';
+                    $data['display'] = '';
+                    $this->load->view('template/header.php', $data);
+                    $this->load->view('edit_product_image_view',$_data);;
+                }
+                $position = $position+1;
+                $upload_state=true;
+            }
+        }
+        if($upload_state ==true){
+            $query=$this->Product_model->get_products($product_id);
+            $query = $query->row_array();
+            $_data =  array(
+                "path"=>$query['image'],
+                "mainpath"=>$query['main_product_image'],
+                "pk_id"=>$product_id,
+                "product_name"=>$query['product_name']
+            );
+            $_data['state']=$this->input->post("product_id");
+            $data['title'] = 'Edit Products Image';
+            $data['display'] = '';
+            $this->load->view('template/header.php', $data);
+            $this->load->view('edit_product_image_view',$_data);;
+        }
+        else{
+            $query=$this->Product_model->get_products($product_id);
+            $query = $query->row_array();
+            $_data =  array(
+                "path"=>$query['image'],
+                "mainpath"=>$query['main_product_image'],
+                "pk_id"=>$product_id,
+                "product_name"=>$query['product_name']
+            );
+            $_data['state']="Fail";
+            $data['title'] = 'Edit Products Image';
+            $data['display'] = '';
+            $this->load->view('template/header.php', $data);
+            $this->load->view('edit_product_image_view',$_data);;
+        }
+    }
 
-              } else {
+    public function change_image(){
+        if($this->input->server('REQUEST_METHOD') === 'POST'){
+            $product_id = $this->input->post("product_id");
+            $main_product_image= $this->input->post("image_url");
+            $products_n = array(
+                'main_product_image' => $main_product_image
+            );
+            $this->Product_model->update_product($product_id,$products_n);
+            $query=$this->Product_model->get_products($product_id);
+            $query = $query->row_array();
+            $_data =  array(
+                "path"=>$query['image'],
+                "mainpath"=>$query['main_product_image'],
+                "pk_id"=>$product_id,
+                "product_name"=>$query['product_name']
+            );
+            $_data['state']="Done";
+            $data['title'] = 'Edit Products Image';
+            $data['display'] = '';
+            $this->load->view('template/header.php', $data);
+            $this->load->view('edit_product_image_view',$_data);;
+        }
+    }
+
+    public function remove_image(){
+        if($this->input->server('REQUEST_METHOD') === 'POST'){
+            $product_id = $this->input->post("product_id");
+            $main_product_image= $this->input->post("image_url");
+            $rest = substr($main_product_image, 27);
+
+            if (file_exists($rest)) {
+                unlink($rest);
                 $query=$this->Product_model->get_products($product_id);
                 $query = $query->row_array();
                 $_data =  array(
-                  "path"=>$query['image'],
-                  "mainpath"=>$query['main_product_image'],
-                  "pk_id"=>$product_id,
-                  "product_name"=>$query['product_name']
+                    "path"=>$query['image'],
+                    "mainpath"=>$query['main_product_image'],
+                    "pk_id"=>$product_id,
+                    "product_name"=>$query['product_name']
                 );
-                $_data['state']="Error";
+                $_data['state']="Done";
                 $data['title'] = 'Edit Products Image';
                 $data['display'] = '';
                 $this->load->view('template/header.php', $data);
                 $this->load->view('edit_product_image_view',$_data);;
-              }
-              $position = $position+1;
-              $upload_state=true;
-
-
-          }
-      }
-      if($upload_state ==true){
-        $query=$this->Product_model->get_products($product_id);
-        $query = $query->row_array();
-        $_data =  array(
-          "path"=>$query['image'],
-          "mainpath"=>$query['main_product_image'],
-          "pk_id"=>$product_id,
-          "product_name"=>$query['product_name']
-        );
-        $_data['state']=$this->input->post("product_id");
-        $data['title'] = 'Edit Products Image';
-        $data['display'] = '';
-        $this->load->view('template/header.php', $data);
-        $this->load->view('edit_product_image_view',$_data);;
-
-      }
-      else{
-        $query=$this->Product_model->get_products($product_id);
-        $query = $query->row_array();
-        $_data =  array(
-          "path"=>$query['image'],
-          "mainpath"=>$query['main_product_image'],
-          "pk_id"=>$product_id,
-          "product_name"=>$query['product_name']
-        );
-        $_data['state']="Fail";
-        $data['title'] = 'Edit Products Image';
-        $data['display'] = '';
-        $this->load->view('template/header.php', $data);
-        $this->load->view('edit_product_image_view',$_data);;
-
-      }
-  }
-    public function change_image(){
-    if($this->input->server('REQUEST_METHOD') === 'POST'){
-      $product_id = $this->input->post("product_id");
-      $main_product_image= $this->input->post("image_url");
-      $products_n = array(
-          'main_product_image' => $main_product_image
-      );
-      $this->Product_model->update_product($product_id,$products_n);
-      $query=$this->Product_model->get_products($product_id);
-      $query = $query->row_array();
-      $_data =  array(
-        "path"=>$query['image'],
-        "mainpath"=>$query['main_product_image'],
-        "pk_id"=>$product_id,
-        "product_name"=>$query['product_name']
-      );
-      $_data['state']="Done";
-      $data['title'] = 'Edit Products Image';
-      $data['display'] = '';
-      $this->load->view('template/header.php', $data);
-      $this->load->view('edit_product_image_view',$_data);;
-    }
-  }
-    public function remove_image(){
-    if($this->input->server('REQUEST_METHOD') === 'POST'){
-      $product_id = $this->input->post("product_id");
-      $main_product_image= $this->input->post("image_url");
-      $rest = substr($main_product_image, 27);
-
-      if (file_exists($rest)) {
-  unlink($rest);
-
-  $query=$this->Product_model->get_products($product_id);
-  $query = $query->row_array();
-  $_data =  array(
-    "path"=>$query['image'],
-    "mainpath"=>$query['main_product_image'],
-    "pk_id"=>$product_id,
-    "product_name"=>$query['product_name']
-  );
-  $_data['state']="Done";
-  $data['title'] = 'Edit Products Image';
-  $data['display'] = '';
-  $this->load->view('template/header.php', $data);
-  $this->load->view('edit_product_image_view',$_data);;
-
-
-} else {
-
-
-}
+            }else {
+            }
+        }
     }
 
-  }
     public function edit_product_image(){
-    if($this->input->server('REQUEST_METHOD') === 'POST'){
-      $product_id  = $this->input->post('product_id');
-      $query=$this->Product_model->get_products($product_id);
-      $query = $query->row_array();
-      $_data =  array(
-        "path"=>$query['image'],
-        "mainpath"=>$query['main_product_image'],
-        "pk_id"=>$product_id,
-        "product_name"=>$query['product_name']
-      );
-      $_data['state']="";
-      $data['title'] = 'Edit Products Image';
-      $data['display'] = '';
-      $this->load->view('template/header.php', $data);
-      $this->load->view('edit_product_image_view',$_data);
+        if($this->input->server('REQUEST_METHOD') === 'POST'){
+            $product_id  = $this->input->post('product_id');
+            $query=$this->Product_model->get_products($product_id);
+            $query = $query->row_array();
+            $_data =  array(
+                "path"=>$query['image'],
+                "mainpath"=>$query['main_product_image'],
+                "pk_id"=>$product_id,
+                "product_name"=>$query['product_name']
+            );
+            $_data['state']="";
+            $data['title'] = 'Edit Products Image';
+            $data['display'] = '';
+            $this->load->view('template/header.php', $data);
+            $this->load->view('edit_product_image_view',$_data);
+        }
     }
-  }
-      public function save_edit_product(){
-      if($this->input->server('REQUEST_METHOD') === 'POST'){
-        $product_id  = $this->input->post('product_id');
-        $description = strip_tags($this->input->post('product_description'));
-        $products_n = array(
-            'product_name' => $this->input->post('product_name'),
-            'price' => $this->input->post('product_price'),
-            'quantity' => $this->input->post('product_quantity'),
-            'category_id' => $this->input->post('product_category'),
-            'description' =>$description
-        );
-        $result = $this->Product_model->update_product($product_id,$products_n);
-        $this->mineproduct();
-      }
+    public function save_edit_product(){
+        if($this->input->server('REQUEST_METHOD') === 'POST'){
+            $product_id  = $this->input->post('product_id');
+            $description = strip_tags($this->input->post('product_description'));
+            $products_n = array(
+                'product_name' => $this->input->post('product_name'),
+                'price' => $this->input->post('product_price'),
+                'quantity' => $this->input->post('product_quantity'),
+                'category_id' => $this->input->post('product_category'),
+                'description' =>$description
+            );
+            $result = $this->Product_model->update_product($product_id,$products_n);
+            $this->mineproduct();
+        }
     }
-
-
 }

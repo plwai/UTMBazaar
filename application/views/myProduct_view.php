@@ -41,7 +41,7 @@
           </div>
           <div role="tabpanel" class="tab-pane fade" id="product_data" aria-labelledBy="dropdown1-tab">
             <div class="row">
-               <?php foreach ($query as $row) { ?>
+               <?php foreach ($query2 as $row) { ?>
                    <div class="col-md-6">
                        <a class="thumbnail">
 
@@ -61,7 +61,7 @@
           </div>
           <div role="tabpanel" class="tab-pane fade" id="product_image" aria-labelledBy="dropdown2-tab">
             <div class="row">
-               <?php foreach ($query as $row) { ?>
+               <?php foreach ($query2 as $row) { ?>
                    <div class="col-md-6">
                        <a class="thumbnail">
 
@@ -103,7 +103,7 @@
           </div>
           <div role="tabpanel" class="tab-pane fade" id="publish_products" aria-labelledBy="profile-tab">
             <div class="row">
-               <?php foreach ($query as $row) { ?>
+               <?php foreach ($query2 as $row) { ?>
                    <div class="col-md-6">
                        <a class="thumbnail">
 
