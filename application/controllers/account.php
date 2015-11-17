@@ -229,21 +229,36 @@ class Account extends CI_Controller{
 
       }
       else{
-        $this->load->view('template/header.php', $data);
-        $this->load->view('registration_view');
+        if (!$this->agent->is_mobile()) {
+            $this->load->view('template/header.php', $data);
+            $this->load->view('registration_view');
+        }else{
+            $this->load->view('mobile/template/header.php', $data);
+            $this->load->view('mobile/account_view/registration_view');
+        }
       }
       }
       else{
-        $this->load->view('template/header.php', $data);
-        $this->load->view('registration_view');
+        if (!$this->agent->is_mobile()) {
+            $this->load->view('template/header.php', $data);
+            $this->load->view('registration_view');
+        }else{
+            $this->load->view('mobile/template/header.php', $data);
+            $this->load->view('mobile/account_view/registration_view');
+        }
       }
     }
     else if($this->session->userdata('is_logged_in')){
       redirect('home');
     }
     else{
-      $this->load->view('template/header.php', $data);
-      $this->load->view('registration_view');
+        if (!$this->agent->is_mobile()) {
+            $this->load->view('template/header.php', $data);
+            $this->load->view('registration_view');
+        }else{
+            $this->load->view('mobile/template/header.php', $data);
+            $this->load->view('mobile/account_view/registration_view');
+        }
     }
   }
 
