@@ -312,6 +312,27 @@ class Pay_item extends CI_Controller{
         $data['result'] = "Something wrong please try again.";
       }
 
+        $list = "";
+
+        if(isset($data['items'])){
+          foreach($data['items'] as $item){
+            $list .= "<div class='row'>";
+            $list .= "<div class='col-sm-offset-3 col-sm-3'>";
+            $list .= "</div>";
+            $list .= "<div class='col-sm-5'><br><br><br>";
+            $list .= "<label>Product Name: </label>".$item['name']." <br>";
+            $list .= "<label>item Quantity: </label>".$item['quantity']." <br>";
+            $list .= "<label>Total Price: </label>RM".(number_format(($item['price'] * $item['quantity']), 2, '.', ''))." <br>";
+            $list .= "</div>";
+            $list .= "</div><br><br> If that is not you, please contact us immediately.";
+          }
+        }
+
+      $content = $data['result'].$list;
+      $subject = "Payment Receipt";
+
+      $this->sendEmail($username,$subject ,$content);
+
       $this->load->view('template/header', $data);
       $this->load->view('payment_view/payment_result', $data);
     }
@@ -330,4 +351,36 @@ class Pay_item extends CI_Controller{
     $this->load->view('template/header', $data);
     $this->load->view('payment_view/order_list', $data);
   }
+
+   // send email to user
+  private function sendEmail($to_email, $subject, $message){
+    $this->load->helper('email');
+
+		$from_email = 'utmbazaar@gmail.com';
+
+    $this->load->library('email');
+
+		//configure email settings
+		$config['protocol'] = 'smtp';
+		$config['smtp_host'] = 'ssl://smtp.gmail.com'; //smtp host name
+		$config['smtp_port'] = '465'; //smtp port number
+		$config['smtp_user'] = $from_email;
+		$config['smtp_pass'] = 'utmbazaar1'; //$from_email password
+		$config['mailtype'] = 'html';
+		$config['charset'] = 'utf-8';
+		$config['wordwrap'] = TRUE;
+		$config['newline'] = "\r\n"; //use double quotes
+
+
+    $this->email->initialize($config);
+		$this->email->set_newline("\r\n");
+
+		//send mail
+		$this->email->from($from_email, 'UTMBazaar');
+		$this->email->to($to_email);
+		$this->email->subject($subject);
+		$this->email->message($message);
+
+		return $this->email->send();
+	}
 }

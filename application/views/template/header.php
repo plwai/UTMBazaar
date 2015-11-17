@@ -3,16 +3,16 @@
 <head>
 	<title><?php echo $title; ?></title>
 
-  <!-- Jquery 1.11.3-->
-  <script src="<?php echo base_url(); ?>assets/jquery/jquery-1.11.3.js"></script>
-
   <!-- bootstrap-3.3.5 css-->
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/bootstrap-3.3.5-dist/css/bootstrap.min.css">
 
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/css/main.css" />
+
+  <!-- Jquery 1.11.3-->
+  <script src="<?php echo base_url(); ?>assets/jquery/jquery-1.11.3.js"></script>
+
   <!-- bootstrap-3.3.5 js-->
   <script src="<?php echo base_url(); ?>assets/bootstrap-3.3.5-dist/js/bootstrap.js"></script>
-
-  <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/css/main.css" />
 
   <div class="container-fluid">
 			<!--THIS IS HEADER-->
@@ -58,6 +58,7 @@
                 <li><a href="#">Sort by Newest</a></li>
               </ul>
               </li>
+              <li><a href=<?php echo base_url(); ?>products/mineproduct><span class="fa fa-home"></span> My Product</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
             <?php
@@ -79,4 +80,3 @@
     </nav>
     <!--THIS IS MIDDLE PANEL-->
 </head>
-
