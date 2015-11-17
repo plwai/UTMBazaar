@@ -64,9 +64,10 @@
 				url: "../change_verify_status",
 				dataType: 'json',
 				data: {product_id: id,status:v_status}
-			}).done(function(msg){;
-			   window.location.replace("http://localhost/UTMBazaar/products/view_verify_products");
+			}).done(function(msg){
+
+			    window.location.replace( "<?php echo base_url('products/view_verify_products'); ?>" );
 			});
-	
+
     }
 </script>
