@@ -58,7 +58,7 @@
                 <li><a href="#">Sort by Newest</a></li>
               </ul>
               </li>
-							<li><a href=<?php echo base_url(); ?>products/mineproduct><span class="fa fa-home"></span> My Product</a></li>
+              <li><a href=<?php echo base_url(); ?>products/mineproduct><span class="fa fa-home"></span> My Product</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
             <?php

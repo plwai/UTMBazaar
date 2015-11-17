@@ -12,19 +12,19 @@
                         <?php echo form_open_multipart('products/save_product',array('id'=>'form'));?>
                         <div class="form-group">
                             <label >Product Name</label><br>
-                            <input class="form-control" id="product_name" type="text" name="product_name" value="">
+                            <input placeholder="Only enter product name here" class="form-control" id="product_name" type="text" name="product_name" value="">
                             <p id= "iproduct_name"></p>
                         </div>
 
                         <div class="form-group">
                             <label >Product Price (RM) :</label><br>
-                            <input  class="form-control" id="product_price" type="number" step="0.01" min="0"  name="product_price" value="">
+                            <input placeholder="Enter the product price here " class="form-control" id="product_price" type="number" step="0.01" min="0"  name="product_price" value="">
                             <p id ="iproduct_price" ></p>                
                         </div>
 
                         <div class="form-group">      
                             <label >Product Quantity:</label><br>
-                            <input class="form-control" id="product_quantity" type="number" step="1" min="1"  name="product_quantity" value="">
+                            <input placeholder="Enter the product quantity here " class="form-control" id="product_quantity" type="number" step="1" min="1"  name="product_quantity" value="">
                             <p id ="iproduct_quantity" ></p>            
                         </div>
 
@@ -45,7 +45,7 @@
                         <label>Product Image</label><br>
                         <div class="fg-upload-parent">
                             <input id="up_file"  multiple="" type="file" name="up_file[]"  style="visibility:hidden; height:0px !important;" onchange="document.getElementById('import_file_text').value = this.value;">  
-                            <input  id="import_file_text" placeholder="" type="text" onclick="document.getElementById('up_file').click();" readonly>
+                            <input  id="import_file_text" placeholder="Press to upload image" type="text" onclick="document.getElementById('up_file').click();" readonly>
                             <span class="fg-upload-btn " onclick="document.getElementById('up_file').click();">Choose</span>
                         </div>
                         <p id ="iup_file" ></p>
@@ -55,7 +55,7 @@
 
                         <div class="form-group">
                             <label >Product Description</label><br>
-                            <textarea id= "product_description" class="form-control" name="product_description"  rows="6"></textarea>
+                            <textarea placeholder="Enter the description here, included product size and use manual " id= "product_description" class="form-control" name="product_description"  rows="6"></textarea>
                             <p id ="iproduct_description" ></p>
                         </div>
 
