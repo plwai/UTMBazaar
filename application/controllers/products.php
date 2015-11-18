@@ -186,16 +186,29 @@ class Products extends CI_Controller{
     }
     public function update_cart(){
         $allpro=$this->cart->contents();
-
-        $id  = $this->input->post('product_id');
-        $quantity = $this->input->post('value');
-
-        $this->cart->update(array('rowid' => $id, 'qty' => $quantity));
-        $result['state']='success';
-
-        echo json_encode($result);
-        return;
+        $i = 1;
+        if(!empty($allpro)){
+            foreach($allpro as $allprovl){
+                foreach($allpro as $allprovll){
+                    if($this->input->post($i.'[rowid]')==$allprovll['rowid']){
+                        $data = array(
+                          'rowid' => $allprovll['rowid'],
+                          'qty'   => $this->input->post($i.'[qty]')
+                        );
+                        $this->cart->update($data);
+                    }
+                    $i++;
+                }
+                $i=1;
+            }
+            redirect('/products/view_cart/', 'refresh');
+        }
+        else{
+            $this->cart->destroy();
+            redirect('/products/view_cart/', 'refresh');
+        }
     }
+
   function delete()
 	{
     $id  = $this->input->post('product_id');
