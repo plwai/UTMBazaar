@@ -32,7 +32,19 @@
             <a href=<?php echo base_url("account/reset_password")?>>Forget password?</a>
 					</div>
 
+
+          <div class="form-group">
+            <div class="col-sm-6" style="padding-left:0px;">
+              <input type="text" autocomplete="off" name="userCaptcha" id="userCaptcha" placeholder="Enter the text" class="form-control">
+            </div>
+            <div class="col-sm-6 captcha_img">
+              <label for="captcha" name="captcha_label"><?php echo $captcha['image']; ?></label>
+            </div>
+          </div>
 					<br>
+          <br>
+          <br>
+
                     <p id="respond"></p>
           <div class="form-group">
 					<button id="submit" type="submit" class="btn btn-default">Login</button>

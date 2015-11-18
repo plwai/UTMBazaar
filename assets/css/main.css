@@ -115,3 +115,7 @@ h1, h2, h3, h4, h5, h6 {
 .fa-google-plus:hover  {
 	background:#CE3C2D;
 }
+
+.frm_error{
+  color: red;
+}
