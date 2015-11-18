@@ -186,6 +186,7 @@ class Products extends CI_Controller{
                     $query = $query->row_array();
                     if($items['qty']>$query['quantity']){
                         $result['problem_id']= $items['id'];
+                        $result['row_id'] = $items['rowid'];
                         $result['problem_quantity']=$query['quantity'];
                         $result['state']=0;
                     }else{

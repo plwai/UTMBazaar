@@ -24,7 +24,6 @@
                 <td>
                     
                     <select onchange=<?php echo "jsFunction(this.value,'".$items['rowid']."')"; ?>  id="product_category" name="<?php echo $i.'[qty]' ?>">
-                        <option value="" title="$"> --Quantity--</option>
                         <?php for ($x=0;$x<= $items['max_qty'];$x++) { ?>
                         <option value="<?php echo $x; ?>" title="$" <?php if($x==$items['qty']) echo("selected")?>><?php echo $x; ?></option>
                         <?php } ?>
@@ -73,6 +72,15 @@
             }
             else if(msg.state==0){
                 document.getElementById("error_mesage").innerHTML="Product ID "+msg.problem_id+" only can have maximum "+msg.problem_quantity;
+                document.getElementById("product_category").selectedIndex=msg.problem_quantity;
+                $.ajax({
+                    type: "POST",
+                    url: "update_cart",
+                    dataType: 'json',
+                    data: {product_id: msg.row_id,value:msg.problem_quantity}
+                }).done(function(msg){
+                   
+            });
             }
 
         });
