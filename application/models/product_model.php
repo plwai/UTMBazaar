@@ -30,6 +30,7 @@ class product_model extends CI_Model {
             $this->db->select('*');
             $this->db->from('utm_product');
             $this->db->where('remove_state', 0 );
+            $this->db->where('quantity !=', 0 );
             $this->db->where( 'publish_state',1);
             $this->db->order_by("pk_id", "desc");
             $query = $this->db->get();
