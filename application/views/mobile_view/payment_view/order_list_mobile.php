@@ -8,8 +8,8 @@
       $start = microtime(true);
       foreach($orderList as $order){
         echo "<div class='row data' style='display:none; margin-bottom: 10px'>
-        <div class='col-sm-offset-3 col-sm-3'>
-        ".$i++."<img src='".$order['image']."' height='200' width='200'></img>
+        <div class='col-sm-offset-4 col-sm-1'>
+        ".$i++."
         </div>
         <div class='col-sm-5'>
         <div class='row'>

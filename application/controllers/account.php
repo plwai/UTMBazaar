@@ -7,7 +7,6 @@ class Account extends CI_Controller{
 	  parent::__construct();
 
     $this->load->helper('captcha');
-    $this->load->library('user_agent');
     $this->load->model('Account_model');
   }
 

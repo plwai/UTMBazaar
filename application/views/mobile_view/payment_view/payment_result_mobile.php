@@ -7,8 +7,8 @@
     if(isset($items)){
       foreach($items as $item){
         $list .= "<div class='row'>";
-        $list .= "<div class='col-sm-offset-3 col-sm-3'>";
-        $list .= "<img src='".$item['image']."' height='200' width='200'></img> <br>";
+        $list .= "<div class='col-sm-offset-4 col-sm-1'>";
+        $list .= " <br>";
         $list .= "</div>";
         $list .= "<div class='col-sm-5'><br><br><br>";
         $list .= "<label>Product Name: </label>".$item['name']." <br>";
