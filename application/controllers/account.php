@@ -6,6 +6,7 @@ class Account extends CI_Controller{
   public function __construct(){
 	  parent::__construct();
 
+    $this->load->helper('captcha');
     $this->load->model('Account_model');
   }
 
@@ -91,6 +92,21 @@ class Account extends CI_Controller{
       redirect('home');
     }
     else{
+      // numeric random number for captcha
+      $random_number = substr(number_format(time() * rand(),0,'',''),0,6);
+      // setting up captcha config
+      $vals = array(
+        'word' => $random_number,
+        'img_path' => './captcha/',
+        'img_url' => base_url().'captcha/',
+        'img_width' => 140,
+        'img_height' => 32,
+        'expiration' => 7200
+      );
+
+      $data['captcha'] = create_captcha($vals);
+      $this->session->set_userdata('captchaWord',$data['captcha']['word']);
+
       $this->load->view('template/header.php', $data);
       $this->load->view('reset_view/reset_view');
     }
@@ -271,13 +287,57 @@ class Account extends CI_Controller{
 			$this->form_validation->set_rules('email', 'email', 'required');
 			$this->form_validation->set_rules('password', 'Password', 'required');
 
+
 			if ($this->form_validation->run())
 			{
+        $userCaptcha = $this->input->post('userCaptcha');
+
+        if($this->check_captcha($userCaptcha)){
+          // captcha correct proceed to next validation
+        }
+        else{
+          // reset captcha
+          // numeric random number for captcha
+          $random_number = substr(number_format(time() * rand(),0,'',''),0,6);
+          // setting up captcha config
+          $vals = array(
+                 'word' => $random_number,
+                 'img_path' => './captcha/',
+                 'img_url' => base_url().'captcha/',
+                 'img_width' => 140,
+                 'img_height' => 32,
+                 'expiration' => 7200
+                );
+          $data['captcha'] = create_captcha($vals);
+          $this->session->set_userdata('captchaWord',$data['captcha']['word']);
+
+          $result['captcha'] = create_captcha($vals)['image'];
+          $result['cap']=0;
+          echo json_encode($result);
+          return;
+        }
+
 				$username  = $this->input->post('email');
 				$password  = $this->input->post('password');
 
 				$_data = $this->Account_model->get_user($username);
         if($_data['isSuccess']==false){
+          // reset captcha
+          // numeric random number for captcha
+          $random_number = substr(number_format(time() * rand(),0,'',''),0,6);
+          // setting up captcha config
+          $vals = array(
+                 'word' => $random_number,
+                 'img_path' => './captcha/',
+                 'img_url' => base_url().'captcha/',
+                 'img_width' => 140,
+                 'img_height' => 32,
+                 'expiration' => 7200
+                );
+          $data['captcha'] = create_captcha($vals);
+          $this->session->set_userdata('captchaWord',$data['captcha']['word']);
+
+          $result['captcha'] = create_captcha($vals)['image'];
           $result['res']=0;
           echo json_encode($result);
           return;
@@ -288,17 +348,50 @@ class Account extends CI_Controller{
 
 				if(sha1($password.$salt)!=$enc_pass[0])
 				{
+          // reset captcha
+          // numeric random number for captcha
+          $random_number = substr(number_format(time() * rand(),0,'',''),0,6);
+          // setting up captcha config
+          $vals = array(
+                 'word' => $random_number,
+                 'img_path' => './captcha/',
+                 'img_url' => base_url().'captcha/',
+                 'img_width' => 140,
+                 'img_height' => 32,
+                 'expiration' => 7200
+                );
+          $data['captcha'] = create_captcha($vals);
+          $this->session->set_userdata('captchaWord',$data['captcha']['word']);
+
+          $result['captcha'] = create_captcha($vals)['image'];
           $result['res']=0;
           echo json_encode($result);
 					return;
 				}
-		//validation for banned user		
-		if($_data['user_type']==2){
-		$result['res']=3;
-		echo json_encode($result);
-		return;
-		}
-		
+      //validation for banned user
+      if($_data['user_type']==2){
+        // reset captcha
+        // numeric random number for captcha
+        $random_number = substr(number_format(time() * rand(),0,'',''),0,6);
+        // setting up captcha config
+        $vals = array(
+          'word' => $random_number,
+          'img_path' => './captcha/',
+          'img_url' => base_url().'captcha/',
+          'img_width' => 140,
+          'img_height' => 32,
+          'expiration' => 7200
+        );
+        $data['captcha'] = create_captcha($vals);
+        $this->session->set_userdata('captchaWord',$data['captcha']['word']);
+
+        $result['captcha'] = create_captcha($vals)['image'];
+
+        $result['res']=3;
+        echo json_encode($result);
+        return;
+	  	}
+
         $data = array(
 						'username' 	=> $_data['username'],
 						'id'  => $_data['id'],
@@ -317,6 +410,21 @@ class Account extends CI_Controller{
       redirect('home');
     }
 		else{
+      // numeric random number for captcha
+      $random_number = substr(number_format(time() * rand(),0,'',''),0,6);
+      // setting up captcha config
+      $vals = array(
+        'word' => $random_number,
+        'img_path' => './captcha/',
+        'img_url' => base_url().'captcha/',
+        'img_width' => 140,
+        'img_height' => 32,
+        'expiration' => 7200
+      );
+
+      $data['captcha'] = create_captcha($vals);
+      $this->session->set_userdata('captchaWord',$data['captcha']['word']);
+
       $this->load->view('template/header.php', $data);
 			$this->load->view('login');
 		}
@@ -450,6 +558,16 @@ class Account extends CI_Controller{
 
     else{
       $this->login();
+    }
+  }
+
+  public function check_captcha($str){
+    $word = $this->session->userdata('captchaWord');
+    if(strcmp(strtoupper($str),strtoupper($word)) == 0){
+      return true;
+    }
+    else{
+      return false;
     }
   }
 }

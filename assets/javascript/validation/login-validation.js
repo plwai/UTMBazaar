@@ -9,22 +9,39 @@ $(document).ready(function(){
                 type: "POST",
                 url: window.location.origin + window.location.pathname + "/login",
                 dataType: 'json',
-                data: {email:$("#email").val(),password:$("#password").val()}
+                  data: {email:$("#email").val(),password:$("#password").val(), userCaptcha:$("#userCaptcha").val()}
                 }).done(function(msg){
+                    if(msg.cap==0){
+                      if ( $( "input[name=userCaptcha] + div.frm_error" ).length ) {
+                      }
+                      else{
+                        $( "<div class='frm_error'>Incorrect Captcha</div>" ).insertAfter("input[name=userCaptcha]");
+                      }
+
+                      $( "div.captcha_img" ).html('<label for="captcha" name="captcha_label">'+msg.captcha+'</label>');
+                      $("input[name=userCaptcha]").val('');
+                    }
+
                     if(msg.res==0){
+                        $("input[name=userCaptcha] + div.frm_error").remove();
                         $("p#respond").css('color', 'red');
                         document.getElementById("respond").innerHTML=" Invalid Email or Password ";
+                        $( "div.captcha_img" ).html('<label for="captcha" name="captcha_label">'+msg.captcha+'</label>');
+                        $("input[name=userCaptcha]").val('');
                     }
                     if(msg.done==1){
                       window.location.href = window.location.origin+window.location.pathname;
                     }
-					
-					//for banned user
-					if(msg.res==3){
-					$("p#respond").css('color', 'red');
-                        document.getElementById("respond").innerHTML=" Sorry your account is facing some issues, please contact admin! ";
-						}
-                });
+
+                    //for banned user
+                    if(msg.res==3){
+                      $("input[name=userCaptcha] + div.frm_error").remove();
+                      $( "div.captcha_img" ).html('<label for="captcha" name="captcha_label">'+msg.captcha+'</label>');
+                      $("input[name=userCaptcha]").val('');
+                    $("p#respond").css('color', 'red');
+                                  document.getElementById("respond").innerHTML=" Sorry your account is facing some issues, please contact admin! ";
+                      }
+                    });
 		}
 	});
 
@@ -33,9 +50,9 @@ $(document).ready(function(){
 
 function validation(){
     var password = $("input#password").val();
-    if (password == '' || password == null || password.length<4) {
+    if (password == '' || password == null) {
         $("p#password").css('color', 'red');
-        $("p#password").text('Please Enter Password with atleast length 4');
+        $("p#password").text('Please Enter Password');
         var a = false;
     }
     else{
@@ -59,7 +76,7 @@ function validation(){
     }
 
     var isEmail = isValidEmailAddress(email)
-    if (!isEmail) {
+    if (!isEmail && email != '') {
         $("p#email2").css('color', 'red');
         $("p#email2").text('Please enter vaild email');
         var c = false;
