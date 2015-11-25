@@ -5,126 +5,124 @@
     <div class="col-sm-9">
         <h2> My Products </h2>
 
-
         <ul id="myTabs" class="nav nav-tabs" role="tablist">
-          <li role="presentation" class="active"><a href="#products" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">Products</a></li>
+            <li role="presentation" class="active"><a href="#products" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">Products</a></li>
 
-          <li role="presentation" class="dropdown">
-            <a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown" aria-controls="myTabDrop1-contents">Edi Product <span class="caret"></span></a>
-            <ul class="dropdown-menu" aria-labelledby="myTabDrop1" id="myTabDrop1-contents">
-              <li><a href="#product_data" role="tab" id="dropdown1-tab" data-toggle="tab" aria-controls="dropdown1">Products Data</a></li>
-              <li><a href="#product_image" role="tab" id="dropdown2-tab" data-toggle="tab" aria-controls="dropdown2">Products Image</a></li>
-            </ul>
-          </li>
-          <li role="presentation"><a href="#remove_products" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">Remove Products</a></li>
-          <li role="presentation"><a href="#publish_products" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">Publish Products</a></li>
-          <li role="presentation"><a href="add_products" >Add Products</a></li>
+            <li role="presentation" class="dropdown">
+                <a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown" aria-controls="myTabDrop1-contents">Edi Product <span class="caret"></span></a>
+                <ul class="dropdown-menu" aria-labelledby="myTabDrop1" id="myTabDrop1-contents">
+                    <li><a href="#product_data" role="tab" id="dropdown1-tab" data-toggle="tab" aria-controls="dropdown1">Products Data</a></li>
+                    <li><a href="#product_image" role="tab" id="dropdown2-tab" data-toggle="tab" aria-controls="dropdown2">Products Image</a></li>
+                </ul>
+            </li>
+            <li role="presentation"><a href="#remove_products" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">Remove Products</a></li>
+            <li role="presentation"><a href="#publish_products" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">Publish Products</a></li>
+            <li role="presentation"><a href="add_products" >Add Products</a></li>
         </ul>
 
         <div id="myTabContent" class="tab-content">
-          <div role="tabpanel" class="tab-pane fade in active" id="products" aria-labelledBy="home-tab">
-            <div class="row">
-               <?php foreach ($query as $row) { ?>
-                   <div class="col-md-6">
-                       <a class="thumbnail">
+            <div role="tabpanel" class="tab-pane fade in active" id="products" aria-labelledBy="home-tab">
+                <div class="row">
+                    <?php foreach ($query as $row) { ?>
+                    <div class="row" onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'">
+                        <div class="col-sm-6">
+                            <p style="font-size:24px;color:black;font-weight:bold"><?php echo $row->product_name; ?></p>
+                            <p style="font-size:20px;color:grey;"><?php echo $row->description; ?></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <?php } ?>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="product_data" aria-labelledBy="dropdown1-tab">
+                <div class="row">
+                    <?php foreach ($query2 as $row) { ?>
+                    <div class="row" onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'">
+                        <div class="col-sm-6">
+                            <p style="font-size:24px;color:black;font-weight:bold"><?php echo $row->product_name; ?></p>
+                            <p style="font-size:20px;color:grey;"><?php echo $row->description; ?></p>
+                        </div>
+                        <div  class="col-sm-6" style="height:100% ;min-height: 100%;">    
+                            <form  action="edit_products" method="post">
+                                <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
+                                <button  type="submit" class="btn btn-warning">
+                                    <span class="glyphicon glyphicon-pencil"></span> Edit
+                                </button>
+                            </form>
+                        </div>
+                        
+                    </div>
+                    <hr>
+                    <?php } ?>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="product_image" aria-labelledBy="dropdown2-tab">
+                <div class="row">
+                <?php foreach ($query2 as $row) { ?>
+                    <div class="row" onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'">
+                        <div class="col-sm-6">
+                            <p style="font-size:24px;color:black;font-weight:bold"><?php echo $row->product_name; ?></p>
+                            <p style="font-size:20px;color:grey;"><?php echo $row->description; ?></p>
+                        </div>
 
-                          <div onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'" class="well well-sm"><?php echo $row->product_name; ?></div>
-                           <form  action="edit_products" method="post">
-                           <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
-                           </form>
-                       </a>
-                   </div>
+                        <div  class="col-sm-6" style="height:100% ;min-height: 100%;">
+                            <form  action="edit_product_image" method="post">
+                                <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
+                                <button  type="submit" class="btn btn-warning">
+                                    <span class="glyphicon glyphicon-pencil"></span> Edit
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <hr>
+                    <?php } ?>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="remove_products" aria-labelledBy="profile-tab">
+                <div class="row">
+                    <?php foreach ($query2 as $row) { ?>
+                    <div class="row" onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'">
+                        <div class="col-sm-6">
+                            <p style="font-size:24px;color:black;font-weight:bold"><?php echo $row->product_name; ?></p>
+                            <p style="font-size:20px;color:grey;"><?php echo $row->description; ?></p>
+                        </div>
+                        <div  class="col-sm-6" style="height:100% ;min-height: 100%;">
+                            <form  action="edit_products" method="post">
+                                <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
 
-               <?php } ?>
-           </div>
-          </div>
-          <div role="tabpanel" class="tab-pane fade" id="product_data" aria-labelledBy="dropdown1-tab">
-            <div class="row">
-               <?php foreach ($query2 as $row) { ?>
-                   <div class="col-md-6">
-                       <a class="thumbnail">
+                                <button type="button" onclick="remove_event(<?php echo $row->pk_id; ?>)" class="btn btn-warning">
+                                    <span class="glyphicon glyphicon-trash"></span> Remove
+                                </button>
 
-                           <div onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'" class="well well-sm"><?php echo $row->product_name; ?></div>
-                           <form  action="edit_products" method="post">
-                           <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
-                           <button  type="submit" class="btn btn-warning">
-                               <span class="glyphicon glyphicon-pencil"></span> Edit
-                           </button>
-                           </form>
-                       </a>
-                   </div>
-
-               <?php } ?>
-           </div>
-          </div>
-          <div role="tabpanel" class="tab-pane fade" id="product_image" aria-labelledBy="dropdown2-tab">
-            <div class="row">
-               <?php foreach ($query2 as $row) { ?>
-                   <div class="col-md-6">
-                       <a class="thumbnail">
-
-                           <div onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'" class="well well-sm"><?php echo $row->product_name; ?></div>
-                           <form  action="edit_product_image" method="post">
-                           <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
-                           <button  type="submit" class="btn btn-warning">
-                               <span class="glyphicon glyphicon-pencil"></span> Edit
-                           </button>
-                           </form>
-                       </a>
-                   </div>
-
-               <?php } ?>
-           </div>
-          </div>
-          <div role="tabpanel" class="tab-pane fade" id="remove_products" aria-labelledBy="profile-tab">
-            <div class="row">
-               <?php foreach ($query2 as $row) { ?>
-                   <div class="col-md-6">
-                       <a class="thumbnail">
-
-                           <div onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'" class="well well-sm"><?php echo $row->product_name; ?></div>
-                           <form  action="edit_products" method="post">
-                           <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
-
-                           <button type="button" onclick="remove_event(<?php echo $row->pk_id; ?>)" class="btn btn-warning">
-                               <span class="glyphicon glyphicon-trash"></span> Remove
-                           </button>
-
-                           </form>
-                       </a>
-                   </div>
-
-               <?php } ?>
-           </div>
-          </div>
-          <div role="tabpanel" class="tab-pane fade" id="publish_products" aria-labelledBy="profile-tab">
-            <div class="row">
-               <?php foreach ($query2 as $row) { ?>
-                   <div class="col-md-6">
-                       <a class="thumbnail">
-
-                           <div onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'" class="well well-sm"><?php echo $row->product_name; ?></div>
-                           <form  action="edit_products" method="post">
-                           <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
-                           <button type="button" onclick="change_publish_state(<?php echo $row->pk_id; ?>,<?php echo $row->publish_state ?>)" class="btn btn-warning">
-                               <span class="glyphicon glyphicon-asterisk"></span> <?php if($row->publish_state==1){echo "unpushblish" ;}else{echo "pubish";}?>
-                           </button>
-                           </form>
-                       </a>
-                   </div>
-
-               <?php } ?>
-           </div>
-          </div>
+                            </form>
+                        </div> 
+                    </div>
+                    <hr>
+                    <?php } ?>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="publish_products" aria-labelledBy="profile-tab">
+                <div class="row">
+                    <?php foreach ($query2 as $row) { ?>
+                    <div class="row" onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'" class="well well-sm; " style="font-size:25px;">
+                        <div class="col-sm-6">
+                            <p style="font-size:24px;color:black;font-weight:bold"><?php echo $row->product_name; ?></p>
+                            <p style="font-size:20px;color:grey;"><?php echo $row->description; ?></p>
+                        </div>
+                        <div  class="col-sm-6" style="height:100% ;min-height: 100%;">
+                            <form  style="position:relative;top:50%;" action="edit_products" method="post">
+                               <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
+                               <button type="button" onclick="change_publish_state(<?php echo $row->pk_id; ?>,<?php echo $row->publish_state ?>)" class="btn btn-warning">
+                                   <span   class="glyphicon glyphicon-asterisk"></span> <?php if($row->publish_state==1){echo "unpushblish" ;}else{echo "pubish";}?>
+                               </button>
+                            </form>
+                        </div>
+                    </div>
+                    <hr>
+                    <?php } ?>
+                </div>
+            </div>
         </div>
-      </div>
-
-
-
-
-
-
-
     </div>
 
         <div id="delete_product_pop" style="display: none;" class="simplePopup">
@@ -176,6 +174,7 @@
 </script>
 <script>
 $(document).ready(function(){
+    $("#columnTwo").height($("#columnOne").height());
     $('input#del_submit').click(function(e){
 
                 $.ajax({

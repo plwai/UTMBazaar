@@ -58,7 +58,7 @@ class Products extends CI_Controller{
                         'price' => $this->input->post('product_price'),
                         'quantity' => $this->input->post('product_quantity'),
                         'category_id' => $this->input->post('product_category'),
-                        'main_product_image'=> base_url().$img_fullpath.$filename,
+                        'main_product_image'=> "/utmbazaar/".$img_fullpath.$filename,
                         'description' =>$description ,
                         'user_id'=>$this->session->userdata('id'),
                         'date_added'=>$date,

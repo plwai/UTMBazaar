@@ -69,7 +69,7 @@
             if(msg.res==1){
                 $("p#notify").css('color', 'red');
                 $("p#notify").text('Add Cart Success');
-                window.location.replace("http://localhost/UTMBazaar/products/view_cart");
+                window.location.replace("<?php echo base_url('products/view_cart') ?>");
             }
             else{
                 $("p#notify").css('color', 'red');
