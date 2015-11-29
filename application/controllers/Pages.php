@@ -39,10 +39,18 @@ class Pages extends CI_Controller {
 
   public function display_reviews($product_id=null)
 	{
+        $this->load->helper('url');
+        $config = array();
+        $config["base_url"] = base_url() . "pages/display_reviews";
+        $config["total_rows"] = $this->pages_model->record_count();
+        $config["per_page"] = 10;
+        $config["uri_segment"] = 3;
+        $this->pagination->initialize($config);
+
         $_data['query'] = $this->Reviews_model->view_reviews($product_id);
-        $data['title'] = 'Product Reviews';
-        $data['display'] = 'display:none';
-        $this->load->view('template/header.php', $data);
+        $pageData['title'] = 'Product Reviews';
+        
+        $this->load->view('template/header.php', $pageData);
         $this->load->view('review', $_data);
 		
 	}
