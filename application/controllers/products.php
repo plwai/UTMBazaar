@@ -595,26 +595,34 @@ class Products extends CI_Controller{
     }
 
     public function edit_product_image(){
-        if($this->input->server('REQUEST_METHOD') === 'POST'){
-            $product_id  = $this->input->post('product_id');
-            $query=$this->Product_model->get_products($product_id);
-            $query = $query->row_array();
-            $_data =  array(
-                "path"=>$query['image'],
-                "mainpath"=>$query['main_product_image'],
-                "pk_id"=>$product_id,
-                "product_name"=>$query['product_name']
-            );
-            $_data['state']="";
-            $data['title'] = 'Edit Products Image';
-            $data['display'] = '';
-            if (!$this->agent->is_mobile()) {
-                $this->load->view('template/header.php', $data);
-                $this->load->view('edit_product_image_view',$_data);
-            }else{
-                $this->load->view('mobile/template/header.php', $data);
-                $this->load->view('mobile/products_view/edit_product_image_view',$_data);
+        if($this->session->userdata('is_logged_in')){
+            $username = $this->session->userdata('username');
+            $data['username']   = $username;
+
+        
+            if($this->input->server('REQUEST_METHOD') === 'POST'){
+                $product_id  = $this->input->post('product_id');
+                $query=$this->Product_model->get_products($product_id);
+                $query = $query->row_array();
+                $_data =  array(
+                    "path"=>$query['image'],
+                    "mainpath"=>$query['main_product_image'],
+                    "pk_id"=>$product_id,
+                    "product_name"=>$query['product_name']
+                );
+                $_data['state']="";
+                $data['title'] = 'Edit Products Image';
+                $data['display'] = '';
+                if (!$this->agent->is_mobile()) {
+                    $this->load->view('template/header.php', $data);
+                    $this->load->view('edit_product_image_view',$_data);
+                }else{
+                    $this->load->view('mobile/template/header.php', $data);
+                    $this->load->view('mobile/products_view/edit_product_image_view',$_data);
+                }
             }
+        }else{
+            redirect('account');
         }
     }
     public function save_edit_product(){

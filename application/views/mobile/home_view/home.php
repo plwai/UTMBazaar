@@ -1,5 +1,5 @@
 <body>
-    <div class="container">
+    <div class="container  col-xs-offset-1">
         <div class="row">
 
             <!--FEATURED ITEMS PANEL-->
@@ -7,15 +7,15 @@
             <h2> Featured Items </h2>
                 <div class="row">
                     <?php foreach ($product_list as $row) { ?>
-                    <div class="row" >
-                        <div class="col-sm-6" onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'">
+                    <div class="row" style="display: -webkit-box;display: -webkit-flex;display: -ms-flexbox;display: flex;">
+                        <div style="" class="col-sm-6" onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'">
                             <p style="font-size:24px;color:black;font-weight:bold"><?php echo $row->product_name; ?></p>
                             <p>
                                 Price <span class="label label-info"> RM <?php echo $row->price; ?></span>
                             </p>
                         </div>
-                        <div  class="col-sm-6" style="height:100% ;min-height: 100%;">
-                            <button type="button" onclick="add_cart(<?php echo $row->pk_id; ?>)" class="btn btn-warning">
+                        <div  class="col-sm-6 "  >
+                            <button style="top:45%;position: absolute;" type="button" onclick="add_cart(<?php echo $row->pk_id; ?>)" class="btn btn-warning">
                                 <span class="fa fa-cart-plus"></span> Add to Cart
                             </button>
                         </div>

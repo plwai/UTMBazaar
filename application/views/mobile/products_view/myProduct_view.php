@@ -2,127 +2,170 @@
 <script src="<?php echo base_url(); ?>assets/jquery/jquery.simplePopup.js"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/simplePopup.css">
 <body>
-    <div class="col-sm-9">
-        <h2> My Products </h2>
+    <div class="col-xs-11 col-xs-offset-1">
+        <h2> Manage My Products </h2>
 
-        <ul id="myTabs" class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#products" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">Products</a></li>
-
-            <li role="presentation" class="dropdown">
-                <a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown" aria-controls="myTabDrop1-contents">Edi Product <span class="caret"></span></a>
-                <ul class="dropdown-menu" aria-labelledby="myTabDrop1" id="myTabDrop1-contents">
-                    <li><a href="#product_data" role="tab" id="dropdown1-tab" data-toggle="tab" aria-controls="dropdown1">Products Data</a></li>
-                    <li><a href="#product_image" role="tab" id="dropdown2-tab" data-toggle="tab" aria-controls="dropdown2">Products Image</a></li>
-                </ul>
-            </li>
-            <li role="presentation"><a href="#remove_products" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">Remove Products</a></li>
-            <li role="presentation"><a href="#publish_products" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">Publish Products</a></li>
-            <li role="presentation"><a href="add_products" >Add Products</a></li>
-        </ul>
-
-        <div id="myTabContent" class="tab-content">
-            <div role="tabpanel" class="tab-pane fade in active" id="products" aria-labelledBy="home-tab">
-                <div class="row">
-                    <?php foreach ($query as $row) { ?>
-                    <div class="row" onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'">
-                        <div class="col-sm-6">
-                            <p style="font-size:24px;color:black;font-weight:bold"><?php echo $row->product_name; ?></p>
-                            <p style="font-size:20px;color:grey;"><?php echo $row->description; ?></p>
-                        </div>
-                    </div>
-                    <hr>
-                    <?php } ?>
+        <div class="accordion" id="accordion2">
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#productdata">
+                        Products Data
+                    </a>
                 </div>
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="product_data" aria-labelledBy="dropdown1-tab">
-                <div class="row">
-                    <?php foreach ($query2 as $row) { ?>
-                    <div class="row" onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'">
-                        <div class="col-sm-6">
-                            <p style="font-size:24px;color:black;font-weight:bold"><?php echo $row->product_name; ?></p>
-                            <p style="font-size:20px;color:grey;"><?php echo $row->description; ?></p>
-                        </div>
-                        <div  class="col-sm-6" style="height:100% ;min-height: 100%;">    
-                            <form  action="edit_products" method="post">
-                                <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
-                                <button  type="submit" class="btn btn-warning">
-                                    <span class="glyphicon glyphicon-pencil"></span> Edit
-                                </button>
-                            </form>
-                        </div>
+                <div id="productdata" class="accordion-body collapse in">
+                    <div class="accordion-inner">
+                        <div class="row">
+                            <?php foreach ($query2 as $row) { ?>
+                            <div style="display: -webkit-box;display: -webkit-flex;display: -ms-flexbox;display: flex;" class="row" >
+                                <div class="col-xs-5" style="padding-left: 0px;padding-right: 0px;"onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'">
+                                    <p style="font-size:24px;color:black;font-weight:bold"><?php echo $row->product_name; ?></p>
+                                    <p style="font-size:20px;color:grey;"><?php echo $row->description; ?></p>
+                                </div>
+                                <div  class="col-xs-1" style="padding-left: 0px;padding-right: 0px;" >    
+                                    <form style="top:45%;position: absolute;" action="edit_products" method="post">
+                                        <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
+                                        <button  type="submit" class="btn btn-warning">
+                                            <span class="glyphicon glyphicon-cog"></span> 
+                                        </button>
+                                    </form>
+                                </div>
+                                <div  class="col-xs-1"style="padding-left: 0px;padding-right: 0px;" >
+                                    <form  style="top:45%;position: absolute;" action="edit_product_image" method="post">
+                                        <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
+                                        <button  type="submit" class="btn btn-warning">
+                                            <span class="glyphicon glyphicon-film"></span> 
+                                        </button>
+                                    </form>
+                                </div>
+                                <div  class="col-xs-1"style="padding-left: 0px;padding-right: 0px;" >
+                                    <form style="top:45%;position: absolute;" action="edit_products" method="post">
+                                        <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
+
+                                        <button type="button" onclick="remove_event(<?php echo $row->pk_id; ?>)" class="btn btn-warning">
+                                            <span class="glyphicon glyphicon-trash"></span> 
+                                        </button>
+                                    </form>
+                                </div>
+                                <div  class="col-xs-1" style="padding-left: 0px;padding-right: 0px;" >
+                                    <form style="top:45%;position: absolute;"  action="edit_products" method="post">
+                                       <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
+                                       <button type="button" onclick="change_publish_state(<?php echo $row->pk_id; ?>,<?php echo $row->publish_state ?>)" class="btn btn-warning">
+                                           <span   class="glyphicon glyphicon-asterisk"></span> <?php if($row->publish_state==1){echo "UP" ;}else{echo "P";}?>
+                                       </button>
+                                    </form>
+                                </div>
                         
+                            </div>
+
+                            <hr>
+                            <?php } ?>
+                        </div>
                     </div>
-                    <hr>
-                    <?php } ?>
                 </div>
             </div>
-            <div role="tabpanel" class="tab-pane fade" id="product_image" aria-labelledBy="dropdown2-tab">
-                <div class="row">
-                <?php foreach ($query2 as $row) { ?>
-                    <div class="row" onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'">
-                        <div class="col-sm-6">
-                            <p style="font-size:24px;color:black;font-weight:bold"><?php echo $row->product_name; ?></p>
-                            <p style="font-size:20px;color:grey;"><?php echo $row->description; ?></p>
-                        </div>
-
-                        <div  class="col-sm-6" style="height:100% ;min-height: 100%;">
-                            <form  action="edit_product_image" method="post">
-                                <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
-                                <button  type="submit" class="btn btn-warning">
-                                    <span class="glyphicon glyphicon-pencil"></span> Edit
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                    <hr>
-                    <?php } ?>
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle"  href="add_products">
+                        Add Products
+                    </a>
                 </div>
             </div>
-            <div role="tabpanel" class="tab-pane fade" id="remove_products" aria-labelledBy="profile-tab">
-                <div class="row">
-                    <?php foreach ($query2 as $row) { ?>
-                    <div class="row" onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'">
-                        <div class="col-sm-6">
-                            <p style="font-size:24px;color:black;font-weight:bold"><?php echo $row->product_name; ?></p>
-                            <p style="font-size:20px;color:grey;"><?php echo $row->description; ?></p>
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#productimage">
+                        Products Image
+                    </a>
+                </div>
+                <div id="productimage" class="accordion-body collapse">
+                    <div class="accordion-inner">
+                        <div class="row">
+                            <?php foreach ($query2 as $row) { ?>
+                                <div style="display: -webkit-box;display: -webkit-flex;display: -ms-flexbox;display: flex;" class="row" onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'">
+                                    <div class="col-sm-6">
+                                        <p style="font-size:24px;color:black;font-weight:bold"><?php echo $row->product_name; ?></p>
+                                        <p style="font-size:20px;color:grey;"><?php echo $row->description; ?></p>
+                                    </div>
+
+                                    <div  class="col-sm-6" >
+                                        <form  style="top:45%;position: absolute;" action="edit_product_image" method="post">
+                                            <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
+                                            <button  type="submit" class="btn btn-warning">
+                                                <span class="glyphicon glyphicon-pencil"></span> Edit
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            <hr>
+                            <?php } ?>
                         </div>
-                        <div  class="col-sm-6" style="height:100% ;min-height: 100%;">
-                            <form  action="edit_products" method="post">
-                                <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
-
-                                <button type="button" onclick="remove_event(<?php echo $row->pk_id; ?>)" class="btn btn-warning">
-                                    <span class="glyphicon glyphicon-trash"></span> Remove
-                                </button>
-
-                            </form>
-                        </div> 
                     </div>
-                    <hr>
-                    <?php } ?>
                 </div>
             </div>
-            <div role="tabpanel" class="tab-pane fade" id="publish_products" aria-labelledBy="profile-tab">
-                <div class="row">
-                    <?php foreach ($query2 as $row) { ?>
-                    <div class="row" onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'" class="well well-sm; " style="font-size:25px;">
-                        <div class="col-sm-6">
-                            <p style="font-size:24px;color:black;font-weight:bold"><?php echo $row->product_name; ?></p>
-                            <p style="font-size:20px;color:grey;"><?php echo $row->description; ?></p>
-                        </div>
-                        <div  class="col-sm-6" style="height:100% ;min-height: 100%;">
-                            <form  style="position:relative;top:50%;" action="edit_products" method="post">
-                               <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
-                               <button type="button" onclick="change_publish_state(<?php echo $row->pk_id; ?>,<?php echo $row->publish_state ?>)" class="btn btn-warning">
-                                   <span   class="glyphicon glyphicon-asterisk"></span> <?php if($row->publish_state==1){echo "unpushblish" ;}else{echo "pubish";}?>
-                               </button>
-                            </form>
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#removeproducts">
+                        Remove Products
+                    </a>
+                </div>
+                <div id="removeproducts" class="accordion-body collapse">
+                    <div class="accordion-inner">
+                        <div class="row">
+                            <?php foreach ($query2 as $row) { ?>
+                            <div class="row" style="display: -webkit-box;display: -webkit-flex;display: -ms-flexbox;display: flex;" onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'">
+                                <div class="col-sm-6">
+                                    <p style="font-size:24px;color:black;font-weight:bold"><?php echo $row->product_name; ?></p>
+                                    <p style="font-size:20px;color:grey;"><?php echo $row->description; ?></p>
+                                </div>
+                                <div  class="col-sm-6" >
+                                    <form style="top:45%;position: absolute;" action="edit_products" method="post">
+                                        <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
+
+                                        <button type="button" onclick="remove_event(<?php echo $row->pk_id; ?>)" class="btn btn-warning">
+                                            <span class="glyphicon glyphicon-trash"></span> Remove
+                                        </button>
+
+                                    </form>
+                                </div> 
+                            </div>
+                            <hr>
+                            <?php } ?>
                         </div>
                     </div>
-                    <hr>
-                    <?php } ?>
+                </div>
+            </div>
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#publishproducts">
+                        Publish products
+                    </a>
+                </div>
+                <div id="publishproducts" class="accordion-body collapse">
+                    <div class="accordion-inner">
+                        <div class="row" style="">
+                            <?php foreach ($query2 as $row) { ?>
+                            <div class="row " style="display: -webkit-box;display: -webkit-flex;display: -ms-flexbox;display: flex;" onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'" class="well well-sm; " style="font-size:25px;">
+                                <div  class="col-sm-6" >
+                                    <p style="font-size:24px;color:black;font-weight:bold"><?php echo $row->product_name; ?></p>
+                                    <p style="font-size:20px;color:grey;"><?php echo $row->description; ?></p>
+                                </div>
+                                <div  class="col-sm-6 " style="" >
+                                    <form style="top:45%;position: absolute;"  action="edit_products" method="post">
+                                       <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
+                                       <button type="button" onclick="change_publish_state(<?php echo $row->pk_id; ?>,<?php echo $row->publish_state ?>)" class="btn btn-warning">
+                                           <span   class="glyphicon glyphicon-asterisk"></span> <?php if($row->publish_state==1){echo "unpushblish" ;}else{echo "pubish";}?>
+                                       </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <hr>
+                            <?php } ?>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+
     </div>
 
         <div id="delete_product_pop" style="display: none;" class="simplePopup">
@@ -174,7 +217,9 @@
 </script>
 <script>
 $(document).ready(function(){
-    $("#columnTwo").height($("#columnOne").height());
+
+    
+
     $('input#del_submit').click(function(e){
 
                 $.ajax({
@@ -210,4 +255,7 @@ $(window).on('popstate', function() {
     var anchor = location.hash || $("a[data-toggle=tab]").first().attr("href");
     $('a[href=' + anchor + ']').tab('show');
 });
+</script>
+<script>
+
 </script>

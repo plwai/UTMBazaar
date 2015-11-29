@@ -42,7 +42,7 @@ class product_model extends CI_Model {
             $where = "(utm_product.pk_id = $product_id)";
             $this->db->where($where);
             $this->db->where('remove_state', 0 );
-            $this->db->where( 'publish_state',1);
+//           $this->db->where( 'publish_state',1);
             $this->db->order_by("pk_id", "desc");
             $query = $this->db->get();
         }
