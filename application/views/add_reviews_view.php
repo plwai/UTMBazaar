@@ -1,6 +1,7 @@
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/rating/jquery-ui-1.8.12.custom.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/rating/jquery.ui.stars.min.js"></script>
     <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>assets/rating/jquery.ui.stars.min.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <html>
     <body>
         <div class="row col-md-6 col-md-offset-3 container">
