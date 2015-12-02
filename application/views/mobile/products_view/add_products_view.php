@@ -1,9 +1,9 @@
 <script type="text/javascript" src="<?php echo base_url();?>assets\javascript\validation/add-product-validation.js"></script>
 <html>
     <body>
-        <div class="row col-md-6 col-md-offset-3 container">
+        <div class="row col-md-6 col-md-offset-3 container ">
             <div id="validation-error"></div>
-                <div id="right-section-wrapper" class="panel panel-default">
+                <div id="right-section-wrapper" class="panel panel-default col-xs-offset-1 col-xs-10" >
                     <div class="panel-heading" >
                         <h2>Add Product</h2>
                     </div>

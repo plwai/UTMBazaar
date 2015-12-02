@@ -2,26 +2,29 @@
 <script src="<?php echo base_url(); ?>assets/jquery/jquery.simplePopup.js"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/simplePopup.css">
 <body>
-    <div class="col-xs-11 col-xs-offset-1">
-        <h2> Manage My Products </h2>
+    <div class="col-sm-9">
+        <h2> My Products </h2>
 
-        <div class="accordion" id="accordion2">
-            <div class="accordion-group">
-                <div class="accordion-heading">
-                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#productdata">
-                        Products Data
-                    </a>
-                </div>
-                <div id="productdata" class="accordion-body collapse in">
-                    <div class="accordion-inner">
-                        <div class="row">
+
+        <ul id="myTabs" class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#products" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">Products</a></li>
+
+            <li role="presentation" class="dropdown">
+
+            <li role="presentation"><a href="add_products" >Add Products</a></li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            
+                
+                    <div role="tabpanel" class="tab-pane fade in active" id="products" aria-labelledBy="home-tab">
+                        <div class="row col-xs-offset-1">
                             <?php foreach ($query2 as $row) { ?>
                             <div style="display: -webkit-box;display: -webkit-flex;display: -ms-flexbox;display: flex;" class="row" >
-                                <div class="col-xs-5" style="padding-left: 0px;padding-right: 0px;"onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'">
+                                <div class="col-xs-4" style="padding-left: 0px;padding-right: 0px;"onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'">
                                     <p style="font-size:24px;color:black;font-weight:bold"><?php echo $row->product_name; ?></p>
                                     <p style="font-size:20px;color:grey;"><?php echo $row->description; ?></p>
                                 </div>
-                                <div  class="col-xs-1" style="padding-left: 0px;padding-right: 0px;" >    
+                                <div  class="col-xs-2" style="padding-left: 0px;padding-right: 0px;" >    
                                     <form style="top:45%;position: absolute;" action="edit_products" method="post">
                                         <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
                                         <button  type="submit" class="btn btn-warning">
@@ -29,7 +32,7 @@
                                         </button>
                                     </form>
                                 </div>
-                                <div  class="col-xs-1"style="padding-left: 0px;padding-right: 0px;" >
+                                <div  class="col-xs-2"style="padding-left: 0px;padding-right: 0px;" >
                                     <form  style="top:45%;position: absolute;" action="edit_product_image" method="post">
                                         <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
                                         <button  type="submit" class="btn btn-warning">
@@ -37,7 +40,7 @@
                                         </button>
                                     </form>
                                 </div>
-                                <div  class="col-xs-1"style="padding-left: 0px;padding-right: 0px;" >
+                                <div  class="col-xs-2"style="padding-left: 0px;padding-right: 0px;" >
                                     <form style="top:45%;position: absolute;" action="edit_products" method="post">
                                         <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
 
@@ -46,7 +49,7 @@
                                         </button>
                                     </form>
                                 </div>
-                                <div  class="col-xs-1" style="padding-left: 0px;padding-right: 0px;" >
+                                <div  class="col-xs-2" style="padding-left: 0px;padding-right: 0px;" >
                                     <form style="top:45%;position: absolute;"  action="edit_products" method="post">
                                        <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
                                        <button type="button" onclick="change_publish_state(<?php echo $row->pk_id; ?>,<?php echo $row->publish_state ?>)" class="btn btn-warning">
@@ -61,108 +64,9 @@
                             <?php } ?>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="accordion-group">
-                <div class="accordion-heading">
-                    <a class="accordion-toggle"  href="add_products">
-                        Add Products
-                    </a>
-                </div>
-            </div>
-            <div class="accordion-group">
-                <div class="accordion-heading">
-                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#productimage">
-                        Products Image
-                    </a>
-                </div>
-                <div id="productimage" class="accordion-body collapse">
-                    <div class="accordion-inner">
-                        <div class="row">
-                            <?php foreach ($query2 as $row) { ?>
-                                <div style="display: -webkit-box;display: -webkit-flex;display: -ms-flexbox;display: flex;" class="row" onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'">
-                                    <div class="col-sm-6">
-                                        <p style="font-size:24px;color:black;font-weight:bold"><?php echo $row->product_name; ?></p>
-                                        <p style="font-size:20px;color:grey;"><?php echo $row->description; ?></p>
-                                    </div>
-
-                                    <div  class="col-sm-6" >
-                                        <form  style="top:45%;position: absolute;" action="edit_product_image" method="post">
-                                            <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
-                                            <button  type="submit" class="btn btn-warning">
-                                                <span class="glyphicon glyphicon-pencil"></span> Edit
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            <hr>
-                            <?php } ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-group">
-                <div class="accordion-heading">
-                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#removeproducts">
-                        Remove Products
-                    </a>
-                </div>
-                <div id="removeproducts" class="accordion-body collapse">
-                    <div class="accordion-inner">
-                        <div class="row">
-                            <?php foreach ($query2 as $row) { ?>
-                            <div class="row" style="display: -webkit-box;display: -webkit-flex;display: -ms-flexbox;display: flex;" onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'">
-                                <div class="col-sm-6">
-                                    <p style="font-size:24px;color:black;font-weight:bold"><?php echo $row->product_name; ?></p>
-                                    <p style="font-size:20px;color:grey;"><?php echo $row->description; ?></p>
-                                </div>
-                                <div  class="col-sm-6" >
-                                    <form style="top:45%;position: absolute;" action="edit_products" method="post">
-                                        <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
-
-                                        <button type="button" onclick="remove_event(<?php echo $row->pk_id; ?>)" class="btn btn-warning">
-                                            <span class="glyphicon glyphicon-trash"></span> Remove
-                                        </button>
-
-                                    </form>
-                                </div> 
-                            </div>
-                            <hr>
-                            <?php } ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-group">
-                <div class="accordion-heading">
-                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#publishproducts">
-                        Publish products
-                    </a>
-                </div>
-                <div id="publishproducts" class="accordion-body collapse">
-                    <div class="accordion-inner">
-                        <div class="row" style="">
-                            <?php foreach ($query2 as $row) { ?>
-                            <div class="row " style="display: -webkit-box;display: -webkit-flex;display: -ms-flexbox;display: flex;" onclick="location.href='<?php echo base_url();?>products/load_details/<?php echo $row->pk_id;?>'" class="well well-sm; " style="font-size:25px;">
-                                <div  class="col-sm-6" >
-                                    <p style="font-size:24px;color:black;font-weight:bold"><?php echo $row->product_name; ?></p>
-                                    <p style="font-size:20px;color:grey;"><?php echo $row->description; ?></p>
-                                </div>
-                                <div  class="col-sm-6 " style="" >
-                                    <form style="top:45%;position: absolute;"  action="edit_products" method="post">
-                                       <input type="hidden" value="<?php echo $row->pk_id; ?>" name="product_id">
-                                       <button type="button" onclick="change_publish_state(<?php echo $row->pk_id; ?>,<?php echo $row->publish_state ?>)" class="btn btn-warning">
-                                           <span   class="glyphicon glyphicon-asterisk"></span> <?php if($row->publish_state==1){echo "unpushblish" ;}else{echo "pubish";}?>
-                                       </button>
-                                    </form>
-                                </div>
-                            </div>
-                            <hr>
-                            <?php } ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                
+    
+            
         </div>
 
 
