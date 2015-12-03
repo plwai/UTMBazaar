@@ -274,7 +274,7 @@ class Pay_item extends CI_Controller{
         $data['result'] = "Something wrong please try again.";
 
         if ($this->agent->is_mobile()){
-          $this->load->view('template/header.php', $data);
+          $this->load->view('mobile_view/template/header', $data);
           $this->load->view('mobile_view/payment_view/payment_result_mobile');
         }
         else{
@@ -341,7 +341,7 @@ class Pay_item extends CI_Controller{
       $this->sendEmail($username,$subject ,$content);
 
       if ($this->agent->is_mobile()){
-        $this->load->view('template/header.php', $data);
+        $this->load->view('mobile_view/template/header', $data);
         $this->load->view('mobile_view/payment_view/payment_result_mobile');
       }
       else{
@@ -362,7 +362,7 @@ class Pay_item extends CI_Controller{
     $data['orderList'] = $orderList;
 
     if ($this->agent->is_mobile()){
-      $this->load->view('template/header.php', $data);
+      $this->load->view('mobile_view/template/header', $data);
       $this->load->view('mobile_view/payment_view/order_list_mobile');
     }
     else{

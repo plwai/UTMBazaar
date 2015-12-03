@@ -43,8 +43,14 @@ class History extends CI_Controller{
 
       $data['history'] = $this->History_model->get_history($type, $id);
 
-      $this->load->view('template/header', $data);
-      $this->load->view('history', $data);
+      if ($this->agent->is_mobile()){
+        $this->load->view('mobile_view/template/header', $data);
+        $this->load->view('mobile_view/history_view/history', $data);
+      }
+      else{
+        $this->load->view('template/header', $data);
+        $this->load->view('history', $data);
+      }
     }
   }
 }

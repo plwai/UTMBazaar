@@ -108,7 +108,7 @@ class Account extends CI_Controller{
       $this->session->set_userdata('captchaWord',$data['captcha']['word']);
 
       if ($this->agent->is_mobile()){
-        $this->load->view('template/header.php', $data);
+        $this->load->view('mobile_view/template/header.php', $data);
         $this->load->view('mobile_view/reset_view/reset_view_mobile');
       }
       else{
@@ -155,7 +155,7 @@ class Account extends CI_Controller{
       $data['id'] = $id;
 
       if ($this->agent->is_mobile()){
-        $this->load->view('template/header.php', $data);
+        $this->load->view('mobile_view/template/header', $data);
         $this->load->view('mobile_view/reset_view/resetlink_view_mobile');
       }
       else{

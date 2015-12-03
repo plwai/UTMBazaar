@@ -17,27 +17,7 @@
   <script src="<?php echo base_url(); ?>assets/bootstrap-3.3.5-dist/js/bootstrap.js"></script>
 
   <div class="container-fluid">
-			<!--THIS IS HEADER-->
-        <div class="header_top"><!--header_top-->
-				<div class="container">
-          <div class="row">
-						<div class="col-sm-6">
-              <div class="contactinfo">
-								<ul class="nav nav-pills">
-                  <li><a href="#"><i class="fa fa-graduation-cap"></i> Universiti Teknologi Malaysia</a></li>
-								</ul>
-              </div>
-              </div>
-            <div class="col-sm-6">
-					</div>
-        </div>
-				</div>
-      </div>
-  	<!--/header_top-->
-    <div id="header" class="jumbotron">
-      <h1><a style='text-decoration: none;' href=<?php echo base_url(); ?>>UTM BAZAAR</a></h1>
-      <!-- <img class="img-responsive" src=""> -->
-    </div>
+
 
     <!--THIS IS NAVIBAR-->
     <nav class="navbar navbar-default topmenu" style=<?php if(isset($display)){echo $display;}; ?>>
@@ -49,7 +29,7 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">UTM BAZAAR</a>
+            <a class="navbar-brand" href=<?php echo base_url() ?>>UTM BAZAAR</a>
           </div>
           <div class="collapse navbar-collapse" id="pageNavi">
             <ul class="nav navbar-nav">

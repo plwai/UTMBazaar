@@ -1,17 +1,19 @@
 
 
 <body>
+  <h3>Order List</h3>
   <?php
     $i = 1;
     if($orderList){
       echo form_open('pay_item');
       $start = microtime(true);
+      echo "<hr>";
       foreach($orderList as $order){
         echo "<div class='row data' style='display:none; margin-bottom: 10px'>
-        <div class='col-sm-offset-4 col-sm-1'>
+        <div class='col-xs-offset-1 col-xs-1'>
         ".$i++."
         </div>
-        <div class='col-sm-5'>
+        <div class='col-xs-offset-1 col-xs-8'>
         <div class='row'>
         <label>Product Name: </label>".$order['name']."
         </div>
@@ -23,13 +25,12 @@
         </div>
         <input type='hidden' name='order_id[]' id='order_id[]' value=".$order['id'].">
         </div>
-        </div>";
-      }
-     echo "<hr>
-        <div class='row'>
-        <div class='col-sm-offset-5'>
-          <input type='submit'>
         </div>
+        <hr>";
+      }
+     echo "
+        <div class='form-group'>
+          <button class='btn btn-block btn-default' type='submit'>Pay Now</button>
         </div>
         <br>
         <br>
@@ -38,8 +39,8 @@
         <br>
         <br>";
       echo form_close();
-      echo "Completed in ", microtime(true) - $start, " Seconds\n";
-      echo 'Elapsed time: '.$this->benchmark->elapsed_time();
+      //echo "Completed in ", microtime(true) - $start, " Seconds\n";
+      //echo 'Elapsed time: '.$this->benchmark->elapsed_time();
     }
     else{
       echo "No order";
