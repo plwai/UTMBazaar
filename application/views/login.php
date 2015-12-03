@@ -5,7 +5,7 @@
 <!-- Jquery Validation Plugin version 1.13.0-->
 <script type="text/javascript" src="<?php echo base_url();?>assets\javascript\validation/login-validation.js"></script>
 
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <body>
 
 	<div class="container">
