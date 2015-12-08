@@ -166,8 +166,14 @@ class Pay_item extends CI_Controller{
 
           $data['link'] = '';
 
-          $this->load->view('template/header');
-          $this->load->view('payment_view/payment', $data);
+          if ($this->agent->is_mobile()){
+            $this->load->view('mobile/template/header', $data);
+            $this->load->view('mobile/payment_view/payment_mobile', $data);
+          }
+          else{
+            $this->load->view('template/header', $data);
+            $this->load->view('payment_view/payment', $data);
+          }
 
           return;
         }
@@ -228,16 +234,28 @@ class Pay_item extends CI_Controller{
 
         $data['link'] = '';
 
-        $this->load->view('template/header', $data);
-        $this->load->view('payment_view/payment', $data);
+        if ($this->agent->is_mobile()){
+          $this->load->view('mobile/template/header', $data);
+          $this->load->view('mobile/payment_view/payment_mobile', $data);
+        }
+        else{
+          $this->load->view('template/header', $data);
+          $this->load->view('payment_view/payment', $data);
+        }
         return;
       }
       $approvalUrl = $payment->getApprovalLink();
 
       $data['link'] = $approvalUrl;
 
-      $this->load->view('template/header', $data);
-      $this->load->view('payment_view/payment', $data);
+      if ($this->agent->is_mobile()){
+          $this->load->view('mobile/template/header', $data);
+          $this->load->view('mobile/payment_view/payment_mobile', $data);
+        }
+        else{
+          $this->load->view('template/header', $data);
+          $this->load->view('payment_view/payment', $data);
+        }
 
       header( "refresh:1;url=".$approvalUrl);
     }
