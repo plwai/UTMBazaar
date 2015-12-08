@@ -107,8 +107,14 @@ class Account extends CI_Controller{
       $data['captcha'] = create_captcha($vals);
       $this->session->set_userdata('captchaWord',$data['captcha']['word']);
 
-      $this->load->view('template/header.php', $data);
-      $this->load->view('reset_view/reset_view');
+      if ($this->agent->is_mobile()){
+        $this->load->view('mobile/template/header.php', $data);
+        $this->load->view('mobile/reset_view/reset_view_mobile');
+      }
+      else{
+        $this->load->view('template/header.php', $data);
+        $this->load->view('reset_view/reset_view');
+      }
     }
   }
 
@@ -148,8 +154,15 @@ class Account extends CI_Controller{
     if($storedData['storedHash'] == $hash){
       $data['id'] = $id;
 
-      $this->load->view('template/header.php', $data);
-      $this->load->view('reset_view/resetlink_view', $data);
+      if ($this->agent->is_mobile()){
+        $this->load->view('mobile/template/header', $data);
+        $this->load->view('mobile/reset_view/resetlink_view_mobile');
+      }
+      else{
+        $this->load->view('template/header.php', $data);
+        $this->load->view('reset_view/resetlink_view', $data);
+      }
+
     }
     else{
       redirect('home');

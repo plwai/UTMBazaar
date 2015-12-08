@@ -273,8 +273,15 @@ class Pay_item extends CI_Controller{
       } catch(Exception $ex){
         $data['result'] = "Something wrong please try again.";
 
-        $this->load->view('template/header', $data);
-        $this->load->view('payment_view/payment_result', $data);
+        if ($this->agent->is_mobile()){
+          $this->load->view('mobile/template/header', $data);
+          $this->load->view('mobile/payment_view/payment_result_mobile');
+        }
+        else{
+          $this->load->view('template/header', $data);
+          $this->load->view('payment_view/payment_result', $data);
+        }
+
         return;
       }
 
@@ -324,8 +331,9 @@ class Pay_item extends CI_Controller{
             $list .= "<label>item Quantity: </label>".$item['quantity']." <br>";
             $list .= "<label>Total Price: </label>RM".(number_format(($item['price'] * $item['quantity']), 2, '.', ''))." <br>";
             $list .= "</div>";
-            $list .= "</div><br><br> If that is not you, please contact us immediately.";
+            $list .= "</div>";
           }
+          $list .= "<br><br> If that is not you, please contact us immediately.";
         }
 
       $content = $data['result'].$list;
@@ -333,8 +341,14 @@ class Pay_item extends CI_Controller{
 
       $this->sendEmail($username,$subject ,$content);
 
-      $this->load->view('template/header', $data);
-      $this->load->view('payment_view/payment_result', $data);
+      if ($this->agent->is_mobile()){
+        $this->load->view('mobile/template/header', $data);
+        $this->load->view('mobile/payment_view/payment_result_mobile');
+      }
+      else{
+        $this->load->view('template/header', $data);
+        $this->load->view('payment_view/payment_result', $data);
+      }
     }
   }
 
@@ -348,8 +362,16 @@ class Pay_item extends CI_Controller{
 
     $data['orderList'] = $orderList;
 
-    $this->load->view('template/header', $data);
-    $this->load->view('payment_view/order_list', $data);
+    if ($this->agent->is_mobile()){
+      $this->load->view('mobile/template/header', $data);
+      $this->load->view('mobile/payment_view/order_list_mobile');
+    }
+    else{
+      $this->load->view('template/header', $data);
+      $this->load->view('payment_view/order_list', $data);
+    }
+
+
   }
 
    // send email to user
