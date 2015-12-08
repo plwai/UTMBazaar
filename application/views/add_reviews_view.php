@@ -17,7 +17,7 @@
                             
                         </div>
                         <div class="form-group" id="try"><?php echo $star; ?></div>
-						<input type="hidden" id="product_id" name="product_id" value="5">
+						<input type="hidden" id="product_id" name="product_id" value="30">
                         <?php echo validation_errors(); ?>
                         <p id ="respond_rating"></p>
                         <p id="respond_post"></p>
