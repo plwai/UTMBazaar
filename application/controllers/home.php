@@ -23,14 +23,27 @@
 
     // check whether user login
     if($this->session->userdata('is_logged_in')){
-        $this->load->view('template/header', $data);
-        $this->load->view('home', $data); //$data
+        if (!$this->agent->is_mobile()) {
+            $this->load->view('template/header', $data);
+            $this->load->view('home', $data); //$data
+        }else{
+            $this->load->view('mobile/template/header', $data);
+            $this->load->view('mobile/home_view/home', $data); //$data
+        }
     }
     else{
-        $this->load->view('template/header', $data);
-        $this->load->view('home', $data); //$data
+        if (!$this->agent->is_mobile()) {
+            $this->load->view('template/header', $data);
+            $this->load->view('home', $data); //$data
+        }else{
+            $this->load->view('mobile/template/header', $data);
+            $this->load->view('mobile/home_view/home', $data); //$data
+        }
     }
-
-    $this->load->view('template/footer');
+    if (!$this->agent->is_mobile()) {
+        $this->load->view('template/footer');
+    }else{
+        $this->load->view('mobile/template/footer');
+    }
   }
 }
