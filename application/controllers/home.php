@@ -21,27 +21,29 @@
     $data['product_list'] = $this->Product_model->get_products($owner_id);
     $data['product_list'] = $data['product_list']->result();
 
-    if ($this->agent->is_mobile()){
-      $this->load->view('mobile_view/template/header', $data);
-    }
-    else{
-      $this->load->view('template/header', $data);
-    }
-
     // check whether user login
     if($this->session->userdata('is_logged_in')){
-        $this->load->view('home', $data); //$data
+        if (!$this->agent->is_mobile()) {
+            $this->load->view('template/header', $data);
+            $this->load->view('home', $data); //$data
+        }else{
+            $this->load->view('mobile/template/header', $data);
+            $this->load->view('mobile/home_view/home', $data); //$data
+        }
     }
     else{
-        $this->load->view('home', $data); //$data
+        if (!$this->agent->is_mobile()) {
+            $this->load->view('template/header', $data);
+            $this->load->view('home', $data); //$data
+        }else{
+            $this->load->view('mobile/template/header', $data);
+            $this->load->view('mobile/home_view/home', $data); //$data
+        }
     }
-
-
-    if ($this->agent->is_mobile()){
-      $this->load->view('mobile_view/template/footer');
-    }
-    else{
-      $this->load->view('template/footer');
+    if (!$this->agent->is_mobile()) {
+        $this->load->view('template/footer');
+    }else{
+        $this->load->view('mobile/template/footer');
     }
   }
 }

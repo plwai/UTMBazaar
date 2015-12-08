@@ -108,8 +108,8 @@ class Account extends CI_Controller{
       $this->session->set_userdata('captchaWord',$data['captcha']['word']);
 
       if ($this->agent->is_mobile()){
-        $this->load->view('mobile_view/template/header.php', $data);
-        $this->load->view('mobile_view/reset_view/reset_view_mobile');
+        $this->load->view('mobile/template/header.php', $data);
+        $this->load->view('mobile/reset_view/reset_view_mobile');
       }
       else{
         $this->load->view('template/header.php', $data);
@@ -155,8 +155,8 @@ class Account extends CI_Controller{
       $data['id'] = $id;
 
       if ($this->agent->is_mobile()){
-        $this->load->view('mobile_view/template/header', $data);
-        $this->load->view('mobile_view/reset_view/resetlink_view_mobile');
+        $this->load->view('mobile/template/header', $data);
+        $this->load->view('mobile/reset_view/resetlink_view_mobile');
       }
       else{
         $this->load->view('template/header.php', $data);
@@ -258,21 +258,36 @@ class Account extends CI_Controller{
 
       }
       else{
-        $this->load->view('template/header.php', $data);
-        $this->load->view('registration_view');
+        if (!$this->agent->is_mobile()) {
+            $this->load->view('template/header.php', $data);
+            $this->load->view('registration_view');
+        }else{
+            $this->load->view('mobile/template/header.php', $data);
+            $this->load->view('mobile/account_view/registration_view');
+        }
       }
       }
       else{
-        $this->load->view('template/header.php', $data);
-        $this->load->view('registration_view');
+        if (!$this->agent->is_mobile()) {
+            $this->load->view('template/header.php', $data);
+            $this->load->view('registration_view');
+        }else{
+            $this->load->view('mobile/template/header.php', $data);
+            $this->load->view('mobile/account_view/registration_view');
+        }
       }
     }
     else if($this->session->userdata('is_logged_in')){
       redirect('home');
     }
     else{
-      $this->load->view('template/header.php', $data);
-      $this->load->view('registration_view');
+        if (!$this->agent->is_mobile()) {
+            $this->load->view('template/header.php', $data);
+            $this->load->view('registration_view');
+        }else{
+            $this->load->view('mobile/template/header.php', $data);
+            $this->load->view('mobile/account_view/registration_view');
+        }
     }
   }
 

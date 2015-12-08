@@ -18,8 +18,13 @@ class Products extends CI_Controller{
             $_data['error'] = "";
             $data['title'] = 'Add Product';
             $data['display'] = '';
-            $this->load->view('template/header.php', $data);
-            $this->load->view('add_products_view',$_data);
+            if (!$this->agent->is_mobile()) {
+                $this->load->view('template/header.php', $data);
+                $this->load->view('add_products_view',$_data);
+            }else{
+                $this->load->view('mobile/template/header.php', $data);
+                $this->load->view('mobile/products_view/add_products_view',$_data);
+            }
         }else{
             redirect('account');
         }
@@ -53,7 +58,7 @@ class Products extends CI_Controller{
                         'price' => $this->input->post('product_price'),
                         'quantity' => $this->input->post('product_quantity'),
                         'category_id' => $this->input->post('product_category'),
-                        'main_product_image'=> base_url().$img_fullpath.$filename,
+                        'main_product_image'=> "/utmbazaar/".$img_fullpath.$filename,
                         'description' =>$description ,
                         'user_id'=>$this->session->userdata('id'),
                         'date_added'=>$date,
@@ -68,8 +73,13 @@ class Products extends CI_Controller{
                     $_data['error'] = "Error occur somewhere, please do again!!";
                     $data['title'] = 'Add Product';
                     $data['display'] = '';
-                    $this->load->view('template/header.php', $data);
-                    $this->load->view('add_products_view',$_data);
+                    if (!$this->agent->is_mobile()) {
+                        $this->load->view('template/header.php', $data);
+                        $this->load->view('add_products_view',$_data);
+                    }else{
+                        $this->load->view('mobile/template/header.php', $data);
+                        $this->load->view('mobile/products_view/add_products_view',$_data);
+                    }
                 }
                 $position = $position+1;
                 $upload_state=true;
@@ -91,8 +101,13 @@ class Products extends CI_Controller{
             $_data['error'] = "Error occur somewhere, please do again!!";
             $data['title'] = 'Add Product';
             $data['display'] = '';
-            $this->load->view('template/header.php', $data);
-            $this->load->view('add_products_view',$_data);
+            if (!$this->agent->is_mobile()) {
+                $this->load->view('template/header.php', $data);
+                $this->load->view('add_products_view',$_data);
+            }else{
+                $this->load->view('mobile/template/header.php', $data);
+                $this->load->view('mobile/produts/add_products_view',$_data);
+            }
 
         }
     }
@@ -108,8 +123,13 @@ class Products extends CI_Controller{
         $_data['query'] = $query->result();
         $data['title'] = 'showproducts';
         $data['display'] = '';
-        $this->load->view('template/header.php', $data);
-        $this->load->view('views_products_view', $_data);
+        if (!$this->agent->is_mobile()) {
+            $this->load->view('template/header.php', $data);
+            $this->load->view('views_products_view', $_data);
+        }else{
+            $this->load->view('mobile/template/header.php', $data);
+            $this->load->view('mobile/products_view/views_products_view', $_data);
+        }
     }
 
     public function load_details($product_id){
@@ -121,8 +141,13 @@ class Products extends CI_Controller{
         $_data['query'] = $query->result();
         $data['title'] = 'loaddetails';
         $data['display'] = '';
-        $this->load->view('template/header.php', $data);
-        $this->load->view('views_products_details_view', $_data);
+        if (!$this->agent->is_mobile()) {
+            $this->load->view('template/header.php', $data);
+            $this->load->view('views_products_details_view', $_data);
+        }else{
+            $this->load->view('mobile/template/header.php', $data);
+            $this->load->view('mobile/products_view/views_products_details_view', $_data);
+        }
     }
 
     public function add_cart(){
@@ -151,9 +176,13 @@ class Products extends CI_Controller{
         }
         $data['title'] = 'loaddetails';
         $data['display'] = '';
-
-        $this->load->view('template/header.php', $data);
-        $this->load->view('cart_view');
+        if (!$this->agent->is_mobile()) {
+            $this->load->view('template/header.php', $data);
+            $this->load->view('cart_view');
+        }else{
+            $this->load->view('mobile/template/header.php', $data);
+            $this->load->view('mobile/products_view/cart_view');
+        }
     }
     public function update_cart(){
         $allpro=$this->cart->contents();
@@ -221,23 +250,30 @@ class Products extends CI_Controller{
 
     public function view_edit_cat() {
         $data['title'] = 'UTM Bazaar - Edit Category';
-    $data['display'] = '';
+        $data['display'] = '';
 
-    $username = $this->session->userdata('username');
+        $username = $this->session->userdata('username');
 
-    $data['username'] 	= $username;
-    $data['category_data'] = $this->Product_model->load_category();
+        $data['username'] 	= $username;
+        $data['category_data'] = $this->Product_model->load_category();
 
-    // check whether user login
-    if($this->session->userdata('is_logged_in')){
-        $this->load->view('template/header', $data);
-    }
-    else{
-        $this->load->view('template/header', $data);
-    }
-
-    $this->load->view('edit_categories_view');
-    $this->load->view('template/footer');
+        // check whether user login
+        if($this->session->userdata('is_logged_in')){
+            if (!$this->agent->is_mobile()) {
+                $this->load->view('template/header', $data);
+            }else{
+                $this->load->view('mobile/template/header', $data);
+            }
+        }
+        else{
+            if (!$this->agent->is_mobile()) {
+                $this->load->view('template/header', $data);
+            }else{
+                $this->load->view('mobile/template/header', $data);
+            }
+        }
+        $this->load->view('edit_categories_view');
+        $this->load->view('template/footer');   
     }
 
     public function add_category(){
@@ -265,8 +301,13 @@ class Products extends CI_Controller{
             $query2 = $this->Product_model->get_products_by_owner_ignore_publish($this->session->userdata('id'));
             $_data['query'] = $query->result();
             $_data['query2'] = $query2->result();
-            $this->load->view('template/header.php', $data);
-            $this->load->view('myProduct_view',$_data);
+            if (!$this->agent->is_mobile()) {
+                $this->load->view('template/header.php', $data);
+                $this->load->view('myProduct_view',$_data);
+            }else{
+                $this->load->view('mobile/template/header.php', $data);
+                $this->load->view('mobile/products_view/myProduct_view',$_data);
+            }
         }else{
             redirect('account');
         }
@@ -302,10 +343,15 @@ class Products extends CI_Controller{
             $query = $this->Product_model->get_products($product_id);
             $_data['category_data'] = $this->Product_model->load_category();
             $_data['query'] = $query->result();
-             $data['title'] = 'Mine Products';
+            $data['title'] = 'Mine Products';
             $data['display'] = '';
+            if (!$this->agent->is_mobile()) {
                 $this->load->view('template/header.php', $data);
-            $this->load->view('edit_product_view',$_data);
+                $this->load->view('edit_product_view',$_data);
+            }else{
+                $this->load->view('mobile/template/header.php', $data);
+                $this->load->view('mobile/products_view/edit_product_view',$_data);
+            }
         }
       }
     }
@@ -332,13 +378,18 @@ class Products extends CI_Controller{
 				$_data['query'] = $query->result();
 				$data['title'] = 'Verify product';
 				$data['display'] = 'display:none;';
-				$this->load->view('template/header.php', $data);
-				$this->load->view('verify_products_view', $_data);
-				}
-				else{
-				    //temporary redirect to home first
-					redirect ('home');
-				}
+                if (!$this->agent->is_mobile()) {
+				    $this->load->view('template/header.php', $data);
+				    $this->load->view('verify_products_view', $_data);
+                }else{
+                    $this->load->view('mobile/template/header.php', $data);
+                    $this->load->view('mobile/products_view/verify_products_view', $_data);
+                }
+			}
+			else{
+				//temporary redirect to home first
+				redirect ('home');
+			}
 
         }
     }
@@ -352,8 +403,13 @@ class Products extends CI_Controller{
                 $_data['query'] = $query->result();
                 $data['title'] = 'Verify product';
                 $data['display'] = 'display:none;';
-                $this->load->view('template/header.php', $data);
-                $this->load->view('verify_products_details_view', $_data);
+                if (!$this->agent->is_mobile()) {
+                    $this->load->view('template/header.php', $data);
+                    $this->load->view('verify_products_details_view', $_data);
+                }else{
+                    $this->load->view('mobile/template/header.php', $data);
+                    $this->load->view('mobile/products_view/verify_products_details_view', $_data);
+                }
             }
             else{
                 redirect('home');
@@ -413,8 +469,13 @@ class Products extends CI_Controller{
                     $_data['state']="Error";
                     $data['title'] = 'Edit Products Image';
                     $data['display'] = '';
-                    $this->load->view('template/header.php', $data);
-                    $this->load->view('edit_product_image_view',$_data);;
+                    if (!$this->agent->is_mobile()) {
+                        $this->load->view('template/header.php', $data);
+                        $this->load->view('edit_product_image_view',$_data);
+                    }else{
+                        $this->load->view('mobile/template/header.php', $data);
+                        $this->load->view('mobile/products_view/edit_product_image_view',$_data);
+                    }
                 }
                 $position = $position+1;
                 $upload_state=true;
@@ -432,8 +493,13 @@ class Products extends CI_Controller{
             $_data['state']=$this->input->post("product_id");
             $data['title'] = 'Edit Products Image';
             $data['display'] = '';
-            $this->load->view('template/header.php', $data);
-            $this->load->view('edit_product_image_view',$_data);;
+            if (!$this->agent->is_mobile()) {
+                $this->load->view('template/header.php', $data);
+                $this->load->view('edit_product_image_view',$_data);
+            }else{
+                $this->load->view('mobile/template/header.php', $data);
+                $this->load->view('mobile/products_view/edit_product_image_view',$_data);
+            }
         }
         else{
             $query=$this->Product_model->get_products($product_id);
@@ -447,8 +513,13 @@ class Products extends CI_Controller{
             $_data['state']="Fail";
             $data['title'] = 'Edit Products Image';
             $data['display'] = '';
-            $this->load->view('template/header.php', $data);
-            $this->load->view('edit_product_image_view',$_data);;
+            if (!$this->agent->is_mobile()) {
+                $this->load->view('template/header.php', $data);
+                $this->load->view('edit_product_image_view',$_data);
+            }else{
+                $this->load->view('mobiletemplate/header.php', $data);
+                $this->load->view('mobile/products_view/edit_product_image_view',$_data);
+            }  
         }
     }
 
@@ -471,8 +542,13 @@ class Products extends CI_Controller{
             $_data['state']="Done";
             $data['title'] = 'Edit Products Image';
             $data['display'] = '';
-            $this->load->view('template/header.php', $data);
-            $this->load->view('edit_product_image_view',$_data);;
+            if (!$this->agent->is_mobile()) {
+                $this->load->view('template/header.php', $data);
+                $this->load->view('edit_product_image_view',$_data);
+            }else{
+                $this->load->view('mobile/template/header.php', $data);
+                $this->load->view('mobile/products_view/edit_product_image_view',$_data);
+            }
         }
     }
 
@@ -495,29 +571,47 @@ class Products extends CI_Controller{
                 $_data['state']="Done";
                 $data['title'] = 'Edit Products Image';
                 $data['display'] = '';
-                $this->load->view('template/header.php', $data);
-                $this->load->view('edit_product_image_view',$_data);;
+                if (!$this->agent->is_mobile()) {
+                    $this->load->view('template/header.php', $data);
+                    $this->load->view('edit_product_image_view',$_data);
+                }else{
+                    $this->load->view('mobile/template/header.php', $data);
+                    $this->load->view('mobile/products_view/edit_product_image_view',$_data);
+                }
             }else {
             }
         }
     }
 
     public function edit_product_image(){
-        if($this->input->server('REQUEST_METHOD') === 'POST'){
-            $product_id  = $this->input->post('product_id');
-            $query=$this->Product_model->get_products($product_id);
-            $query = $query->row_array();
-            $_data =  array(
-                "path"=>$query['image'],
-                "mainpath"=>$query['main_product_image'],
-                "pk_id"=>$product_id,
-                "product_name"=>$query['product_name']
-            );
-            $_data['state']="";
-            $data['title'] = 'Edit Products Image';
-            $data['display'] = '';
-            $this->load->view('template/header.php', $data);
-            $this->load->view('edit_product_image_view',$_data);
+        if($this->session->userdata('is_logged_in')){
+            $username = $this->session->userdata('username');
+            $data['username']   = $username;
+
+        
+            if($this->input->server('REQUEST_METHOD') === 'POST'){
+                $product_id  = $this->input->post('product_id');
+                $query=$this->Product_model->get_products($product_id);
+                $query = $query->row_array();
+                $_data =  array(
+                    "path"=>$query['image'],
+                    "mainpath"=>$query['main_product_image'],
+                    "pk_id"=>$product_id,
+                    "product_name"=>$query['product_name']
+                );
+                $_data['state']="";
+                $data['title'] = 'Edit Products Image';
+                $data['display'] = '';
+                if (!$this->agent->is_mobile()) {
+                    $this->load->view('template/header.php', $data);
+                    $this->load->view('edit_product_image_view',$_data);
+                }else{
+                    $this->load->view('mobile/template/header.php', $data);
+                    $this->load->view('mobile/products_view/edit_product_image_view',$_data);
+                }
+            }
+        }else{
+            redirect('account');
         }
     }
     public function save_edit_product(){

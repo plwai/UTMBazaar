@@ -40,7 +40,15 @@
                 <li><a href="#">Sort by Newest</a></li>
               </ul>
               </li>
-              <li><a href=<?php echo base_url(); ?>products/mineproduct><span class="fa fa-home"></span> My Product</a></li>
+              <?php if(isset($username)){
+                echo "<li><a href=".base_url()."products/mineproduct><span class='fa fa-home'></span> My Product</a></li>";
+                echo "<li class='dropdown'><a class='dropdown-toggle' data-toggle='dropdown' href='#'><span class='fa fa-chevron-circle-down'></span>History</a>";
+                echo "<ul class='dropdown-menu'>";
+                echo "<li><a href=".base_url()."history><span class='fa fa-home'></span> Item Sold</a></li>";
+                echo "<li><a href=".base_url()."history/view_history/Buyer><span class='fa fa-home'></span> Item Bought</a></li>";
+                echo "</ul>";
+                echo "</li>";
+              } ?>
             </ul>
             <ul class="nav navbar-nav navbar-right">
             <?php
@@ -50,9 +58,8 @@
                 echo "<li><a href=".base_url('account/register')."><span class='fa fa-edit'></span> Register</a></li>";
               }
             else{
-              echo "<p class='header'>Welcome ".$username."</p>";
-					    echo "<a href='".base_url()."account/logout' class='header'>logout</a>";
-						echo "<br><a href='".base_url()."account/show_user' class='header'> Edit Account</a>";
+					    echo "<li><a href='".base_url()."account/logout' class='header'><span class='fa fa-sign-in'></span>Logout</a></li>";
+						echo "<li><a href='".base_url()."account/show_user' class='header'><span class='fa fa-sign-in'></span> Edit Account</a></li>";
             }
             ?>
             </ul>
