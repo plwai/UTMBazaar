@@ -22,8 +22,12 @@
                     <?php echo $i; ?>
                 </td>
                 <td>
-                    <input type="number" name="<?php echo $i.'[qty]' ?>" min="0" max="<?php echo $items['max_qty'] ?>" value="<?php echo $items['qty'] ?>" >
-
+                    
+                    <select onchange=<?php echo "jsFunction(this.value,'".$items['rowid']."')"; ?>  id="product_category" name="<?php echo $i.'[qty]' ?>">
+                        <?php for ($x=0;$x<= $items['max_qty'];$x++) { ?>
+                        <option value="<?php echo $x; ?>" title="$" <?php if($x==$items['qty']) echo("selected")?>><?php echo $x; ?></option>
+                        <?php } ?>
+                    </select>
                 </td>
                 <td>
                     <?php echo $items['name']; ?>
@@ -48,7 +52,7 @@
 
     </table>
     <p id="error_mesage"></p>
-    <p><?php echo form_submit('', 'Update your Cart'); ?></p>
+    <p></p>
     <p><button type="button" onclick="confirm_order()" >Confirm Order</button></p>
 
 <script>
@@ -68,6 +72,15 @@
             }
             else if(msg.state==0){
                 document.getElementById("error_mesage").innerHTML="Product ID "+msg.problem_id+" only can have maximum "+msg.problem_quantity;
+                document.getElementById("product_category").selectedIndex=msg.problem_quantity;
+                $.ajax({
+                    type: "POST",
+                    url: "update_cart",
+                    dataType: 'json',
+                    data: {product_id: msg.row_id,value:msg.problem_quantity}
+                }).done(function(msg){
+                   
+            });
             }
 
         });
@@ -84,4 +97,16 @@
            window.location.reload();
         });
   }
+  function jsFunction(value,id)
+{
+    $.ajax({
+            type: "POST",
+            url: "update_cart",
+            dataType: 'json',
+            data: {product_id: id,value:value}
+        }).done(function(msg){
+           window.location.reload();
+        });
+
+}
 </script>

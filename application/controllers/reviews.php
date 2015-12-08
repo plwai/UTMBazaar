@@ -58,7 +58,8 @@ class Reviews extends CI_Controller{
                                         $new_reviews = array(
                                             'cust_review' => $this->input->post('cust_review'),
                     						'product_id' => $this->input->post('product_id'),
-                    						'user_id' => $this->session->userdata('id'),
+                    						//user_id follows user_id of current session
+											'user_id' => $this->session->userdata('id'),
                                             'rating' => $value,
                                             'date_added'=>$date
                                         );
