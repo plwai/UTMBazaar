@@ -42,6 +42,7 @@
               </li>
               <?php if(isset($username)){
                 echo "<li><a href=".base_url()."products/mineproduct><span class='fa fa-home'></span> My Product</a></li>";
+                echo "<li><a href=".base_url()."products/view_cart><span class='fa fa-home'></span> My Cart</a></li>";
                 echo "<li class='dropdown'><a class='dropdown-toggle' data-toggle='dropdown' href='#'><span class='fa fa-chevron-circle-down'></span>History</a>";
                 echo "<ul class='dropdown-menu'>";
                 echo "<li><a href=".base_url()."history><span class='fa fa-home'></span> Item Sold</a></li>";
