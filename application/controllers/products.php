@@ -106,7 +106,7 @@ class Products extends CI_Controller{
                 $this->load->view('add_products_view',$_data);
             }else{
                 $this->load->view('mobile/template/header.php', $data);
-                $this->load->view('mobile/produts/add_products_view',$_data);
+                $this->load->view('mobile/products_view/add_products_view',$_data);
             }
 
         }

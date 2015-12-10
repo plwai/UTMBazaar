@@ -73,7 +73,7 @@ function validation(){
         var uploadedFile = document.getElementById('up_file');
         var fileSize = uploadedFile.files[0].size;
 
-        if(fileSize >100000){
+        if(fileSize >10000000){
             var h = false;
             $("p#file_siez_text").css('color', 'red');
             $("p#file_siez_text").text('File size too big');
