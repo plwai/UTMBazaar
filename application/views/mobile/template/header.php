@@ -49,6 +49,7 @@
                 echo "<li><a href=".base_url()."history/view_history/Buyer><span class='fa fa-home'></span> Item Bought</a></li>";
                 echo "</ul>";
                 echo "</li>";
+                echo "<li><a href=".base_url()."pay_item/view_list><span class='fa fa-home'></span> My Order</a></li>";
               } ?>
             </ul>
             <ul class="nav navbar-nav navbar-right">
