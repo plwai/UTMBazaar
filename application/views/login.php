@@ -34,10 +34,10 @@
 
 
           <div class="form-group">
-            <div class="col-sm-6" style="padding-left:0px;">
+            <div class="col-xs-6 " style="padding-left:0px;">
               <input type="text" autocomplete="off" name="userCaptcha" id="userCaptcha" placeholder="Enter the text" class="form-control">
             </div>
-            <div class="col-sm-6 captcha_img">
+            <div class="col-xs-6  captcha_img" style="padding-left:0px;">
               <label for="captcha" name="captcha_label"><?php echo $captcha['image']; ?></label>
             </div>
           </div>
@@ -47,7 +47,7 @@
 
                     <p id="respond"></p>
           <div class="form-group">
-					<button id="submit" type="submit" class="btn btn-default">Login</button>
+					<button id="submit" type="submit" class="btn btn-block btn-default">Login</button>
           </div>
 					<br>
 					<br>
