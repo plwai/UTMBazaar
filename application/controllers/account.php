@@ -201,7 +201,7 @@ class Account extends CI_Controller{
 
   public function register(){
     $data['title'] = 'Registration';
-    $data['display'] = 'display:none;';
+    $data['display'] = '';
 
     //set input validation rule
     $this->form_validation->set_rules('sirname', 'Sir Name', 'trim|required|min_length[1]');
