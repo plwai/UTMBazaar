@@ -17,7 +17,7 @@
                             
                         </div>
                         <div class="form-group" id="try"><?php echo $star; ?></div>
-						<input type="hidden" id="product_id" name="product_id" value="30">
+						<input type="hidden" id="product_id" name="product_id" value="<?php echo $product_id; ?>">
                         <?php echo validation_errors(); ?>
                         <p id ="respond_rating"></p>
                         <p id="respond_post"></p>
@@ -43,7 +43,7 @@
         document.getElementById("respond_start").innerHTML=" ";
             $.ajax({
                 type: "POST",
-                url: "save_reviews",
+                url: "../save_reviews",
                 dataType: 'json',
                 data: {mystart:$("input[name=mystar]").val(),cust_review:$("#cust_review").val(),product_id:$("#product_id").val()}   
                 }).done(function(msg){

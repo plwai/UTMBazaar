@@ -25,10 +25,10 @@ class Reviews extends CI_Controller{
     public function index(){
     }
 
-    public function add_reviews(){
+    public function add_reviews($product_id){
         if($this->session->userdata('is_logged_in')){
                      
-
+        $_data['product_id'] = $product_id;
 
         $_data['star'] = $this->jquery_stars->get_stars();
             $_data['error'] = "";
