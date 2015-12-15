@@ -71,7 +71,7 @@ class Reviews extends CI_Controller{
                     			$email = $email['email'];
                     			
                     			$subject = 'Your product had been reviewed!';
-                    			$message = 'Dear Owner,<br /><br />Your product below had been reviewed. Click on the link below to read the review.<br /><br /> http://localhost/UTMBazaar/index.php/products/load_details/ <br /><br /><br />Thanks<br />UTMBazaar Team';
+                    			$message = 'Dear Owner,<br /><br />Your product below had been reviewed. Click on the link below to read the review.<br /><br /> http://localhost/UTMBazaar/Pages/display_reviews/ <br /><br /><br />Thanks<br />UTMBazaar Team';
                     			$this->sendEmail($email,$subject,$message);
 
                                 $result['res']=1;
