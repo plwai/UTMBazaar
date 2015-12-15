@@ -453,8 +453,15 @@ class Account extends CI_Controller{
       $data['captcha'] = create_captcha($vals);
       $this->session->set_userdata('captchaWord',$data['captcha']['word']);
 
-      $this->load->view('template/header.php', $data);
-			$this->load->view('login');
+      if($this->agent->is_mobile()){
+        $this->load->view('mobile/template/header.php', $data);
+        $this->load->view('mobile/login');
+      }
+      else{
+        $this->load->view('template/header.php', $data);
+        $this->load->view('login');
+      }
+
 		}
 	}
 
@@ -532,8 +539,14 @@ class Account extends CI_Controller{
 
 	if($this->session->userdata('is_logged_in'))
     {
+      $data['username'] = $this->session->userdata('username');
   		$data['single_user'] = $this->Account_model->show_user($this->session->userdata('id'));
-  		$this->load->view('template/header.php', $data);
+  		if($this->agent->is_mobile()){
+        $this->load->view('mobile/template/header.php', $data);
+      }
+      else{
+        $this->load->view('template/header.php', $data);
+      }
   		$this->load->view('update_view', $data);
    }
 
@@ -577,6 +590,7 @@ class Account extends CI_Controller{
             $data['display'] = 'displayname';
 
             $data['single_user'] = $this->Account_model->show_user($this->session->userdata('id'));
+
             $this->load->view('template/header.php', $data);
             $this->load->view('update_view', $data);
 

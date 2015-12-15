@@ -275,8 +275,14 @@ class Pay_item extends CI_Controller{
 
       if($success == 'false'){
         $data['result'] = "payment canceled";
-        $this->load->view('template/header', $data);
-        $this->load->view('payment_view/payment_result');
+        if ($this->agent->is_mobile()){
+          $this->load->view('mobile/template/header', $data);
+          $this->load->view('mobile/payment_view/payment_result_mobile');
+        }
+        else{
+          $this->load->view('template/header', $data);
+          $this->load->view('payment_view/payment_result', $data);
+        }
         header( "refresh:1;url=".base_url());
         return;
       }
