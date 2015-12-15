@@ -52,6 +52,9 @@
                         <span class="glyphicon glyphicon-shopping-cart"></span> Add to Cart
                     </button>
                     <p class="notify" id="notify"></p>
+					<button type="button" onclick="location.href='<?php echo base_url();?>reviews/add_reviews/<?php echo $row->pk_id;?>'" class="btn btn-warning" >
+					    Add Review
+					</button>
                 </div>
             </a>
         </div>
